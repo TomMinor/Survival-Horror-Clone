@@ -10,13 +10,28 @@ SOURCES=src/main.cpp \
         src/GLFunctions.cpp \
         src/Vec4.cpp \
         src/Mat4.cpp \
-    src/model.cpp
+    src/model.cpp \
+    src/World.cpp \
+    src/Actor.cpp \
+    src/Room.cpp \
+    src/BoundingBox.cpp \
+    src/Background.cpp \
+    src/Image.cpp \
+    src/Camera.cpp
 
 
 HEADERS+=include/GLFunctions.h \
          include/Vec4.h \
          include/Mat4.h \
-    include/model.h
+    include/model.h \
+    include/World.h \
+    include/Actor.h \
+    include/Room.h \
+    include/Door.h \
+    include/BoundingBox.h \
+    include/Background.h \
+    include/Image.h \
+    include/Camera.h
 
 # add the ngl lib
 # this is where to look for includes

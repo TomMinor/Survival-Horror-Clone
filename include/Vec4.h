@@ -119,6 +119,8 @@ public:
 
 };
 
+
+
 std::ostream & operator<<(std::ostream &_output, const Vec4 &_v);
 
 #endif

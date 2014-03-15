@@ -86,9 +86,6 @@ int main()
     float y;
   }offset = {0,0,0};
 
-  Model test;
-  test.load("test.obj");
-
   unsigned int currentTime = SDL_GetTicks();
   unsigned int lastTime = 0;
   unsigned int delay = 30;
@@ -117,46 +114,19 @@ int main()
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
 
-            case SDLK_w :
-            {
-              offset.x += 0.1f;
-              break;
-            }
-            case SDLK_s :
-            {
-              offset.x -= 0.1f;
-              break;
-            }
-            case SDLK_a :
-            {
-              offset.angle += 8.0f;
-              break;
-            }
-            case SDLK_d :
-            {
-              offset.angle -= 8.0f;
-              break;
-            }
-            case SDLK_PAGEUP :
-            {
-              delay = 60;
-              break;
-            }
-            case SDLK_PAGEDOWN :
-            {
-              delay = 30;
-              break;
-            }
+            case SDLK_w : offset.x++; break;
+            case SDLK_s : offset.x--; break;
+            case SDLK_a : offset.angle += 5; break;
+            case SDLK_d : offset.angle -= 5; break;
+            case SDLK_PAGEUP : break;
+            case SDLK_PAGEDOWN : break;
 
             default : break;
           } // end of key process
         } // end of keydown*
         default : break;
       } // end of event switch
-    } // end of poll events
-
-
-    currentTime = SDL_GetTicks();
+    } // end of poll events    
 
     if( currentTime > (lastTime + delay))
     {
@@ -165,20 +135,14 @@ int main()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       // now draw etc
 
-      // yellow.colourGL();
-      glRotatef(1.0,1, 1 ,1); // Rotate everything in scene
+      //glRotatef(1.0,1, 1 ,1); // Rotate everything in scene
 
       glPushMatrix();
         glTranslatef(offset.x, offset.y, 0.0f);
-
-        glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
-
-        glRotatef(offset.angle, 0.0f, 0.0f, 1.0f);
-
-
-        red.colourGL();
-        GLFunctions::cube(2.0f,1.0f,1.0f);
+          glRotatef(offset.angle, 0.0f, 0.0f, 1.0f);
+          GLFunctions::cube(2.0f,1.0f,1.0f);
+        glPopMatrix();
       glPopMatrix();
 
       // swap the buffers
