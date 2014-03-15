@@ -15,7 +15,6 @@ SOURCES=src/main.cpp \
     src/Actor.cpp \
     src/Room.cpp \
     src/BoundingBox.cpp \
-    src/Background.cpp \
     src/Image.cpp \
     src/Camera.cpp
 
