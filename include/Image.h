@@ -1,10 +1,14 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+namespace Game {
+
 class Image
 {
 public:
-  Image();
+  Image() {;}
 };
+
+}
 
 #endif // IMAGE_H

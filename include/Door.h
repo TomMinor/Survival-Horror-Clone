@@ -3,6 +3,10 @@
 
 #include "Room.h"
 
+namespace Game {
+
+class Room;
+
 class Door
 {
 public:
@@ -14,5 +18,7 @@ private:
   Room *m_nextRoom;
 
 };
+
+}
 
 #endif // DOOR_H

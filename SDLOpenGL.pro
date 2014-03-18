@@ -16,7 +16,9 @@ SOURCES=src/main.cpp \
     src/Room.cpp \
     src/BoundingBox.cpp \
     src/Image.cpp \
-    src/Camera.cpp
+    src/Camera.cpp \
+    src/Background.cpp \
+    src/Door.cpp
 
 
 HEADERS+=include/GLFunctions.h \

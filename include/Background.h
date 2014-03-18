@@ -6,6 +6,8 @@
 #include "Image.h"
 #include "Camera.h"
 
+namespace Game {
+
 class Background
 {
 public:
@@ -19,5 +21,7 @@ private:
   Image m_fgTexture; // Foreground image
   Camera m_cameraView;
 };
+
+}
 
 #endif // BACKGROUND_H

@@ -9,6 +9,7 @@
 #include <iostream>
 #include "GLFunctions.h"
 #include "model.h"
+#include "Actor.h"
 
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
@@ -89,6 +90,9 @@ int main()
   unsigned int currentTime = SDL_GetTicks();
   unsigned int lastTime = 0;
   unsigned int delay = 30;
+
+  Game::Actor player(Vec4(5,5,5), Vec4());
+  std::cout << player.getBoundingBox();
 
   // now we create an instance of our ngl class, this will init NGL and setup basic
   // opengl stuff ext. When this falls out of scope the dtor will be called and cleanup
