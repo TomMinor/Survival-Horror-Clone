@@ -7,9 +7,10 @@
 #endif
 
 #include <iostream>
+#include <cstdlib>
 #include "GLFunctions.h"
 #include "model.h"
-#include "Actor.h"
+#include "World.h"
 
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
@@ -81,18 +82,10 @@ int main()
   // sdl event processing data structure
   SDL_Event event;
 
-  struct{
-    float angle;
-    float x;
-    float y;
-  }offset = {0,0,0};
-
-  unsigned int currentTime = SDL_GetTicks();
-  unsigned int lastTime = 0;
   unsigned int delay = 30;
 
-  Game::Actor player(Vec4(5,5,5), Vec4());
-  std::cout << player.getBoundingBox();
+  if ( !Game::World::instance().init() )
+      return EXIT_FAILURE;
 
   // now we create an instance of our ngl class, this will init NGL and setup basic
   // opengl stuff ext. When this falls out of scope the dtor will be called and cleanup
@@ -118,10 +111,10 @@ int main()
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
 
-            case SDLK_w : offset.x++; break;
-            case SDLK_s : offset.x--; break;
-            case SDLK_a : offset.angle += 5; break;
-            case SDLK_d : offset.angle -= 5; break;
+//            case SDLK_w : offset.x++; break;
+//            case SDLK_s : offset.x--; break;
+//            case SDLK_a : offset.angle += 5; break;
+//            case SDLK_d : offset.angle -= 5; break;
             case SDLK_PAGEUP : break;
             case SDLK_PAGEDOWN : break;
 
@@ -132,22 +125,11 @@ int main()
       } // end of event switch
     } // end of poll events    
 
-    if( currentTime > (lastTime + delay))
+    if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime()  + delay))
     {
-      lastTime = currentTime;
+      Game::World::instance().updateTime();
 
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      // now draw etc
-
-      //glRotatef(1.0,1, 1 ,1); // Rotate everything in scene
-
-      glPushMatrix();
-        glTranslatef(offset.x, offset.y, 0.0f);
-        glPushMatrix();
-          glRotatef(offset.angle, 0.0f, 0.0f, 1.0f);
-          GLFunctions::cube(2.0f,1.0f,1.0f);
-        glPopMatrix();
-      glPopMatrix();
+      Game::World::instance().draw();
 
       // swap the buffers
       SDL_GL_SwapWindow(window);
