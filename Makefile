@@ -387,7 +387,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d obj/SDLOpenGL1.0.0 || mkdir -p obj/SDLOpenGL1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/SDLOpenGL1.0.0/ && $(COPY_FILE) --parents include/GLFunctions.h include/Vec4.h include/Mat4.h include/model.h include/World.h include/Actor.h include/Room.h include/Door.h include/BoundingBox.h include/Background.h include/Image.h include/Camera.h obj/SDLOpenGL1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/GLFunctions.cpp src/Vec4.cpp src/Mat4.cpp src/model.cpp src/World.cpp src/Actor.cpp src/Room.cpp src/BoundingBox.cpp src/Image.cpp src/Camera.cpp src/Background.cpp src/Door.cpp obj/SDLOpenGL1.0.0/ && (cd `dirname obj/SDLOpenGL1.0.0` && $(TAR) SDLOpenGL1.0.0.tar SDLOpenGL1.0.0 && $(COMPRESS) SDLOpenGL1.0.0.tar) && $(MOVE) `dirname obj/SDLOpenGL1.0.0`/SDLOpenGL1.0.0.tar.gz . && $(DEL_FILE) -r obj/SDLOpenGL1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/SDLOpenGL1.0.0/ && $(COPY_FILE) --parents include/GLFunctions.h include/Vec4.h include/Mat4.h include/model.h include/World.h include/Actor.h include/Room.h include/Door.h include/BoundingBox.h include/Background.h include/Image.h include/Camera.h include/stringUtilities.h obj/SDLOpenGL1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/GLFunctions.cpp src/Vec4.cpp src/Mat4.cpp src/model.cpp src/World.cpp src/Actor.cpp src/Room.cpp src/BoundingBox.cpp src/Image.cpp src/Camera.cpp src/Background.cpp src/Door.cpp obj/SDLOpenGL1.0.0/ && (cd `dirname obj/SDLOpenGL1.0.0` && $(TAR) SDLOpenGL1.0.0.tar SDLOpenGL1.0.0 && $(COMPRESS) SDLOpenGL1.0.0.tar) && $(MOVE) `dirname obj/SDLOpenGL1.0.0`/SDLOpenGL1.0.0.tar.gz . && $(DEL_FILE) -r obj/SDLOpenGL1.0.0
 
 
 clean:compiler_clean 
@@ -429,8 +429,15 @@ compiler_clean:
 obj/main.o: src/main.cpp include/GLFunctions.h \
 		include/Vec4.h \
 		include/model.h \
+		include/World.h \
 		include/Actor.h \
-		include/BoundingBox.h
+		include/BoundingBox.h \
+		include/Room.h \
+		include/Background.h \
+		include/Image.h \
+		include/Camera.h \
+		include/Mat4.h \
+		include/Door.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o src/main.cpp
 
 obj/GLFunctions.o: src/GLFunctions.cpp include/GLFunctions.h \
@@ -448,11 +455,17 @@ obj/model.o: src/model.cpp include/model.h \
 		include/Vec4.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/model.o src/model.cpp
 
-obj/World.o: src/World.cpp include/World.h \
-		include/Actor.h \
+obj/World.o: src/World.cpp include/GLFunctions.h \
 		include/Vec4.h \
+		include/World.h \
+		include/Actor.h \
 		include/BoundingBox.h \
-		include/Room.h
+		include/Room.h \
+		include/Background.h \
+		include/Image.h \
+		include/Camera.h \
+		include/Mat4.h \
+		include/Door.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/World.o src/World.cpp
 
 obj/Actor.o: src/Actor.cpp include/Actor.h \
@@ -460,7 +473,14 @@ obj/Actor.o: src/Actor.cpp include/Actor.h \
 		include/BoundingBox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Actor.o src/Actor.cpp
 
-obj/Room.o: src/Room.cpp include/Room.h
+obj/Room.o: src/Room.cpp include/Room.h \
+		include/Background.h \
+		include/Vec4.h \
+		include/BoundingBox.h \
+		include/Image.h \
+		include/Camera.h \
+		include/Mat4.h \
+		include/Door.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Room.o src/Room.cpp
 
 obj/BoundingBox.o: src/BoundingBox.cpp include/BoundingBox.h \
@@ -484,7 +504,13 @@ obj/Background.o: src/Background.cpp include/Background.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Background.o src/Background.cpp
 
 obj/Door.o: src/Door.cpp include/Door.h \
-		include/Room.h
+		include/Room.h \
+		include/Background.h \
+		include/Vec4.h \
+		include/BoundingBox.h \
+		include/Image.h \
+		include/Camera.h \
+		include/Mat4.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Door.o src/Door.cpp
 
 ####### Install

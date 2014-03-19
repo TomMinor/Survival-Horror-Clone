@@ -17,7 +17,7 @@ public:
     return m_instance;
   }
 
-  bool init();
+  bool init(const std::string& _assetpath = "assets/");
   void draw();
   void update();
   void changeRoom(const Room & _nextRoom) const;
@@ -28,17 +28,18 @@ public:
 
 private:
   World()
-    : m_player(Vec4(5,5,5), Vec4()), m_currentTime(0), m_lastTime(0)
+    : m_player(Vec4(2,5,2), Vec4()), m_currentTime(0), m_lastTime(0)
   {;}
 
   void loadRooms();
+  bool loadRoom(const std::string& _fileName);
 
   Actor m_player;
   std::vector<Room> m_rooms;
   double m_currentTime;
   double m_lastTime;
 
-  //static World *m_instance;
+  std::string m_assetPath;
 };
 
 }

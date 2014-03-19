@@ -19,7 +19,6 @@ void SDLErrorExit(const std::string &_msg);
 /// @brief initialize SDL OpenGL context
 SDL_GLContext createOpenGLContext( SDL_Window *window);
 
-
 int main()
 {
 
@@ -84,12 +83,11 @@ int main()
 
   unsigned int delay = 30;
 
+  // Exit if we fail to load for some reason
+  // Maybe add exceptions here
   if ( !Game::World::instance().init() )
       return EXIT_FAILURE;
 
-  // now we create an instance of our ngl class, this will init NGL and setup basic
-  // opengl stuff ext. When this falls out of scope the dtor will be called and cleanup
-  // our gl stuff
   while(!quit)
   {
     while ( SDL_PollEvent(&event) )
@@ -128,7 +126,6 @@ int main()
     if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime()  + delay))
     {
       Game::World::instance().updateTime();
-
       Game::World::instance().draw();
 
       // swap the buffers

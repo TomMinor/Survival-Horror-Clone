@@ -32,7 +32,8 @@ HEADERS+=include/GLFunctions.h \
     include/BoundingBox.h \
     include/Background.h \
     include/Image.h \
-    include/Camera.h
+    include/Camera.h \
+    include/stringUtilities.h
 
 # add the ngl lib
 # this is where to look for includes
