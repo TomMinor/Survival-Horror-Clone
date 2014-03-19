@@ -109,9 +109,15 @@ bool World::loadRoom(const std::string& _fileName)
   bg 1 BG_00_01.tga
   */
 
+  // Expected amount of data to read for each identifier (+1 to include identifier itself)
+  const unsigned int BBOX_FIELDS   = 9 + 1;
+  const unsigned int CAMERA_FIELDS = 8 + 1;
+  const unsigned int BG_FIELDS     = 2 + 1;
+
   std::ifstream backgroundFile;
   std::string path = m_assetPath + _fileName;
   std::string line;
+  unsigned int lineCount = 0;
 
   backgroundFile.open(path.c_str(), std::ios::in);
   if( backgroundFile.is_open() )
@@ -121,34 +127,42 @@ bool World::loadRoom(const std::string& _fileName)
       std::vector<std::string> tokens;
       stringUtils::tokenize(line, tokens, " ");
 
+      lineCount++;
+
       if( !tokens.empty() )
       {
         if(tokens[0] == "bbox")
         {
-          std::cout << tokens[0];
-          for(std::vector<std::string>::iterator it = ++tokens.begin(); it != tokens.end(); ++it)
+          if(tokens.size() == BBOX_FIELDS)
           {
-            std::cout << *it;
-          }
-          std::cout << std::endl;
-        }
 
+          }
+          else
+          {
+            std::cout << "Bounding Box (Malformed line : " << lineCount << ")\n";
+          }
+        }
         else if(tokens[0] == "camera")
         {
-          for(std::vector<std::string>::iterator it = ++tokens.begin(); it != tokens.end(); ++it)
+          if(tokens.size() == BBOX_FIELDS)
           {
-            std::cout << *it;
-          }
-          std::cout << std::endl;
-        }
 
+          }
+          else
+          {
+            std::cout << "Camera (Malformed line : " << lineCount << ")\n";
+          }
+        }
         else if(tokens[0] == "bg")
         {
-          for(std::vector<std::string>::iterator it = ++tokens.begin(); it != tokens.end(); ++it)
+          if(tokens.size() == BBOX_FIELDS)
           {
-            std::cout << *it;
+
           }
-          std::cout << std::endl;
+          else
+          {
+            std::cout << "Camera (Malformed line : " << lineCount << ")\n";
+          }
         }
       }
     }
