@@ -11,15 +11,21 @@ namespace Game {
 class Background
 {
 public:
-  Background();
+  Background(
+              const BBox& _triggerVolume,
+              const std::string& _bgPath,
+              const std::string& _fgPath,
+              const Camera& _cameraView )
+    : m_cameraView(_cameraView)
+  {;}
   void drawBG() const;
   void drawFG() const;
 
 private:
-  BBox m_triggerVolume;
-  Image m_bgTexture; // Background image
-  Image m_fgTexture; // Foreground image
-  Camera m_cameraView;
+  const BBox m_triggerVolume;
+  const Image m_bgTexture; // Background image
+  const Image m_fgTexture; // Foreground image
+  const Camera m_cameraView;
 };
 
 }

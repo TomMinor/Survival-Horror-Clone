@@ -9,6 +9,7 @@
 #include <fstream>
 #include <string>
 #include <cstdio>
+#include <map>
 
 #include "SDL.h"
 #include "GLFunctions.h"
@@ -107,6 +108,8 @@ bool World::loadRoom(const std::string& _fileName)
 
   //bg <bgID> <texturename>
   bg 1 BG_00_01.tga
+
+  spawn 0 0 0
   */
 
   // Expected amount of data to read for each identifier (+1 to include identifier itself)
@@ -129,13 +132,21 @@ bool World::loadRoom(const std::string& _fileName)
 
       lineCount++;
 
+      //Vec4 spawnPosition;
+      std::vector<Camera> roomCameras;
+      std::map<int, Background> roomBG;
+
+      std::vector<BBox> roomBounds;
+      std::vector<Door> roomDoors;
+
       if( !tokens.empty() )
       {
         if(tokens[0] == "bbox")
         {
           if(tokens.size() == BBOX_FIELDS)
           {
-
+            roomBounds.push_back( BBox(atof(tokens[1].c_str()), atof(tokens[2].c_str()), atof(tokens[3].c_str()),
+                                       atof(tokens[4].c_str()), atof(tokens[5].c_str()), atof(tokens[6].c_str()) );
           }
           else
           {
@@ -144,9 +155,9 @@ bool World::loadRoom(const std::string& _fileName)
         }
         else if(tokens[0] == "camera")
         {
-          if(tokens.size() == BBOX_FIELDS)
+          if(tokens.size() == CAMERA_FIELDS)
           {
-
+            roomCameras.push_back( CameraID( tokens[9] ), Camera() );
           }
           else
           {
@@ -155,14 +166,18 @@ bool World::loadRoom(const std::string& _fileName)
         }
         else if(tokens[0] == "bg")
         {
-          if(tokens.size() == BBOX_FIELDS)
+          if(tokens.size() == BG_FIELDS)
           {
 
           }
           else
           {
-            std::cout << "Camera (Malformed line : " << lineCount << ")\n";
+            std::cout << "Background (Malformed line : " << lineCount << ")\n";
           }
+        }
+        else if(tokens[0] == "spawn")
+        {
+
         }
       }
     }

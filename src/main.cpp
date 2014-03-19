@@ -21,42 +21,41 @@ SDL_GLContext createOpenGLContext( SDL_Window *window);
 
 int main()
 {
+  // Initialize SDL's Video subsystem
+  if (SDL_Init(SDL_INIT_VIDEO) < 0 )
+  {
+    // Or die on error
+    SDLErrorExit("Unable to initialize SDL");
+  }
 
-    // Initialize SDL's Video subsystem
-    if (SDL_Init(SDL_INIT_VIDEO) < 0 )
-    {
-      // Or die on error
-      SDLErrorExit("Unable to initialize SDL");
-    }
+  // now get the size of the display and create a window we need to init the video
+  SDL_Rect rect;
+  SDL_GetDisplayBounds(0,&rect);
+  // now create our window
+  SDL_Window *window=SDL_CreateWindow("SDLGL",
+                                      SDL_WINDOWPOS_CENTERED,
+                                      SDL_WINDOWPOS_CENTERED,
+                                      rect.w/2,
+                                      rect.h/2,
+                                      SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+                                     );
+  // check to see if that worked or exit
+  if (!window)
+  {
+    SDLErrorExit("Unable to create window");
+  }
 
-    // now get the size of the display and create a window we need to init the video
-    SDL_Rect rect;
-    SDL_GetDisplayBounds(0,&rect);
-    // now create our window
-    SDL_Window *window=SDL_CreateWindow("SDLGL",
-                                        SDL_WINDOWPOS_CENTERED,
-                                        SDL_WINDOWPOS_CENTERED,
-                                        rect.w/2,
-                                        rect.h/2,
-                                        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
-                                       );
-    // check to see if that worked or exit
-    if (!window)
-    {
-      SDLErrorExit("Unable to create window");
-    }
+  // Create our opengl context and attach it to our window
 
-    // Create our opengl context and attach it to our window
-
-     SDL_GLContext glContext=createOpenGLContext(window);
-     if(!glContext)
-     {
-       SDLErrorExit("Problem creating OpenGL context");
-     }
-     // make this our current GL context (we can have more than one window but in this case not)
-     SDL_GL_MakeCurrent(window, glContext);
-    /* This makes our buffer swap syncronized with the monitor's vertical refresh */
-    SDL_GL_SetSwapInterval(1);
+   SDL_GLContext glContext=createOpenGLContext(window);
+   if(!glContext)
+   {
+     SDLErrorExit("Problem creating OpenGL context");
+   }
+   // make this our current GL context (we can have more than one window but in this case not)
+   SDL_GL_MakeCurrent(window, glContext);
+  /* This makes our buffer swap syncronized with the monitor's vertical refresh */
+  SDL_GL_SetSwapInterval(1);
 
   // now clear the screen and swap whilst NGL inits (which may take time)
   Vec4 red(1,0,0);
