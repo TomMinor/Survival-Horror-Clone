@@ -2,11 +2,6 @@
 
 namespace Game {
 
-Room::Room()
-{
-
-}
-
 bool Room::checkWallCollide(BBox _player) const
 {
 

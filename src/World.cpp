@@ -106,78 +106,120 @@ bool World::loadRoom(const std::string& _fileName)
   //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
   camera 0 0 0 1 1 1 75 1
 
-  //bg <bgID> <texturename>
-  bg 1 BG_00_01.tga
+  //bg <bgID> <ForegroundFileName> <BackgroundFileName>
+  bg 1 BG_01_fg.tga BG_01_bg.tga
 
+  //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
+  trigger 0 0 0 1 1 1 0 0 0 1
+
+  // spawn x y z
   spawn 0 0 0
   */
 
-  // Expected amount of data to read for each identifier (+1 to include identifier itself)
-  const unsigned int BBOX_FIELDS   = 9 + 1;
-  const unsigned int CAMERA_FIELDS = 8 + 1;
-  const unsigned int BG_FIELDS     = 2 + 1;
+  // Values store expected amount of tokens for each identifier
+  // (+1 to include identifier itself)
+  enum {
+    TRIGGER     = 1+10,
+    BBOX        = 1+9,
+    CAMERA      = 1+8,
+    BACKGROUND  = 1+2,
+    SPAWN       = 1,
+    ERROR       = ~0
+  };
 
+  unsigned int lineCount = 0;
   std::ifstream backgroundFile;
   std::string path = m_assetPath + _fileName;
   std::string line;
-  unsigned int lineCount = 0;
 
   backgroundFile.open(path.c_str(), std::ios::in);
   if( backgroundFile.is_open() )
   {
+    // These are all linked using ID's
+    std::map<int, Camera> roomCameras;
+    std::map<int, BBox> roomTriggers;
+    std::map<int, Background> roomBG;
+
+    std::vector<BBox> roomBounds;
+    std::vector<Door> roomDoors;
+    Vec4 spawnPosition;
+
     while(getline(backgroundFile, line))
     {
       std::vector<std::string> tokens;
       stringUtils::tokenize(line, tokens, " ");
-
       lineCount++;
 
-      //Vec4 spawnPosition;
-      std::vector<Camera> roomCameras;
-      std::map<int, Background> roomBG;
-
-      std::vector<BBox> roomBounds;
-      std::vector<Door> roomDoors;
-
-      if( !tokens.empty() )
+      // Try to parse the line if it isn't empty or a comment
+      if( !tokens.empty() && !(tokens[0].substr(2) == "//") )
       {
-        if(tokens[0] == "bbox")
-        {
-          if(tokens.size() == BBOX_FIELDS)
-          {
-            roomBounds.push_back( BBox(atof(tokens[1].c_str()), atof(tokens[2].c_str()), atof(tokens[3].c_str()),
-                                       atof(tokens[4].c_str()), atof(tokens[5].c_str()), atof(tokens[6].c_str()) );
-          }
-          else
-          {
-            std::cout << "Bounding Box (Malformed line : " << lineCount << ")\n";
-          }
-        }
-        else if(tokens[0] == "camera")
-        {
-          if(tokens.size() == CAMERA_FIELDS)
-          {
-            roomCameras.push_back( CameraID( tokens[9] ), Camera() );
-          }
-          else
-          {
-            std::cout << "Camera (Malformed line : " << lineCount << ")\n";
-          }
-        }
-        else if(tokens[0] == "bg")
-        {
-          if(tokens.size() == BG_FIELDS)
-          {
+        unsigned int identifier;
+             if(tokens[0] == "bbox")    { identifier = BBOX;      }
+        else if(tokens[0] == "trigger") { identifier = TRIGGER;   }
+        else if(tokens[0] == "camera")  { identifier = CAMERA;    }
+        else if(tokens[0] == "bg")      { identifier = BACKGROUND;}
+        else if(tokens[0] == "spawn")   { identifier = SPAWN;     }
+        else                            { identifier = ERROR;     } // None-empty line, but invalid identifier
 
-          }
-          else
+        // identifier enum values store the expected amount of tokens
+        if(tokens.size() == identifier)
+        {
+          switch(identifier)
           {
-            std::cout << "Background (Malformed line : " << lineCount << ")\n";
+            case BBOX:
+            case TRIGGER:
+            {
+              float xmin = atof(tokens[1].c_str());
+              float ymin = atof(tokens[2].c_str());
+              float zmin = atof(tokens[3].c_str());
+              float xmax = atof(tokens[4].c_str());
+              float ymax = atof(tokens[5].c_str());
+              float zmax = atof(tokens[6].c_str());
+              Vec4 pos(atof(tokens[7].c_str()),
+                       atof(tokens[8].c_str()),
+                       atof(tokens[9].c_str()) );
+
+              if(identifier == TRIGGER)
+              {
+                unsigned int bgID = atof(tokens[10].c_str());
+                roomTriggers[bgID] =  BBox(xmin, ymin, zmin, xmax, ymax, zmax);
+              }
+              else
+              {
+                roomBounds.push_back( BBox(xmin, ymin, zmin, xmax, ymax, zmax) );
+              }
+
+              break;
+            }
+            case CAMERA:
+            {
+              roomCameras[atoi(tokens[9].c_str())] = Camera(Vec4(), 0, 0, 0) ;
+              break;
+            }
+            case BACKGROUND:
+            {
+              //roomBG[atoi(tokens[1].c_str())] = Background(tokens[2]);
+              break;
+            }
+            case SPAWN:
+            {
+              float x = atof(tokens[0].c_str());
+              float y = atof(tokens[1].c_str());
+              float z = atof(tokens[2].c_str());
+
+              spawnPosition = Vec4(x,y,z);
+              break;
+            }
+            case ERROR:
+            {
+              std::cout << "Line " << lineCount << " : invalid identifier\n";
+              break;
+            }
           }
         }
-        else if(tokens[0] == "spawn")
+        else
         {
-
+          std::cout << tokens[0]  << " : malformed line " << lineCount << "\n";
         }
       }
     }
