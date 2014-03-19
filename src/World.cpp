@@ -122,7 +122,7 @@ bool World::loadRoom(const std::string& _fileName)
     TRIGGER     = 1+10,
     BBOX        = 1+9,
     CAMERA      = 1+8,
-    BACKGROUND  = 1+2,
+    BACKGROUND  = 1+3,
     SPAWN       = 1,
     ERROR       = ~0
   };
@@ -191,14 +191,16 @@ bool World::loadRoom(const std::string& _fileName)
 
               break;
             }
-            case CAMERA:
-            {
-              roomCameras[atoi(tokens[9].c_str())] = Camera(Vec4(), 0, 0, 0) ;
-              break;
-            }
             case BACKGROUND:
             {
+              // Map to bgID
               //roomBG[atoi(tokens[1].c_str())] = Background(tokens[2]);
+              break;
+            }
+            case CAMERA:
+            {
+              // Map to bgID
+              roomCameras[atoi(tokens[9].c_str())] = Camera(Vec4(), 0, 0, 0) ;
               break;
             }
             case SPAWN:
