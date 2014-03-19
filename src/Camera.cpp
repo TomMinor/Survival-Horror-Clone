@@ -2,7 +2,7 @@
 
 namespace Game {
 
-Camera::Camera(const Vec4 &_pos, float _pitch, float _yaw, float _roll)
+Camera::Camera(const Vec4 &_pos, float _pitch, float _yaw, float _roll, float _fov) : m_fov(_fov)
 {
   setTransform(_pos, _pitch, _yaw, _roll);
 }

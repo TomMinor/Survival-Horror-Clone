@@ -138,7 +138,8 @@ bool World::loadRoom(const std::string& _fileName)
     // These are all linked using ID's
     std::map<int, Camera> roomCameras;
     std::map<int, BBox> roomTriggers;
-    std::map<int, Background> roomBG;
+    std::map<int, std::string> roomBackgroundFG;
+    std::map<int, std::string> roomBackgroundBG;
 
     std::vector<BBox> roomBounds;
     std::vector<Door> roomDoors;
@@ -166,8 +167,8 @@ bool World::loadRoom(const std::string& _fileName)
         {
           switch(identifier)
           {
-            case BBOX:
-            case TRIGGER:
+            case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
+            case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
             {
               float xmin = atof(tokens[1].c_str());
               float ymin = atof(tokens[2].c_str());
@@ -191,16 +192,29 @@ bool World::loadRoom(const std::string& _fileName)
 
               break;
             }
-            case BACKGROUND:
+            case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
             {
-              // Map to bgID
-              //roomBG[atoi(tokens[1].c_str())] = Background(tokens[2]);
+              unsigned int bgID = atof(tokens[1].c_str());
+              roomBackgroundFG[bgID]= tokens[2];
+              roomBackgroundBG[bgID]= tokens[3];
+
               break;
             }
-            case CAMERA:
+            case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
             {
-              // Map to bgID
-              roomCameras[atoi(tokens[9].c_str())] = Camera(Vec4(), 0, 0, 0) ;
+              unsigned int bgID  = atof(tokens[8].c_str());
+
+              float pitch = atof(tokens[1].c_str());
+              float yaw   = atof(tokens[2].c_str());
+              float roll  = atof(tokens[3].c_str());
+
+              Vec4 offset(atof(tokens[4].c_str()),
+                          atof(tokens[5].c_str()),
+                          atof(tokens[6].c_str()));
+
+              float fov = atof(tokens[7].c_str());
+
+              roomCameras[bgID] = Camera(offset, pitch, yaw, roll, fov) ;
               break;
             }
             case SPAWN:
