@@ -139,6 +139,8 @@ bool World::loadRoom(const std::string& _fileName)
   std::map<int, BBox> roomTriggers;
   std::map<int, std::string> roomForeground;
   std::map<int, std::string> roomBackground;
+  unsigned int maxbgID = 0;
+  unsigned int bgID;
 
   // Stores the filenames of the rooms the exits lead to
   std::vector<std::string> roomExits;
@@ -148,10 +150,10 @@ bool World::loadRoom(const std::string& _fileName)
   Vec4 spawnPosition;
 
   unsigned int lineCount = 0;
-  unsigned int maxBgId = 0;
   std::ifstream backgroundFile;
   std::string path = m_assetPath + _fileName;
   std::string line;
+
   backgroundFile.open(path.c_str(), std::ios::in);
   if( backgroundFile.is_open() )
   {
@@ -162,7 +164,7 @@ bool World::loadRoom(const std::string& _fileName)
       lineCount++;
 
       // Try to parse the line if it isn't empty or a comment
-      if( !tokens.empty() && !(tokens[0].substr(2) == "//") )
+      if( !tokens.empty() && (tokens[0].substr(2) != "//") )
       {
         unsigned int identifier;
              if(tokens[0] == "bbox")    { identifier = BBOX;      }
@@ -180,33 +182,25 @@ bool World::loadRoom(const std::string& _fileName)
             case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
             case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
             {
-              float xmin = atof(tokens[1].c_str());
-              float ymin = atof(tokens[2].c_str());
-              float zmin = atof(tokens[3].c_str());
-              float xmax = atof(tokens[4].c_str());
-              float ymax = atof(tokens[5].c_str());
-              float zmax = atof(tokens[6].c_str());
-              Vec4 pos(atof(tokens[7].c_str()),
-                       atof(tokens[8].c_str()),
-                       atof(tokens[9].c_str()) );
+              BBox bound = BBox(atof(tokens[1].c_str()),  atof(tokens[2].c_str()),  atof(tokens[3].c_str()),
+                                atof(tokens[4].c_str()),  atof(tokens[5].c_str()),  atof(tokens[6].c_str()),
+                                Vec4(atof(tokens[7].c_str()), atof(tokens[8].c_str()), atof(tokens[9].c_str())) );
 
               if(identifier == TRIGGER)
               {
-                unsigned int bgID = atof(tokens[10].c_str());
-                if(maxBgId > bgID) { maxBgId = bgID; }
-                roomTriggers[bgID] =  BBox(xmin, ymin, zmin, xmax, ymax, zmax);
+                bgID = atof(tokens[10].c_str());
+                roomTriggers[bgID] = bound;
               }
               else
               {
-                roomBounds.push_back( BBox(xmin, ymin, zmin, xmax, ymax, zmax) );
+                roomBounds.push_back( bound );
               }
 
               break;
             }
             case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
             {
-              unsigned int bgID = atof(tokens[1].c_str());
-              if(maxBgId > bgID) { maxBgId = bgID; }
+              bgID = atof(tokens[1].c_str());
 
               roomForeground[bgID]= tokens[2];
               roomBackground[bgID]= tokens[3];
@@ -215,8 +209,7 @@ bool World::loadRoom(const std::string& _fileName)
             }
             case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
             {
-              unsigned int bgID  = atof(tokens[8].c_str());
-              if(maxBgId > bgID) { maxBgId = bgID; }
+              bgID  = atof(tokens[8].c_str());
 
               float pitch = atof(tokens[1].c_str());
               float yaw   = atof(tokens[2].c_str());
@@ -262,7 +255,10 @@ bool World::loadRoom(const std::string& _fileName)
         {
           std::cout << tokens[0]  << " : malformed line " << lineCount << "\n";
         }
-      }
+
+        maxbgID = (maxbgID < bgID) ? bgID : maxbgID;
+
+      } // End of empty line/comment check
     }
     backgroundFile.close();
   }
@@ -273,15 +269,27 @@ bool World::loadRoom(const std::string& _fileName)
   }
 
   std::vector<Background> roomBackgrounds;
+  for( unsigned int bgID = 0; bgID < maxbgID; ++bgID )
+  {
+    roomBackgrounds.push_back( Background(roomTriggers[bgID],
+                                          roomBackground[bgID],
+                                          roomForeground[bgID],
+                                          roomCameras[bgID] ) );
+  }
+
+//  std::map<int, Camera> roomCameras;
+//  std::map<int, BBox> roomTriggers;
+//  std::map<int, std::string> roomForeground;
+//  std::map<int, std::string> roomBackground;
 
   //roomTriggers, roomForeground,
 
-  for(  )
+  //for(  )
 
   std::vector<Door> roomDoors;
 
   // sort out the room here
-  m_rooms.push_back( Room(spawnPosition, roomBounds, roomBackgrounds, roomDoors) );
+  //m_rooms.push_back( Room(spawnPosition, roomBounds, roomBackgrounds, roomDoors) );
 
   return true;
 }
