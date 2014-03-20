@@ -9,6 +9,7 @@ namespace Game {
 class Camera
 {
 public:
+  Camera() {;}
   Camera(const Vec4 &_pos, float _pitch, float _yaw, float _roll, float _fov);
   void setTransform(const Vec4 &_pos, float _pitch, float _yaw, float _roll );
   inline Mat4 getMatrix() const;
