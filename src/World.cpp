@@ -163,6 +163,17 @@ bool World::loadRoom(const std::string& _fileName)
       stringUtils::tokenize(line, tokens, " ");
       lineCount++;
 
+      if(!tokens.empty())
+      {
+        std::cout << tokens[0].substr(2) << std::endl;
+        std::cout << tokens[0].substr(2) << std::endl;
+
+        if (tokens[0].substr(2) == "//")
+        {
+          std::cout << "This is a comment\n";
+        }
+      }
+
       // Try to parse the line if it isn't empty or a comment
       if( !tokens.empty() && (tokens[0].substr(2) != "//") )
       {
@@ -253,7 +264,7 @@ bool World::loadRoom(const std::string& _fileName)
         }
         else
         {
-          std::cout << tokens[0]  << " : malformed line " << lineCount << "\n";
+          std::cout << _fileName << " : " << tokens[0]  << " : malformed line " << lineCount << "\n";
         }
 
         maxbgID = (maxbgID < bgID) ? bgID : maxbgID;
