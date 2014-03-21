@@ -16,7 +16,6 @@ public:
 
 private:
   Room *m_nextRoom;
-
 };
 
 }

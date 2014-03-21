@@ -14,7 +14,7 @@ bg 1 BG_01_fg.tga BG_01_bg.tga
 trigger 0 0 0 1 1 1 0 0 0 1
 
 // spawn x y
-spawn 0 0
+spawn 0 0 0
 
 //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
 exit 0.5 1 0 ROOM_02.room

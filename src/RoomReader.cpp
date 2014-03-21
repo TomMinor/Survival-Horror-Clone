@@ -1,6 +1,8 @@
 #include "RoomReader.h"
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
+#include <iterator>
 #include "stringUtilities.h"
 
 namespace Game {
@@ -183,7 +185,7 @@ void RoomReader::addBackground(const std::vector<std::string>& i_tokens, int &o_
 
 void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_backgroundID)
 {
-  std::stringstream ss(std::string());  // Empty stream
+  //std::stringstream ss( std::string );  // Empty stream
   float rotation[3]; // pitch, yaw, roll
   float offset[3]; // x,y,z
   float fov;
@@ -191,42 +193,32 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
   // Try to parse the rotation
   for(int i=0; i<3; ++i)
   {
-    if(ss << i_tokens[i+1])
+    std::istringstream ss(i_tokens.at(i+1));
+    if(!(ss >> rotation[i]))
     {
-      ss >> rotation[i];
-      ss.clear();
+      throw std::runtime_error("Invalid camera rotation");
     }
-    else
-    {
-      throw std::runtime_error("Invalid spawn rotation");
-    }
+    ss.clear();
   }
 
   // Try to parse the offset
   for(int i=0; i<3; ++i)
   {
-    if(ss << i_tokens[i+4])
+    std::istringstream ss(i_tokens.at(i+4));
+    if(!(ss >> offset[i]))
     {
-      ss >> offset[i];
-      ss.clear();
+      throw std::runtime_error("Invalid camera coordinates");
     }
-    else
-    {
-      throw std::runtime_error("Invalid spawn coordinates");
-    }
+    ss.clear();
   }
 
-  // FOV
-  if(ss << i_tokens[7])
-  {
-    ss >> fov;
-  }
-  else
+  std::istringstream ss(i_tokens[7]);
+  if(!(ss >> fov))
   {
     throw std::runtime_error("Invalid FOV");
   }
 
-  roomCameras[o_backgroundID] = Camera(Vec4(offset[0], offset[1], offset[2]),
+  m_roomCameras[o_backgroundID] = Camera(Vec4(offset[0], offset[1], offset[2]),
                                 rotation[0], rotation[1], rotation[2], fov);
 }
 
@@ -255,9 +247,10 @@ void RoomReader::addExit(const std::vector<std::string>& i_tokens)
 
 void RoomReader::setSpawn(const std::vector<std::string>& i_tokens)
 {
-  std::stringstream ss;  // Empty stream
+  //std::stringstream ss(std::string);  // Empty stream
   float coord[3];
 
+  std::stringstream ss;
   // Try to parse the coordinates
   for(int i=0; i<3; ++i)
   {
@@ -275,6 +268,8 @@ void RoomReader::setSpawn(const std::vector<std::string>& i_tokens)
 
   m_spawnPosition = Vec4(coord[0], coord[1], coord[2]);
 }
+
+
 
 
 }
