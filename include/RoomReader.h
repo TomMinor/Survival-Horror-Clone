@@ -12,44 +12,49 @@
 #include "Vec4.h"
 #include "stringUtilities.h"
 
+#include <iostream>
+#include <stdexcept>
+#include "stringUtilities.h"
 
 namespace Game {
 
 class RoomReader
 {
 public:
-  RoomReader(const std::string& _fileName, std::vector<Room> _roomsContainer );
+  RoomReader(const std::string& _fileName, std::vector<Room>& _roomsContainer );
   ~RoomReader();
-  bool load();
+  void load();
 
 private:
   enum { TRIGGER, BBOX, CAMERA, EXIT, BACKGROUND, SPAWN, ERROR };
-  static const int c_identifierSize[];
+  static const uint c_identifierSize[];
 
   std::fstream m_fileStream;
+  std::vector<Room>& m_roomsContainer;
 
   // To avoid parsing the file twice to get all the background IDs,
   // use the IDs as keys as we find them then sort out the data into
   // a single Room object later
-  std::map<int, Camera> roomCameras;
-  std::map<int, BBox> roomTriggers;
-  std::map<int, std::string> roomForeground;
-  std::map<int, std::string> roomBackground;
+  std::map<int, Camera> m_roomCameras;
+  std::map<int, BBox> m_roomTriggers;
+  std::map<int, std::string> m_roomForeground;
+  std::map<int, std::string> m_roomBackground;
 
   // Stores the filenames of the rooms the exits lead to
-  std::vector<std::string> roomExits;
-  std::vector<Vec4> roomExitPosition;
-  std::vector<BBox> roomBounds;
+  std::vector<std::string> m_roomExits;
+  std::vector<Vec4> m_roomExitPosition;
+  std::vector<BBox> m_roomBounds;
 
-  Vec4 spawnPosition;
+  Vec4 m_spawnPosition;
 
-  unsigned int getIdentifier(const std::string& _token) const;
+  unsigned int getIdentifier(const std::string& i_token) const;
 
-  BBox parseBBox(const std::vector<std::string>& _tokens) const;
-  void parseBgID(const std::string& _token, int &_backgroundID) const;
-  void addBackground(const std::vector<std::string>& _tokens, int &_backgroundID);
-  void addCamera(const std::vector<std::string>& _tokens, int &_backgroundID);
-  void addExit(const std::vector<std::string>& _tokens);
+  BBox parseBBox(const std::vector<std::string>& i_tokens) const;
+  void parseBgID(const std::string& i_token, int &o_backgroundID) const;
+  void addBackground(const std::vector<std::string>& i_tokens, int &o_backgroundID);
+  void addCamera(const std::vector<std::string>& i_tokens, int &o_backgroundID);
+  void addExit(const std::vector<std::string>& i_tokens);
+  void setSpawn(const std::vector<std::string>& i_tokens);
 
 };
 
