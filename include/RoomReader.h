@@ -46,7 +46,7 @@ private:
   unsigned int getIdentifier(const std::string& _token) const;
 
   BBox parseBBox(const std::vector<std::string>& _tokens) const;
-  bool parseBgID(const std::string& _token, int &_backgroundID) const;
+  void parseBgID(const std::string& _token, int &_backgroundID) const;
   void addBackground(const std::vector<std::string>& _tokens, int &_backgroundID);
   void addCamera(const std::vector<std::string>& _tokens, int &_backgroundID);
   void addExit(const std::vector<std::string>& _tokens);

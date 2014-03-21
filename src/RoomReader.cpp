@@ -39,7 +39,21 @@ unsigned int RoomReader::getIdentifier(const std::string& _token) const
   else if(_token == "exit")    { return EXIT;      }
   // None-empty line, but invalid identifier
   else                         { return ERROR;     }
+}
 
+void parseBgID(const std::string& _token, int &_backgroundID) const
+{
+  std::istringstream ss(_token);
+  int _ID;
+  // Check if the token is valid before placing it's value into bg ID
+  if( ss >> _ID )
+  {
+    ss >> _backgroundID;
+  }
+  else
+  {
+    throw std::runtime_error("Non-integer background ID\n");
+  }
 }
 
 bool RoomReader::load()
@@ -74,38 +88,20 @@ bool RoomReader::load()
             }
             case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
             {
-              if(parseBgID(tokens[10], bgID))
-              {
-                roomTriggers[bgID] = parseBBox(tokens);
-              }
-              else
-              {
-                throw std::runtime_error("Non-integer background ID\n");
-              }
+              parseBgID(tokens[10], bgID);
+              roomTriggers[bgID] = parseBBox(tokens);
               break;
             }
             case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
             {
-              if(parseBgID(tokens[1], bgID))
-              {
-                addBackground(tokens, bgID);
-              }
-              else
-              {
-                throw std::runtime_error("Non-integer background ID\n");
-              }
+              parseBgID(tokens[1], bgID);
+              addBackground(tokens, bgID);
               break;
             }
             case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
             {
-              if(parseBgID(tokens[8], bgID))
-              {
-                addCamera(tokens, bgID);
-              }
-              else
-              {
-                throw std::runtime_error("Non-integer background ID\n");
-              }
+              parseBgID(tokens[8], bgID);
+              addCamera(tokens, bgID);
               break;
             }
             case EXIT: //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
