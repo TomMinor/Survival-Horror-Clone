@@ -21,10 +21,10 @@ public:
   void drawFG() const;
 
 private:
+  Camera m_cameraView;
   BBox m_triggerVolume;
   Image m_bgTexture; // Background image
   Image m_fgTexture; // Foreground image
-  Camera m_cameraView;
 };
 
 }

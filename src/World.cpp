@@ -6,16 +6,13 @@
 #endif
 
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <cstdio>
-#include <map>
+#include <stdexcept>
 
-#include "SDL.h"
 #include "GLFunctions.h"
 #include "World.h"
 #include "Vec4.h"
-#include "stringUtilities.h"
+#include "RoomReader.h"
 
 namespace Game {
 
@@ -30,16 +27,23 @@ bool World::init(const std::string& _assetpath)
     m_assetPath = _assetpath;
     printf("Loading assets : %s\n", m_assetPath.c_str());
 
-    loadRooms();
+    try
+    {
+      loadRooms();
+    }
+    catch(std::ios_base::failure &msg)
+    {
+      std::cerr << msg.what() << "\n";
+      return false;
+    }
 
+    updateTime();
     m_init = true;
   }
   else
   {
     printf("World already loaded, not reinitialising\n");
   }
-
-  updateTime();
 
   return true;
 }
@@ -79,112 +83,27 @@ void World::loadRooms()
   {
     while(getline(manifestFile, line))
     {
-      if(!loadRoom(line))
+      try
       {
-        std::cout << "Could not load background file : " << m_assetPath + line << std::endl;
+        RoomReader(m_assetPath+line, m_rooms).load();
       }
+      catch(std::invalid_argument &msg)
+      {
+        std::cerr << msg.what() << "\n";
+      }
+
     }
     manifestFile.close();
   }
   else
   {
     // Throw an error
-    std::cout << "Could not load manifest file\n";
-    return;
+    throw std::ios_base::failure("Could not load manifest file\n");
   }
 }
 
 bool World::loadRoom(const std::string& _fileName)
 {
-  /*  ----- Example input file ------
-  //bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
-  bbox 0 0 0 1 1 1 0 0 0
-  bbox 2 2 0 3 3 1 1 1 0
-  bbox 0 0 0 -1 -1 1 0 0 0
-  bbox -2 0 3 -3 -1 -1 1 0
-
-  //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
-  camera 0 0 0 1 1 1 75 1
-
-  //bg <bgID> <ForegroundFileName> <BackgroundFileName>
-  bg 1 BG_01_fg.tga BG_01_bg.tga
-
-  //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
-  trigger 0 0 0 1 1 1 0 0 0 1
-
-  // spawn x y z
-  spawn 0 0 0
-
-  //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
-  exit 0.5 1 0 ROOM_02.room
-
-  */
-
-  // Values store expected amount of tokens for each identifier
-  // (+1 to include identifier itself)
-  enum {
-    TRIGGER     = 1+10,
-    BBOX        = 1+9,
-    CAMERA      = 1+8,
-    EXIT        = 1+4,
-    BACKGROUND  = 1+3,
-    SPAWN       = 1,
-    ERROR       = ~0
-  };
-
-  // To avoid parsing the file twice to get all the background IDs,
-  // use the IDs as keys as we find them then sort out the data into
-  // a single Room object later
-  std::map<int, Camera> roomCameras;
-  std::map<int, BBox> roomTriggers;
-  std::map<int, std::string> roomForeground;
-  std::map<int, std::string> roomBackground;
-  unsigned int maxbgID = 0;
-  unsigned int bgID;
-
-  // Stores the filenames of the rooms the exits lead to
-  std::vector<std::string> roomExits;
-  std::vector<Vec4> roomExitPosition;
-  std::vector<BBox> roomBounds;
-
-  Vec4 spawnPosition;
-
-  unsigned int lineCount = 0;
-  std::ifstream backgroundFile;
-  std::string path = m_assetPath + _fileName;
-  std::string line;
-
-  backgroundFile.open(path.c_str(), std::ios::in);
-  if( backgroundFile.is_open() )
-  {
-    while(getline(backgroundFile, line))
-    {
-      std::vector<std::string> tokens;
-      stringUtils::tokenize(line, tokens, " ");
-      lineCount++;
-
-      if(!tokens.empty())
-      {
-        std::cout << tokens[0].substr(2) << std::endl;
-        std::cout << tokens[0].substr(2) << std::endl;
-
-        if (tokens[0].substr(2) == "//")
-        {
-          std::cout << "This is a comment\n";
-        }
-      }
-
-      // Try to parse the line if it isn't empty or a comment
-      if( !tokens.empty() && (tokens[0].substr(2) != "//") )
-      {
-        unsigned int identifier;
-             if(tokens[0] == "bbox")    { identifier = BBOX;      }
-        else if(tokens[0] == "trigger") { identifier = TRIGGER;   }
-        else if(tokens[0] == "camera")  { identifier = CAMERA;    }
-        else if(tokens[0] == "bg")      { identifier = BACKGROUND;}
-        else if(tokens[0] == "spawn")   { identifier = SPAWN;     }
-        else                            { identifier = ERROR;     } // None-empty line, but invalid identifier
-
         // identifier enum values store the expected amount of tokens
         if(tokens.size() == identifier)
         {
@@ -193,13 +112,16 @@ bool World::loadRoom(const std::string& _fileName)
             case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
             case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
             {
+
               BBox bound = BBox(atof(tokens[1].c_str()),  atof(tokens[2].c_str()),  atof(tokens[3].c_str()),
                                 atof(tokens[4].c_str()),  atof(tokens[5].c_str()),  atof(tokens[6].c_str()),
                                 Vec4(atof(tokens[7].c_str()), atof(tokens[8].c_str()), atof(tokens[9].c_str())) );
 
               if(identifier == TRIGGER)
               {
+                if(isdigit(tokens[10]))
                 bgID = atof(tokens[10].c_str());
+
                 roomTriggers[bgID] = bound;
               }
               else
@@ -250,9 +172,8 @@ bool World::loadRoom(const std::string& _fileName)
             {
               float x = atof(tokens[0].c_str());
               float y = atof(tokens[1].c_str());
-              float z = atof(tokens[2].c_str());
 
-              spawnPosition = Vec4(x,y,z);
+              spawnPosition = Vec4(x,y);
               break;
             }
             case ERROR:
@@ -267,7 +188,8 @@ bool World::loadRoom(const std::string& _fileName)
           std::cout << _fileName << " : " << tokens[0]  << " : malformed line " << lineCount << "\n";
         }
 
-        maxbgID = (maxbgID < bgID) ? bgID : maxbgID;
+        if (maxbgID < bgID) { maxbgID = bgID; }
+        //maxbgID = (maxbgID < bgID) ? bgID : maxbgID;
 
       } // End of empty line/comment check
     }
