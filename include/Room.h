@@ -13,12 +13,13 @@ class Door;
 class Room
 {
 public:
-  Room( const Vec4& _spawnPos,
+  Room( const std::string& _name,
+        const Vec4& _spawnPos,
         const std::vector<BBox>& _bboxes,
         const std::vector<Background>& _backgrounds,
-        const std::vector<Door>& _exits )
-    : m_playerSpawn(_spawnPos), m_collisionBoxes(_bboxes),
-      m_backgrounds(_backgrounds), m_exits(_exits)
+        const std::vector<Door>& _exits ) :
+    m_name(_name), m_playerSpawn(_spawnPos), m_collisionBoxes(_bboxes),
+    m_backgrounds(_backgrounds), m_exits(_exits)
   {
     ;
   }
@@ -28,12 +29,12 @@ public:
   void updatePlayer();
 
 private:
+  std::string m_name;
   Vec4 m_playerSpawn;
   std::vector<BBox> m_collisionBoxes;
 
   std::vector<Background> m_backgrounds;
   std::vector<Door> m_exits;
-
 };
 
 

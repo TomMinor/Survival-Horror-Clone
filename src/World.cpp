@@ -81,11 +81,11 @@ void World::loadRooms()
   manifestFile.open(path.c_str(), std::ios::in);
   if( manifestFile.is_open() )
   {
-    while(getline(manifestFile, line))
+    while(std::getline(manifestFile, line))
     {
       try
       {
-        RoomReader(m_assetPath+line, m_rooms).load();
+        RoomReader(line, m_rooms, m_assetPath).load();
       }
       catch(std::invalid_argument &msg)
       {
@@ -100,6 +100,8 @@ void World::loadRooms()
     // Throw an error
     throw std::ios_base::failure("Could not load manifest file\n");
   }
+
+
 }
 
 }

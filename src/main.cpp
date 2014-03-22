@@ -35,8 +35,8 @@ int main()
   SDL_Window *window=SDL_CreateWindow("SDLGL",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
-                                      rect.w,
-                                      rect.h,
+                                      rect.w/2,
+                                      rect.h/2,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
                                      );
   // check to see if that worked or exit

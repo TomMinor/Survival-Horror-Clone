@@ -10,6 +10,8 @@ namespace Game {
 class World
 {
 public:
+  //BUG: Make private copy/assignment constructors
+
   // We only want 1 instance of World
   static World& instance()
   {
@@ -27,8 +29,7 @@ public:
   inline double getCurrentTime() const { return SDL_GetTicks(); }
 
 private:
-  World()
-    : m_player(Vec4(2,5,2), Vec4()), m_currentTime(0), m_lastTime(0)
+  World() : m_player(Vec4(2,5,2), Vec4()), m_currentTime(0), m_lastTime(0)
   {;}
 
   void loadRooms();

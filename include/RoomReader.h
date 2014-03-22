@@ -21,7 +21,7 @@ namespace Game {
 class RoomReader
 {
 public:
-  RoomReader(const std::string& _fileName, std::vector<Room>& _roomsContainer );
+  RoomReader(const std::string& _fileName, std::vector<Room>& _roomsContainer, const std::string& _assetFolder = "assets/");
   ~RoomReader();
   void load();
 
@@ -29,6 +29,8 @@ private:
   enum { TRIGGER, BBOX, CAMERA, EXIT, BACKGROUND, SPAWN, ERROR };
   static const uint c_identifierSize[];
 
+  std::string m_fileName;
+  std::string m_assetFolder;
   std::fstream m_fileStream;
   std::vector<Room>& m_roomsContainer;
 
@@ -49,9 +51,9 @@ private:
 
   unsigned int getIdentifier(const std::string& i_token) const;
 
+  float tokenToFloat(const std::string& _token) const;
   BBox parseBBox(const std::vector<std::string>& i_tokens) const;
   void parseBgID(const std::string& i_token, int &o_backgroundID) const;
-  void addBackground(const std::vector<std::string>& i_tokens, int &o_backgroundID);
   void addCamera(const std::vector<std::string>& i_tokens, int &o_backgroundID);
   void addExit(const std::vector<std::string>& i_tokens);
   void setSpawn(const std::vector<std::string>& i_tokens);

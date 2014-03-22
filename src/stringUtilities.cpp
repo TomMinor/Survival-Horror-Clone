@@ -1,7 +1,7 @@
 #include "stringUtilities.h"
+#include <sstream>
 
 namespace stringUtils {
-
 
 void tokenize(const std::string& _str,std::vector<std::string>& _tokens,const std::string& _delimiters)
 {
@@ -19,6 +19,18 @@ void tokenize(const std::string& _str,std::vector<std::string>& _tokens,const st
     // Find next "non-delimiter"
     pos = _str.find_first_of(_delimiters, lastPos);
   }
+}
+
+float tokenToFloat(const std::string& _token)
+{
+  float output;
+  std::istringstream ss(_token);
+  if(!(ss >> output))
+  {
+    throw std::runtime_error("Could not convert token to float");
+  }
+
+  return output;
 }
 
 }
