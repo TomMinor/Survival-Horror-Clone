@@ -20,7 +20,7 @@ public:
   }
 
   bool init(const std::string& _assetpath = "assets/");
-  void draw();
+  void draw() const;
   void update();
   void changeRoom(const Room & _nextRoom) const;
 

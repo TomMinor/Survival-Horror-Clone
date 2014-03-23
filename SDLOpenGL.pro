@@ -36,7 +36,8 @@ HEADERS+=include/GLFunctions.h \
     include/Image.h \
     include/Camera.h \
     include/stringUtilities.h \
-    include/RoomReader.h
+    include/RoomReader.h \
+    include/GLinc.h
 
 # add the ngl lib
 # this is where to look for includes

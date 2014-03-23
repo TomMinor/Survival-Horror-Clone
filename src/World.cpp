@@ -25,7 +25,7 @@ bool World::init(const std::string& _assetpath)
     // Read assets
     //    Store in m_rooms
     m_assetPath = _assetpath;
-    printf("Loading assets : %s\n", m_assetPath.c_str());
+    std::cout << "Loading assets :" <<  m_assetPath << "\n";
 
     try
     {
@@ -42,27 +42,24 @@ bool World::init(const std::string& _assetpath)
   }
   else
   {
-    printf("World already loaded, not reinitialising\n");
+    std::cerr << "World already loaded, not reinitialising\n";
   }
 
   return true;
 }
 
 // Draw actors and room
-void World::draw()
+void World::draw() const
 {
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   // now draw etc
 
-  glPushMatrix();
-    glTranslatef(0, 0, 0.0f);
-    glPushMatrix();
-      glRotatef(0, 0.0f, 0.0f, 1.0f);
-      GLFunctions::cube(2.0f,1.0f,1.0f);
-    glPopMatrix();
-  glPopMatrix();
-
+  // Draw
+  for(std::vector<Room>::const_iterator room = m_rooms.begin();
+      room!= m_rooms.end(); ++room)
+  {
+      room->debugDrawBounds();
+  }
 
 }
 

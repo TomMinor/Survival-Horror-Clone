@@ -14,6 +14,7 @@ public:
 
   bool checkCollision(const BBox& _b) const;
   void move(Vec4 _pos);
+  void draw() const;
 
   friend std::ostream & operator<<(std::ostream &, const BBox &);
 private:
@@ -24,6 +25,9 @@ private:
   float m_xmax;
   float m_ymax;
   float m_zmax;
+
+  // Store the position, primarily for debug drawing
+  Vec4 m_position;
 };
 
 std::ostream & operator<<(std::ostream &_output, const BBox &_b);
