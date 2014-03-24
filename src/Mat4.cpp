@@ -1,16 +1,12 @@
-#include "Mat4.h"
+#include "GLinc.h"
+
 #include <cstring>
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <cmath>
-#ifdef LINUX
-	#include <GL/gl.h>
-#endif
-#ifdef DARWIN
-	#include <OpenGL/gl.h>
-#endif
 
+#include "Mat4.h"
 
 Mat4::Mat4(float _s)
 {
@@ -98,6 +94,42 @@ void Mat4::loadProjection() const
   glLoadIdentity();
 
   glMultMatrixf(&m_openGL[0]);
+}
+
+
+Mat4 Mat4::operator *(Vec4 _rhs) const
+{
+
+}
+
+void Mat4::operator *=(Vec4 _rhs)
+{
+
+}
+
+Mat4 Mat4::operator -(const Mat4 &_rhs) const
+{
+
+}
+
+void Mat4::operator -=(const Mat4 &_rhs)
+{
+
+}
+
+Mat4 Mat4::operator+(const Mat4 &_rhs) const
+{
+
+}
+
+void Mat4::operator+=(const Mat4 &_rhs)
+{
+
+}
+
+bool Mat4::operator==(const Mat4 &_rhs) const
+{
+
 }
 
 

@@ -2,6 +2,7 @@
 #define GLFUNCTIONS_H__
 
 #include "GLinc.h"
+
 #include "Vec4.h"
 #include <cmath>
 

@@ -1,19 +1,17 @@
 #ifndef ROOMREADER_H
 #define ROOMREADER_H
+#include <SDL.h>
 
 #include <map>
 #include <vector>
 #include <fstream>
 #include <string>
+#include <iostream>
+#include <stdexcept>
 
-#include "SDL.h"
 #include "GLFunctions.h"
 #include "World.h"
 #include "Vec4.h"
-#include "stringUtilities.h"
-
-#include <iostream>
-#include <stdexcept>
 #include "stringUtilities.h"
 
 namespace Game {

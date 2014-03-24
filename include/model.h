@@ -1,15 +1,12 @@
 #ifndef MODEL_H
 #define MODEL_H
+#include "GLinc.h"
 
 #include <vector>
 #include <string>
+
 #include "Vec4.h"
-#ifdef LINUX
-	#include <GL/gl.h>
-#endif
-#ifdef DARWIN
-	#include <OpenGL/gl.h>
-#endif
+
 
 class Model
 {

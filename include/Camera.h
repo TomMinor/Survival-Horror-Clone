@@ -12,10 +12,10 @@ public:
   Camera() {;}
   Camera(const Vec4 &_pos, float _pitch, float _yaw, float _roll, float _fov);
   void setTransform(const Vec4 &_pos, float _pitch, float _yaw, float _roll );
-  inline Mat4 getMatrix() const;
+  inline Mat4 getMatrix() const { return m_viewMatrix; }
 
 private:
-  float m_viewMatrix[16];
+  Mat4 m_viewMatrix;
   float m_fov;
 };
 

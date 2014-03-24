@@ -5,16 +5,6 @@
 
 namespace Game {
 
-BBox::BBox( float _xmin, float _ymin, float _zmin,
-            float _xmax, float _ymax, float _zmax,
-            const Vec4& _offset) :
-  m_position(_offset)
-{
-  m_xmin = _xmin + _offset.m_x;    m_xmax = _xmax + _offset.m_x;
-  m_ymin = _ymin + _offset.m_y;    m_ymax = _ymax + _offset.m_y;
-  m_zmin = _zmin + _offset.m_z;    m_zmax = _zmax + _offset.m_z;
-}
-
 bool BBox::checkCollision(const BBox & _b) const
 {
   return ( _b.m_xmax );
@@ -29,16 +19,17 @@ void BBox::draw() const
 {
   glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-  glColor3f( 1.0f, 0.5f, 0.0f );
+  glColor3f( 1.0f, 0.25f, 0.0f );
   glPushMatrix();
-    glTranslatef(m_xmax - m_xmin, m_ymax - m_ymin, m_zmax - m_zmin);
+    glTranslatef( (m_xmax+m_xmin)/2 , (m_ymax+m_ymin)/2, (m_zmax+m_zmin)/2);
     glPushMatrix();
-      glRotatef(0, 0.0f, 0.0f, 1.0f);
-      GLFunctions::cube(m_xmax,
-                        m_ymax,
-                        m_zmax);
+      GLFunctions::cube(m_xmax - m_xmin,
+                        m_ymax - m_ymin,
+                        m_zmax - m_zmin);
     glPopMatrix();
   glPopMatrix();
+
+  glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 std::ostream & operator<<(std::ostream &_output, const BBox &_b)

@@ -1,14 +1,10 @@
+#include "GLinc.h"
+
 #include <iostream>
 #include <cmath>
 #include <cassert>
 #include "Vec4.h"
 
-#ifdef LINUX
-	#include <GL/gl.h>
-#endif
-#ifdef DARWIN
-	#include <OpenGL/gl.h>
-#endif
 
 Vec4 Vec4::operator *(float _rhs) const
 {

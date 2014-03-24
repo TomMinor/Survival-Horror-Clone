@@ -1,10 +1,5 @@
+#include "GLinc.h"
 #include <SDL.h>
-#ifdef LINUX
-	#include <GL/gl.h>
-#endif
-#ifdef DARWIN
-	#include <OpenGL/gl.h>
-#endif
 
 #include <iostream>
 #include <cstdlib>
@@ -64,9 +59,10 @@ int main()
   Vec4 white(1,1,1);
   Vec4 yellow(1,1,0);
 
+  glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
   GLFunctions::perspective(75,float(1024/720),0.01,500);
-  GLFunctions::lookAt(Vec4(0,0,4),Vec4(0,0,0),Vec4(0,1,0));
+  GLFunctions::lookAt(Vec4(0,4,4),Vec4(-4,2,0),Vec4(0,1,0));
 
   SDL_GL_SwapWindow(window);
   glEnable(GL_LIGHTING);

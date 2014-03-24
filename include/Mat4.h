@@ -1,6 +1,8 @@
 #ifndef MAT4_H__
 #define MAT4_H__
 #include <ostream>
+#include "Vec4.h"
+
 
 class Mat4
 {
@@ -14,6 +16,19 @@ class Mat4
   void transpose();
   void loadModelView() const;
   void loadProjection() const;
+
+  // ------- Operator overloads ---------
+  Mat4 operator *(Vec4 _rhs) const;
+  void operator *=(Vec4 _rhs);
+
+  Mat4 operator -(const Mat4 &_rhs) const;
+  void operator -=(const Mat4 &_rhs);
+
+  Mat4 operator+(const Mat4 &_rhs) const;
+  void operator+=(const Mat4 &_rhs);
+
+  bool operator==(const Mat4 &_rhs) const;
+
 
   union
   {

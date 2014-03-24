@@ -8,9 +8,12 @@ namespace Game {
 class BBox
 {
 public:
-  BBox( float _xmin=0.0f, float _ymin=0.0f, float _zmin=0.0f,
-        float _xmax=1.0f, float _ymax=1.0f, float _zmax=1.0f,
-        const Vec4& _offset = Vec4(0,0,0));
+  BBox() {;}
+  BBox( float _xmin, float _ymin, float _zmin,
+        float _xmax, float _ymax, float _zmax) :
+    m_xmin(_xmin), m_ymin(_ymin), m_zmin(_zmin),
+    m_xmax(_xmax), m_ymax(_ymax), m_zmax(_zmax)
+  {;}
 
   bool checkCollision(const BBox& _b) const;
   void move(Vec4 _pos);
@@ -25,9 +28,6 @@ private:
   float m_xmax;
   float m_ymax;
   float m_zmax;
-
-  // Store the position, primarily for debug drawing
-  Vec4 m_position;
 };
 
 std::ostream & operator<<(std::ostream &_output, const BBox &_b);
