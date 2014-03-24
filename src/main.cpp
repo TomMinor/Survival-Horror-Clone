@@ -7,6 +7,8 @@
 #include "model.h"
 #include "World.h"
 
+#include "BoundingBox.h"
+
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
 void SDLErrorExit(const std::string &_msg);
@@ -83,6 +85,10 @@ int main()
   if ( !Game::World::instance().init() )
       return EXIT_FAILURE;
 
+  Game::BBox a(-1,-1,-1,1,1,1);
+  //Game::BBox b(0.5,-0.5,-0.5,1.5,1.5,1.5);
+  Game::BBox b(-2,-2,-2, 3,3,3);
+
   while(!quit)
   {
     while ( SDL_PollEvent(&event) )
@@ -122,6 +128,16 @@ int main()
     {
       Game::World::instance().updateTime();
       Game::World::instance().draw();
+
+      a.draw();
+      b.draw();
+      if(a.checkCollision(b))
+      {
+        Vec4 offset(a.intersectionAmount(b));
+        a.move( offset*-1 );
+        std::cout << offset*-1;
+      }
+
 
       // swap the buffers
       SDL_GL_SwapWindow(window);

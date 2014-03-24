@@ -18,6 +18,7 @@ public:
   bool checkCollision(const BBox& _b) const;
   void move(Vec4 _pos);
   void draw() const;
+  Vec4 intersectionAmount(const BBox& _b);
 
   friend std::ostream & operator<<(std::ostream &, const BBox &);
 private:
