@@ -55,6 +55,7 @@ LIBS+=$$system(sdl2-config  --libs)
 message(output from sdl2-config --libs added to LIB=$$LIBS)
 
 LIBS += -L/usr/local/lib
+LIBS += -lSDL2_image
 macx:LIBS+= -framework OpenGL
 macx:DEFINES+=DARWIN
 linux-*:DEFINES+=LINUX

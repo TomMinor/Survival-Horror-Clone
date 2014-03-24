@@ -14,9 +14,10 @@ public:
   Background( const BBox& _triggerVolume,
                           const std::string& _bgPath,
                           const std::string& _fgPath,
-                          const Camera& _cameraView  )
-    : m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
-      m_bgTexture(Image(_bgPath)), m_fgTexture(Image(_fgPath)) {;}
+                          const Camera& _cameraView  ) :
+    m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
+    m_bgTexture(Image(_bgPath)), m_fgTexture(Image(_fgPath)) {;}
+
   void drawBG() const;
   void drawFG() const;
 

@@ -112,21 +112,27 @@ void RoomReader::load()
   std::vector<Background> roomBackgrounds;
   for( int bgID = 0; bgID < maxbgID; ++bgID )
   {
-    roomBackgrounds.push_back( Background(m_roomTriggers[bgID],
-                                          m_roomBackground[bgID],
-                                          m_roomForeground[bgID],
-                                          m_roomCameras[bgID] ) );
+    if( (m_roomBackground.count(bgID)>0) && (m_roomTriggers.count(bgID)>0) &&
+        (m_roomForeground.count(bgID)>0) && (m_roomCameras.count(bgID)>0) )
+    {
+      roomBackgrounds.push_back( Background(m_roomTriggers[bgID],
+                                            m_roomBackground[bgID],
+                                            m_roomForeground[bgID],
+                                            m_roomCameras[bgID] ) );
+    }
   }
 
-  // Calculate exits
+
+
+//  // Calculate exits
   std::vector<Door> roomExits;
-  for( int bgID = 0; bgID < maxbgID; ++bgID )
-  {
-    roomBackgrounds.push_back( Background(m_roomTriggers[bgID],
-                                          m_roomBackground[bgID],
-                                          m_roomForeground[bgID],
-                                          m_roomCameras[bgID] ) );
-  }
+//  for( int bgID = 0; bgID < maxbgID; ++bgID )
+//  {
+//    roomBackgrounds.push_back( Background(m_roomTriggers[bgID],
+//                                          m_roomBackground[bgID],
+//                                          m_roomForeground[bgID],
+//                                          m_roomCameras[bgID] ) );
+//  }
 
   m_roomsContainer.push_back( Room(m_fileName,
                                    m_spawnPosition,

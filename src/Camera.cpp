@@ -14,7 +14,8 @@ void Camera::setTransform(const Vec4 &_pos, float _pitch, float _yaw, float _rol
   m_viewMatrix.rotateX( _pitch );
   m_viewMatrix.rotateZ( _yaw );
 
-  m_viewMatrix = m_viewMatrix * _pos;
+  // BUG: Implement matrix operators again
+  //m_viewMatrix = m_viewMatrix * _pos;
 }
 
 }

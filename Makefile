@@ -18,7 +18,7 @@ CXXFLAGS      = -pipe -msse -msse2 -msse3 -I/usr/local/include/SDL2 -D_REENTRANT
 INCPATH       = -I/usr/lib/qt/mkspecs/linux-clang -I. -Iinclude -I/usr/include/qt -I/usr/include/qt/QtOpenGL -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I.
 LINK          = clang++
 LFLAGS        = -Wl,-O1,--sort-common,--as-needed,-z,relro -ccc-gcc-name g++
-LIBS          = $(SUBLIBS) -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lSDL2 -lGLEW -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/local/lib -Wl,-rpath,/usr/local/lib -lSDL2 -lSDL2_image -lGLEW -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /usr/lib/qt/bin/qmake
@@ -430,8 +430,8 @@ compiler_clean:
 
 ####### Compile
 
-obj/main.o: src/main.cpp include/GLFunctions.h \
-		include/GLinc.h \
+obj/main.o: src/main.cpp include/GLinc.h \
+		include/GLFunctions.h \
 		include/Vec4.h \
 		include/model.h \
 		include/World.h \
@@ -451,18 +451,22 @@ obj/GLFunctions.o: src/GLFunctions.cpp include/GLFunctions.h \
 		include/Mat4.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/GLFunctions.o src/GLFunctions.cpp
 
-obj/Vec4.o: src/Vec4.cpp include/Vec4.h
+obj/Vec4.o: src/Vec4.cpp include/GLinc.h \
+		include/Vec4.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Vec4.o src/Vec4.cpp
 
-obj/Mat4.o: src/Mat4.cpp include/Mat4.h
+obj/Mat4.o: src/Mat4.cpp include/GLinc.h \
+		include/Mat4.h \
+		include/Vec4.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Mat4.o src/Mat4.cpp
 
 obj/model.o: src/model.cpp include/model.h \
+		include/GLinc.h \
 		include/Vec4.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/model.o src/model.cpp
 
-obj/World.o: src/World.cpp include/GLFunctions.h \
-		include/GLinc.h \
+obj/World.o: src/World.cpp include/GLinc.h \
+		include/GLFunctions.h \
 		include/Vec4.h \
 		include/World.h \
 		include/Actor.h \
@@ -492,8 +496,10 @@ obj/Room.o: src/Room.cpp include/Room.h \
 		include/Door.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Room.o src/Room.cpp
 
-obj/BoundingBox.o: src/BoundingBox.cpp include/BoundingBox.h \
-		include/Vec4.h
+obj/BoundingBox.o: src/BoundingBox.cpp include/GLinc.h \
+		include/BoundingBox.h \
+		include/Vec4.h \
+		include/GLFunctions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/BoundingBox.o src/BoundingBox.cpp
 
 obj/Image.o: src/Image.cpp include/Image.h
