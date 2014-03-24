@@ -91,26 +91,39 @@ public:
     //XYZW
     struct
     {
-      /// @brief The x element of the vector
+      /// @brief The x element of the position vector
       float m_x;
-      /// @brief The y element of the vector
+      /// @brief The y element of the position vector
       float m_y;
-      /// @brief The z element of the vector
+      /// @brief The z element of the position vector
       float m_z;
-      /// @brief The w element of the vector
+      /// @brief The w element of the position vector
       float m_w;
+    };
+
+    //Pitch/Yaw/Roll
+    struct
+    {
+      /// @brief The pitch element of the rotation vector
+      float m_pitch;
+      /// @brief The roll element of the rotation vector
+      float m_roll;
+      /// @brief The yaw element of the rotation vector
+      float m_yaw;
+      /// @brief The unused 4th element of the rotation vector
+      float m_unused;
     };
 
     //RGBA
     struct
     {
-      /// @brief The r element of the vector
+      /// @brief The r element of the colour vector
       float m_r;
-      /// @brief The g element of the vector
+      /// @brief The g element of the colour vector
       float m_g;
-      /// @brief The b element of the vector
+      /// @brief The b element of the colour vector
       float m_b;
-      /// @brief The a element of the vector
+      /// @brief The a element of the colour vector
       float m_a;
     };
 

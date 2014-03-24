@@ -243,7 +243,7 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
   }
 
   m_roomCameras[o_backgroundID] = Camera( Vec4(offset[0], offset[1], offset[2]),
-                                          rotation[0], rotation[1], rotation[2], fov );
+                                          Vec4(rotation[0], rotation[1], rotation[2]), fov );
 }
 
 void RoomReader::addExit(const std::vector<std::string>& i_tokens)

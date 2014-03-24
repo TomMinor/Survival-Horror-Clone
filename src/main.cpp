@@ -66,7 +66,6 @@ int main()
   glClear(GL_COLOR_BUFFER_BIT);
   GLFunctions::perspective(75,float(1024/720),0.01,500);
 
-
   SDL_GL_SwapWindow(window);
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
@@ -91,7 +90,8 @@ int main()
   Game::BBox b(-2,-2,-2, 3,3,3);
 
   Vec4 offset(0.1,0.1,0.1);
-  Game::Camera current(Vec4(4,4,4), 0, 0, 0, 50);
+  Vec4 rotation;
+  Game::Camera current(Vec4(4,4,4), Vec4(), 50);
 
   while(!quit)
   {
@@ -138,14 +138,44 @@ int main()
               offset.m_x++;
               break;
             }
-            case SDLK_a:
+            case SDLK_LEFTBRACKET:
             {
               offset.m_z--;
               break;
             }
-            case SDLK_s:
+            case SDLK_RIGHTBRACKET:
             {
               offset.m_z++;
+              break;
+            }
+            case SDLK_w:
+            {
+              rotation.m_y++;
+              break;
+            }
+            case SDLK_s:
+            {
+              rotation.m_y--;
+              break;
+            }
+            case SDLK_a:
+            {
+              rotation.m_x--;
+              break;
+            }
+            case SDLK_d:
+            {
+              rotation.m_x++;
+              break;
+            }
+            case SDLK_q:
+            {
+              rotation.m_z--;
+              break;
+            }
+            case SDLK_e:
+            {
+              rotation.m_z++;
               break;
             }
             case SDLK_PAGEUP : break;
@@ -158,20 +188,10 @@ int main()
       } // end of event switch
     } // end of poll events    
 
-//    GLFunctions::lookAt( offset ,Vec4(0,0,0),Vec4(0,1,0));
-
-    //Vec4 n = _look - _eye;
-    //Vec4 u = _up;
-    //Vec4 v = n.cross(u);
-//    u = v.cross(n);
-//    n.normalize();
-//    v.normalize();
-//    u.normalize();
-
     if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime()  + delay))
     { 
-      current
-
+      current.setTransform( offset, rotation );
+      current.setView();
       Game::World::instance().updateTime();
       Game::World::instance().draw();
 
