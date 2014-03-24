@@ -8,6 +8,7 @@
 #include "World.h"
 
 #include "BoundingBox.h"
+#include "Camera.h"
 
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
@@ -64,7 +65,7 @@ int main()
   glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
   GLFunctions::perspective(75,float(1024/720),0.01,500);
-  GLFunctions::lookAt(Vec4(0,4,4),Vec4(-4,2,0),Vec4(0,1,0));
+
 
   SDL_GL_SwapWindow(window);
   glEnable(GL_LIGHTING);
@@ -88,6 +89,9 @@ int main()
   Game::BBox a(-1,-1,-1,1,1,1);
   //Game::BBox b(0.5,-0.5,-0.5,1.5,1.5,1.5);
   Game::BBox b(-2,-2,-2, 3,3,3);
+
+  Vec4 offset(0.1,0.1,0.1);
+  Game::Camera current(Vec4(4,4,4), 0, 0, 0, 50);
 
   while(!quit)
   {
@@ -114,6 +118,36 @@ int main()
 //            case SDLK_s : offset.x--; break;
 //            case SDLK_a : offset.angle += 5; break;
 //            case SDLK_d : offset.angle -= 5; break;
+            case SDLK_UP:
+            {
+              offset.m_y++;
+              break;
+            }
+            case SDLK_DOWN:
+            {
+              offset.m_y--;
+              break;
+            }
+            case SDLK_LEFT:
+            {
+              offset.m_x--;
+              break;
+            }
+            case SDLK_RIGHT:
+            {
+              offset.m_x++;
+              break;
+            }
+            case SDLK_a:
+            {
+              offset.m_z--;
+              break;
+            }
+            case SDLK_s:
+            {
+              offset.m_z++;
+              break;
+            }
             case SDLK_PAGEUP : break;
             case SDLK_PAGEDOWN : break;
 
@@ -124,20 +158,31 @@ int main()
       } // end of event switch
     } // end of poll events    
 
+//    GLFunctions::lookAt( offset ,Vec4(0,0,0),Vec4(0,1,0));
+
+    //Vec4 n = _look - _eye;
+    //Vec4 u = _up;
+    //Vec4 v = n.cross(u);
+//    u = v.cross(n);
+//    n.normalize();
+//    v.normalize();
+//    u.normalize();
+
     if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime()  + delay))
-    {
+    { 
+      current
+
       Game::World::instance().updateTime();
       Game::World::instance().draw();
 
-      a.draw();
-      b.draw();
-      if(a.checkCollision(b))
-      {
-        Vec4 offset(a.intersectionAmount(b));
-        a.move( offset*-1 );
-        std::cout << offset*-1;
-      }
-
+//      a.draw();
+//      b.draw();
+//      if(a.checkCollision(b))
+//      {
+//        Vec4 offset(a.intersectionAmount(b));
+//        a.move( offset*-1 );
+//        std::cout << offset*-1;
+//      }
 
       // swap the buffers
       SDL_GL_SwapWindow(window);
