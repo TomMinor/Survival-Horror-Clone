@@ -56,59 +56,58 @@ void RoomReader::load()
         if( tokens.size() == c_identifierSize[ identifier ] || identifier == ERROR) //Allow the switch statement to deal with the error
         {
           switch(identifier)
+          {
+            case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
             {
-              case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
-              {
-                // The order the room bounds are stored does not matter
-                m_roomBounds.push_back( parseBBox(tokens) );
-                break;
-              }
-              // Each background is linked to a trigger and camera, bgID is used to link them
-              case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
-              {
-                parseBgID(tokens[10], bgID);
-                m_roomTriggers[bgID] = parseBBox(tokens);
-                break;
-              }
-              case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
-              {
-                parseBgID(tokens[1], bgID);
-                m_roomForeground[bgID]= tokens[2];
-                m_roomBackground[bgID]= tokens[3];
-                break;
-              }
-              case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
-              {
-                parseBgID(tokens[8], bgID);
-                addCamera(tokens, bgID);
-                break;
-              }
-              case EXIT: //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
-              {
-                addExit(tokens);
-                break;
-              }
-              case SPAWN: // spawn x y z
-              {
-                setSpawn(tokens);
-                break;
-              }
-              case ERROR:
-              {
-                throw std::runtime_error( "Invalid identifier \"" + tokens[0] + "\"" );
-                break;
-              }
+              // The order the room bounds are stored does not matter
+              m_roomBounds.push_back( parseBBox(tokens) );
+              break;
+            }
+            // Each background is linked to a trigger and camera, bgID is used to link them
+            case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
+            {
+              parseBgID(tokens[10], bgID);
+              m_roomTriggers[bgID] = parseBBox(tokens);
+              break;
+            }
+            case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
+            {
+              parseBgID(tokens[1], bgID);
+              m_roomForeground[bgID]= tokens[2];
+              m_roomBackground[bgID]= tokens[3];
+              break;
+            }
+            case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
+            {
+              parseBgID(tokens[8], bgID);
+              addCamera(tokens, bgID);
+              break;
+            }
+            case EXIT: //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
+            {
+              addExit(tokens);
+              break;
+            }
+            case SPAWN: // spawn x y z
+            {
+              setSpawn(tokens);
+              break;
+            }
+            case ERROR:
+            {
+              throw std::runtime_error( "Invalid identifier \"" + tokens[0] + "\"" );
+              break;
             }
           }
+        }
         else
         {
           throw std::runtime_error( "Invalid token amount" );
-        }
-      } // end token count check
+        } // end token count check
+      }
       catch(std::runtime_error &msg)
       {
-        std::stringstream error;
-        error << "Line " << lineCount << " : " << msg.what() << "\n";
+        std::stringstream error;  error << "Line " << lineCount << " : " << msg.what() << "\n";
         throw std::runtime_error( error.str() );
       }
     } // end empty line/comment check
