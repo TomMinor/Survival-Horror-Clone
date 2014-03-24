@@ -3,7 +3,7 @@
 
 #include "Vec4.h"
 #include "BoundingBox.h"
-#include "Image.h"
+#include "Texture.h"
 #include "Camera.h"
 
 namespace Game {
@@ -16,7 +16,7 @@ public:
                           const std::string& _fgPath,
                           const Camera& _cameraView  ) :
     m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
-    m_bgTexture(Image(_bgPath)), m_fgTexture(Image(_fgPath)) {;}
+    m_bgTexture(Texture(_bgPath)), m_fgTexture(Texture(_fgPath)) {;}
 
   void drawBG() const;
   void drawFG() const;
@@ -24,8 +24,8 @@ public:
 private:
   Camera m_cameraView;
   BBox m_triggerVolume;
-  Image m_bgTexture; // Background image
-  Image m_fgTexture; // Foreground image
+  Texture m_bgTexture; // Background Texture
+  Texture m_fgTexture; // Foreground Texture
 };
 
 }

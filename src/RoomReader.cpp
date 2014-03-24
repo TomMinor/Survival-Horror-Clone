@@ -1,6 +1,7 @@
 #include "RoomReader.h"
 #include "stringUtilities.h"
 #include <stdexcept>
+#include <sstream>
 #include <iostream>
 
 namespace Game {
@@ -22,7 +23,7 @@ RoomReader::RoomReader(const std::string& _fileName, std::vector<Room>& _roomsCo
   m_fileStream.open( filePath.c_str(), std::ios::in );
   if( !m_fileStream.is_open() )
   {
-    throw std::invalid_argument("Could not load background file : " + filePath + "\n");
+    throw std::invalid_argument("Could not load background file : " + filePath);
   }
 }
 
@@ -48,66 +49,77 @@ void RoomReader::load()
     if( !tokens.empty() && (tokens[0].substr(0, 2) != "//") )
     {
       uint identifier = getIdentifier(tokens[0]);
-      if( tokens.size() == c_identifierSize[ identifier ] )
+      // We cannot rely on the input file having the correct data for each field,
+      // hence the various parsing functions are expected to throw exceptions if bad data is encountered
+      try
       {
-        try
+        if( tokens.size() == c_identifierSize[ identifier ] || identifier == ERROR) //Allow the switch statement to deal with the error
         {
-          // We cannot rely on the input file having the correct data for each field,
-          // hence the various parsing functions are expected to throw exceptions if bad data is encountered
           switch(identifier)
-          {
-            case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
             {
-              // The order the room bounds are stored does not matter
-              m_roomBounds.push_back( parseBBox(tokens) );
-              break;
-            }
-            // Each background is linked to a trigger and camera, bgID is used to link them
-            case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
-            {
-              parseBgID(tokens[10], bgID);
-              m_roomTriggers[bgID] = parseBBox(tokens);
-              break;
-            }
-            case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
-            {
-              parseBgID(tokens[1], bgID);
-              m_roomForeground[bgID]= tokens[2];
-              m_roomBackground[bgID]= tokens[3];
-              break;
-            }
-            case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
-            {
-              parseBgID(tokens[8], bgID);
-              addCamera(tokens, bgID);
-              break;
-            }
-            case EXIT: //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
-            {
-              addExit(tokens);
-              break;
-            }
-            case SPAWN: // spawn x y z
-            {
-              setSpawn(tokens);
-              break;
-            }
-            case ERROR:
-            {
-              std::cerr << "Line " << lineCount << " : invalid identifier\n";
-              break;
+              case BBOX:    //bbox    <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
+              {
+                // The order the room bounds are stored does not matter
+                m_roomBounds.push_back( parseBBox(tokens) );
+                break;
+              }
+              // Each background is linked to a trigger and camera, bgID is used to link them
+              case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
+              {
+                parseBgID(tokens[10], bgID);
+                m_roomTriggers[bgID] = parseBBox(tokens);
+                break;
+              }
+              case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
+              {
+                parseBgID(tokens[1], bgID);
+                m_roomForeground[bgID]= tokens[2];
+                m_roomBackground[bgID]= tokens[3];
+                break;
+              }
+              case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
+              {
+                parseBgID(tokens[8], bgID);
+                addCamera(tokens, bgID);
+                break;
+              }
+              case EXIT: //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
+              {
+                addExit(tokens);
+                break;
+              }
+              case SPAWN: // spawn x y z
+              {
+                setSpawn(tokens);
+                break;
+              }
+              case ERROR:
+              {
+                throw std::runtime_error( "Invalid identifier \"" + tokens[0] + "\"" );
+                break;
+              }
             }
           }
-        }
-        catch(std::runtime_error &msg)
+        else
         {
-          std::cerr << "Line " << lineCount << " : " << msg.what() << "\n";
+          throw std::runtime_error( "Invalid token amount" );
         }
       } // end token count check
+      catch(std::runtime_error &msg)
+      {
+        std::stringstream error;
+        error << "Line " << lineCount << " : " << msg.what() << "\n";
+        throw std::runtime_error( error.str() );
+      }
     } // end empty line/comment check
 
     if (bgID > maxbgID) { maxbgID = bgID; }
   }// end get line
+
+  if(lineCount == 0)
+  {
+    throw std::runtime_error( "Empty file" );
+  }
 
   std::vector<Background> roomBackgrounds;
   for( int bgID = 0; bgID < maxbgID; ++bgID )

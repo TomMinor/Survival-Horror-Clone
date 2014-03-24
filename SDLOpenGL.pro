@@ -15,7 +15,7 @@ SOURCES=src/main.cpp \
     src/Actor.cpp \
     src/Room.cpp \
     src/BoundingBox.cpp \
-    src/Image.cpp \
+    src/Texture.cpp \
     src/Camera.cpp \
     src/Background.cpp \
     src/Door.cpp \
@@ -33,7 +33,7 @@ HEADERS+=include/GLFunctions.h \
     include/Door.h \
     include/BoundingBox.h \
     include/Background.h \
-    include/Image.h \
+    include/Texture.h \
     include/Camera.h \
     include/stringUtilities.h \
     include/RoomReader.h \

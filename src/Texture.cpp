@@ -1,11 +1,11 @@
-#include "Image.h"
+#include "Texture.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdexcept>
 
 namespace Game {
 
-  Image::Image(std::string _fileName) : m_texID(0)
+  Texture::Texture(std::string _fileName) : m_texID(0)
   {
     glGenTextures(1,&m_texID);
 
@@ -29,9 +29,14 @@ namespace Game {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   }
 
-  Image::~Image()
+  Texture::~Texture()
   {
     glDeleteTextures(1,&m_texID);
+  }
+
+  void Texture::setCurrent() const
+  {
+    glBindTexture(GL_TEXTURE_2D, m_texID);
   }
 
 }

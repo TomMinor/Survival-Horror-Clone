@@ -83,7 +83,11 @@ void World::loadRooms()
       {
         std::cerr << msg.what() << "\n";
       }
-
+      catch(std::runtime_error &msg)
+      {
+        std::cerr << "Failed loading file " << line << "\n" <<
+                     "(Parse error) " << msg.what() << "\n";
+      }
     }
     manifestFile.close();
   }

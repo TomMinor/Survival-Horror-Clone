@@ -1,0 +1,22 @@
+//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
+bbox -4.0 0.0 -8.0 -3.0 4.0 -2.0 0 0 0
+bbox -8.0 0.0 3.0 4.0 4.0 4.0 0 0 0
+bbox -9.0 0.0 -2.0 -8.0 4.0 3.0 0 0 0
+bbox -8.0 0.0 -3.0 -3.0 4.0 -2.0 0 0 0
+bbox 4.0 0.0 -8.0 5.0 4.0 3.0 0 0 0
+bbox -3.0 0.0 -9.0 4.0 4.0 -8.0 0 0 0
+
+//camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
+camera 0 0 0 1 1 1 75 1
+
+//bg <bgID> <ForegroundFileName> <BackgroundFileName>
+bg 1 BG_01_fg.tga BG_01_bg.tga
+
+//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
+trigger 0 0 0 0 1 1 0 0 0 1
+
+// spawn x y
+spawn 0 0 0
+
+//exit <offsetX> <offsetY> <offsetZ> <roomFileName>
+0.5 1 0 ROOM_02.room
