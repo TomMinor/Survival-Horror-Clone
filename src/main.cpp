@@ -64,7 +64,7 @@ int main()
 
   glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  GLFunctions::perspective(75,float(1024/720),0.01,500);
+  GLFunctions::perspective(75,float(800/600),0.01,500);
 
   SDL_GL_SwapWindow(window);
   glEnable(GL_LIGHTING);
@@ -188,7 +188,7 @@ int main()
       } // end of event switch
     } // end of poll events    
 
-    if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime()  + delay))
+    if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime() + delay))
     { 
       current.setTransform( offset, rotation );
       current.setView();

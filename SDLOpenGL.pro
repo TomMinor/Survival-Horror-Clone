@@ -1,7 +1,7 @@
 # qt 5 wants this may cause errors with 4
 isEqual(QT_MAJOR_VERSION, 5) {cache() }
 QT += core
-QT +=opengl
+QT += opengl
 TARGET=SDLOpenGL
 CONFIG-=app_bundle
 DESTDIR=./

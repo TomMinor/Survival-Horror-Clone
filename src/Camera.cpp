@@ -10,10 +10,22 @@ Camera::Camera(const Vec4 &_pos, const Vec4 &_rotation, float _fov)
 
 void Camera::setTransform(const Vec4 &_pos, const Vec4 &_rotation )
 {
-  m_viewMatrix.rotateZ( _rotation.m_yaw );
-  m_viewMatrix.rotateY( _rotation.m_pitch );
-  m_viewMatrix.rotateX( _rotation.m_roll );
+  Mat4 tmp1(m_viewMatrix);
+  Mat4 tmp2(m_viewMatrix);
+  Mat4 tmp3(m_viewMatrix);
 
+  tmp1.rotateZ( _rotation.m_yaw );
+  tmp2.rotateY( _rotation.m_pitch );
+  tmp3.rotateX( _rotation.m_roll );
+
+  m_viewMatrix *= tmp1;
+
+
+//  m_viewMatrix.rotateZ( _rotation.m_yaw );
+//  m_viewMatrix.rotateY( _rotation.m_pitch );
+//  m_viewMatrix.rotateX( _rotation.m_roll );
+
+  // Translate
   m_viewMatrix.m_30 = _pos.m_x;
   m_viewMatrix.m_31 = _pos.m_y;
   m_viewMatrix.m_32 = _pos.m_z;

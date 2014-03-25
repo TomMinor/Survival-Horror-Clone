@@ -10,6 +10,7 @@ class Mat4
   Mat4(float _s=1.0f);
   Mat4(const Mat4 &_r);
   void identity();
+  void rotate(Vec4 _rotation);
   void rotateX(float _deg);
   void rotateY(float _deg);
   void rotateZ(float _deg);
@@ -21,6 +22,9 @@ class Mat4
   Mat4 operator *(Vec4 _rhs) const;
   void operator *=(Vec4 _rhs);
 
+  Mat4 operator *(Mat4 _rhs) const;
+  void operator *=(Mat4 _rhs);
+
   Mat4 operator -(const Mat4 &_rhs) const;
   void operator -=(const Mat4 &_rhs);
 
@@ -28,7 +32,7 @@ class Mat4
   void operator+=(const Mat4 &_rhs);
 
   bool operator==(const Mat4 &_rhs) const;
-
+  void operator=(const Mat4 &_rhs) const;
 
   union
   {
