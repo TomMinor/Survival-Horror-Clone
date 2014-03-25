@@ -122,17 +122,17 @@ void Mat4::operator *=(Vec4 _rhs)
   {
     for(int j=0; j<4; ++j)
     {
-      m_m[i][j] *= _rhs.m_openGL[i];
+      m_m[j][i] *= _rhs.m_openGL[j];
     }
   }
 }
 
-Mat4 operator *(Mat4 _rhs) const
+Mat4 Mat4::operator *(Mat4 _rhs) const
 {
 
 }
 
-void operator *=(Mat4 _rhs)
+void Mat4::operator *=(Mat4 _rhs)
 {
 
 }
