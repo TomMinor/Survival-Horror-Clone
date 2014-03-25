@@ -21,7 +21,6 @@ Mat4::Mat4(float _s)
 
 Mat4::Mat4(const Mat4 &_r)
 {
-  //memcpy(m_m, &_r.m_m, sizeof(m_m));
   *this = _r;
 }
 
@@ -182,11 +181,9 @@ bool Mat4::operator==(const Mat4 &_rhs) const
   return true;
 }
 
-void Mat4::operator=(const Mat4 &_rhs) const
+void Mat4::operator=(const Mat4 &_rhs)
 {
-  // Baaaaaaaaaaaaaaaaaaaad, I think?
-  memcpy(const_cast<float*>(m_openGL),
-         const_cast<float*>(_rhs.m_openGL), sizeof(m_openGL));
+  memcpy(m_m, &(_rhs.m_m), sizeof(m_m));
 }
 
 

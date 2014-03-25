@@ -89,6 +89,9 @@ int main()
   //Game::BBox b(0.5,-0.5,-0.5,1.5,1.5,1.5);
   Game::BBox b(-2,-2,-2, 3,3,3);
 
+  Mat4 c;
+  Mat4 d(c);
+
   Vec4 offset(0.1,0.1,0.1);
   Vec4 rotation;
   Game::Camera current(Vec4(4,4,4), Vec4(), 50);

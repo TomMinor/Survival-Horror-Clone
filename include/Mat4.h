@@ -32,7 +32,7 @@ class Mat4
   void operator+=(const Mat4 &_rhs);
 
   bool operator==(const Mat4 &_rhs) const;
-  void operator=(const Mat4 &_rhs) const;
+  void operator=(const Mat4 &_rhs);
 
   union
   {
