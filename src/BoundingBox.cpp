@@ -14,9 +14,9 @@ bool BBox::checkCollision(const BBox & _b) const
 
 Vec4 BBox::intersectionAmount(const BBox &_b)
 {
-  return Vec4( m_xmax - _b.m_xmin,
-               m_ymax - _b.m_ymin,
-               m_zmax - _b.m_zmin );
+  return Vec4( abs(m_xmax - _b.m_xmin),
+               abs(m_ymax - _b.m_ymin),
+               abs(m_zmax - _b.m_zmin) );
 }
 
 

@@ -86,15 +86,13 @@ int main()
       return EXIT_FAILURE;
 
   Game::BBox a(-1,-1,-1,1,1,1);
-  //Game::BBox b(0.5,-0.5,-0.5,1.5,1.5,1.5);
   Game::BBox b(-2,-2,-2, 3,3,3);
-
-  Mat4 c;
-  Mat4 d(c);
 
   Vec4 offset(0.1,0.1,0.1);
   Vec4 rotation;
   Game::Camera current(Vec4(4,4,4), Vec4(), 50);
+
+  const Uint8* keystate = SDL_GetKeyboardState(0);
 
   while(!quit)
   {
@@ -116,74 +114,6 @@ int main()
             case SDLK_ESCAPE :  quit = true; break;
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
-
-//            case SDLK_w : offset.x++; break;
-//            case SDLK_s : offset.x--; break;
-//            case SDLK_a : offset.angle += 5; break;
-//            case SDLK_d : offset.angle -= 5; break;
-            case SDLK_UP:
-            {
-              offset.m_y++;
-              break;
-            }
-            case SDLK_DOWN:
-            {
-              offset.m_y--;
-              break;
-            }
-            case SDLK_LEFT:
-            {
-              offset.m_x--;
-              break;
-            }
-            case SDLK_RIGHT:
-            {
-              offset.m_x++;
-              break;
-            }
-            case SDLK_LEFTBRACKET:
-            {
-              offset.m_z--;
-              break;
-            }
-            case SDLK_RIGHTBRACKET:
-            {
-              offset.m_z++;
-              break;
-            }
-            case SDLK_w:
-            {
-              rotation.m_y++;
-              break;
-            }
-            case SDLK_s:
-            {
-              rotation.m_y--;
-              break;
-            }
-            case SDLK_a:
-            {
-              rotation.m_x--;
-              break;
-            }
-            case SDLK_d:
-            {
-              rotation.m_x++;
-              break;
-            }
-            case SDLK_q:
-            {
-              rotation.m_z--;
-              break;
-            }
-            case SDLK_e:
-            {
-              rotation.m_z++;
-              break;
-            }
-            case SDLK_PAGEUP : break;
-            case SDLK_PAGEDOWN : break;
-
             default : break;
           } // end of key process
         } // end of keydown*
@@ -193,6 +123,21 @@ int main()
 
     if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime() + delay))
     { 
+      if(keystate[SDL_SCANCODE_UP])           { offset.m_y++; }
+      if(keystate[SDL_SCANCODE_DOWN])         { offset.m_y--; }
+      if(keystate[SDL_SCANCODE_RIGHT])        { offset.m_x++; }
+      if(keystate[SDL_SCANCODE_LEFT])         { offset.m_x--; }
+      if(keystate[SDL_SCANCODE_LEFTBRACKET])  { offset.m_z++; }
+      if(keystate[SDL_SCANCODE_RIGHTBRACKET]) { offset.m_z--; }
+
+      if(keystate[SDL_SCANCODE_W]) { rotation.m_y++; }
+      if(keystate[SDL_SCANCODE_S]) { rotation.m_y--; }
+      if(keystate[SDL_SCANCODE_D]) { rotation.m_x++; }
+      if(keystate[SDL_SCANCODE_A]) { rotation.m_x--; }
+      if(keystate[SDL_SCANCODE_Q]) { rotation.m_z++; }
+      if(keystate[SDL_SCANCODE_E]) { rotation.m_z--; }
+
+
       current.setTransform( offset, rotation );
       current.setView();
       Game::World::instance().updateTime();

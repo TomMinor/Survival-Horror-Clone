@@ -25,5 +25,11 @@ private:
   BBox m_bbox;
 };
 
+class Command
+{
+public:
+
+};
+
 }
 #endif // PLAYER_H

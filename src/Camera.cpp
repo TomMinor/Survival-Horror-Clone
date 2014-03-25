@@ -1,4 +1,6 @@
 #include "Camera.h"
+#include "GLinc.h"
+#include <iostream>
 
 namespace Game {
 
@@ -10,32 +12,27 @@ Camera::Camera(const Vec4 &_pos, const Vec4 &_rotation, float _fov)
 
 void Camera::setTransform(const Vec4 &_pos, const Vec4 &_rotation )
 {
-  Mat4 tmp1(m_viewMatrix);
-  Mat4 tmp2(m_viewMatrix);
-  Mat4 tmp3(m_viewMatrix);
+  m_viewMatrix.identity();
 
-  tmp1.rotateZ( _rotation.m_yaw );
-  tmp2.rotateY( _rotation.m_pitch );
-  tmp3.rotateX( _rotation.m_roll );
-
-  m_viewMatrix *= tmp1;
-
-
-//  m_viewMatrix.rotateZ( _rotation.m_yaw );
-//  m_viewMatrix.rotateY( _rotation.m_pitch );
-//  m_viewMatrix.rotateX( _rotation.m_roll );
+  // Rotation
+  Mat4 tmpx(m_viewMatrix); tmpx.rotateX( _rotation.m_roll );
+  Mat4 tmpy(m_viewMatrix); tmpy.rotateY( _rotation.m_pitch );
+  Mat4 tmpz(m_viewMatrix); tmpz.rotateZ( _rotation.m_yaw );
+  m_viewMatrix *= tmpx;
+  m_viewMatrix *= tmpy;
+  m_viewMatrix *= tmpz;
 
   // Translate
-  m_viewMatrix.m_30 = _pos.m_x;
-  m_viewMatrix.m_31 = _pos.m_y;
-  m_viewMatrix.m_32 = _pos.m_z;
+  m_viewMatrix.m_m[3][0] = _pos.m_x;
+  m_viewMatrix.m_m[3][1] = _pos.m_y;
+  m_viewMatrix.m_m[3][2] = _pos.m_z;
 
   setView();
 }
 
 void Camera::setView() const
 {
-  m_viewMatrix.loadModelView();
+    m_viewMatrix.loadModelView();
 }
 
 }

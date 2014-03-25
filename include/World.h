@@ -35,6 +35,7 @@ private:
   void loadRooms();
   bool loadRoom(const std::string& _fileName);
 
+
   Actor m_player;
   std::vector<Room> m_rooms;
   double m_currentTime;

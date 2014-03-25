@@ -128,12 +128,25 @@ void Mat4::operator *=(Vec4 _rhs)
 
 Mat4 Mat4::operator *(Mat4 _rhs) const
 {
+  Mat4 temp(0.0f);
 
+  for(int k=0;k<4;k++)
+  {
+    for(int j=0;j<4;j++)
+    {
+      for(int i=0;i<4;i++)
+      {
+        temp.m_m[k][j] += (m_m[i][j] * _rhs.m_m[k][i]);
+
+      }
+    }
+  }
+  return temp;
 }
 
 void Mat4::operator *=(Mat4 _rhs)
 {
-
+  *this = *this * _rhs;
 }
 
 Mat4 Mat4::operator -(const Mat4 &_rhs) const
