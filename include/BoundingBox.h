@@ -12,7 +12,7 @@ public:
   BBox( float _xmin, float _ymin, float _zmin,
         float _xmax, float _ymax, float _zmax) :
     m_xmin(_xmin), m_ymin(_ymin), m_zmin(_zmin),
-    m_xmax(_xmax), m_ymax(_ymax), m_zmax(_zmax)
+    m_xmax(_xmax), m_ymax(_ymax), m_zmax(_zmax), m_offset(Vec4())
   {;}
 
   bool checkCollision(const BBox& _b) const;
@@ -29,6 +29,8 @@ private:
   float m_xmax;
   float m_ymax;
   float m_zmax;
+
+  Vec4 m_offset;
 };
 
 std::ostream & operator<<(std::ostream &_output, const BBox &_b);

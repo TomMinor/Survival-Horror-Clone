@@ -8,19 +8,21 @@ namespace Game {
 class Actor
 {
 public:
-  Actor(const Vec4 & _size, const Vec4 & _pos )
+  Actor(const Vec4 & _scale, const Vec4 & _pos )
     : m_pos(_pos),
+      m_scale(_scale),
       m_yaw(0),
       m_bbox( _pos.m_x, _pos.m_y, _pos.m_z,
-              _pos.m_x + _size.m_x,
-              _pos.m_y + _size.m_y,
-              _pos.m_z + _size.m_z) {;}
+              _pos.m_x + _scale.m_x,
+              _pos.m_y + _scale.m_y,
+              _pos.m_z + _scale.m_z) {;}
   inline BBox getBoundingBox() const { return m_bbox; }
   void draw() const;
-  void move(Vec4 _offset);
+  void move(float _offset, float _deg=0.0f);
 
 private:
   Vec4 m_pos;
+  Vec4 m_scale;
   float m_yaw;
   BBox m_bbox;
 };

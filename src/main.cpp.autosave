@@ -88,8 +88,6 @@ int main()
   Game::Actor player(Vec4(1,2,1), Vec4(0,0,0));
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
-  bool drawBBox=True;
-
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
   while(!quit)

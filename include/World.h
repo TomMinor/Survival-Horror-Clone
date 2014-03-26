@@ -24,17 +24,21 @@ public:
   void update();
   void changeRoom(const Room & _nextRoom) const;
 
+  void toggleBBox() { m_debugBBoxDraw ^= 1; }
+
   inline void updateTime() { m_lastTime = SDL_GetTicks(); }
   inline double getLastTime() const { return m_lastTime; }
   inline double getCurrentTime() const { return SDL_GetTicks(); }
 
 private:
-  World() : m_player(Vec4(2,5,2), Vec4()), m_currentTime(0), m_lastTime(0)
+  World() :
+    m_player(Vec4(2,5,2), Vec4()), m_currentTime(0), m_lastTime(0), m_debugBBoxDraw(true)
   {;}
 
   void loadRooms();
   bool loadRoom(const std::string& _fileName);
 
+  bool m_debugBBoxDraw;
 
   Actor m_player;
   std::vector<Room> m_rooms;

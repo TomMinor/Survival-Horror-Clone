@@ -46,11 +46,6 @@ bool World::init(const std::string& _assetpath)
 // Draw actors and room
 void World::draw() const
 {
-
-
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // now draw etc
-
   // Draw
   for(std::vector<Room>::const_iterator room = m_rooms.begin();
       room!= m_rooms.end(); ++room)
