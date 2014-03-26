@@ -8,9 +8,8 @@ namespace Game {
 class BBox
 {
 public:
-  BBox() {;}
-  BBox( float _xmin, float _ymin, float _zmin,
-        float _xmax, float _ymax, float _zmax) :
+  BBox( float _xmin=-2.0f, float _ymin=-2.0f, float _zmin=-2.0f,
+        float _xmax=2.0f, float _ymax=2.0f, float _zmax=2.0f) :
     m_xmin(_xmin), m_ymin(_ymin), m_zmin(_zmin),
     m_xmax(_xmax), m_ymax(_ymax), m_zmax(_zmax), m_offset(Vec4())
   {;}
@@ -18,7 +17,8 @@ public:
   bool checkCollision(const BBox& _b) const;
   void move(Vec4 _pos);
   void draw() const;
-  Vec4 intersectionAmount(const BBox& _b);
+  Vec4 getCenter() const;
+  Vec4 getCollisionNormal(const BBox& _b);
 
   friend std::ostream & operator<<(std::ostream &, const BBox &);
 private:

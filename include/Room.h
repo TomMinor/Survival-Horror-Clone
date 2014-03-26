@@ -24,7 +24,8 @@ public:
     ;
   }
 
-  bool checkWallCollide(BBox _actor) const;
+  bool checkWallCollide(const BBox& _actor);
+  Vec4 closestCenter(const Vec4& _b);
   void draw() const;
   void debugDrawBounds() const;
   void updatePlayer();
@@ -33,6 +34,7 @@ private:
   std::string m_name;
   Vec4 m_playerSpawn;
   std::vector<BBox> m_collisionBoxes;
+  BBox* m_collidingBBox;  // Points to the last room bound to collide
 
   std::vector<Background> m_backgrounds;
   std::vector<Door> m_exits;

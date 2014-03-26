@@ -42,7 +42,7 @@ void RoomReader::load()
   while(std::getline(m_fileStream, line))
   {
     std::vector<std::string> tokens;
-    stringUtils::tokenize(line, tokens, " ");
+    util::tokenize(line, tokens, " ");
     lineCount++;
 
     // Try to parse the line if it isn't empty or a comment
@@ -176,7 +176,7 @@ BBox RoomReader::parseBBox(const std::vector<std::string>& i_tokens) const
     // Try to parse the rotation
     try
     {
-      bounds[i] = stringUtils::tokenToFloat( i_tokens[i+1]);
+      bounds[i] = util::tokenToFloat( i_tokens[i+1]);
     }
     catch(std::runtime_error)
     {
@@ -192,7 +192,7 @@ void RoomReader::parseBgID(const std::string& i_token, int &o_backgroundID) cons
 {
   try
   {
-    o_backgroundID = stringUtils::tokenToFloat(i_token);
+    o_backgroundID = util::tokenToFloat(i_token);
   }
   catch(std::runtime_error &msg)
   {
@@ -213,7 +213,7 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
     // Try to parse the rotation
     try
     {
-      rotation[i] = stringUtils::tokenToFloat( i_tokens[i+1]);
+      rotation[i] = util::tokenToFloat( i_tokens[i+1]);
     }
     catch(std::runtime_error)
     {
@@ -223,7 +223,7 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
 
     try
     {
-      offset[i] = stringUtils::tokenToFloat( i_tokens[i+4]);
+      offset[i] = util::tokenToFloat( i_tokens[i+4]);
     }
     catch(std::runtime_error)
     {
@@ -234,7 +234,7 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
 
   try
   {
-    fov = stringUtils::tokenToFloat( i_tokens[7]);
+    fov = util::tokenToFloat( i_tokens[7]);
   }
   catch(std::runtime_error)
   {
@@ -279,7 +279,7 @@ void RoomReader::setSpawn(const std::vector<std::string>& i_tokens)
     // Try to parse the rotation
     try
     {
-      coord[i] = stringUtils::tokenToFloat( i_tokens[i+1]);
+      coord[i] = util::tokenToFloat( i_tokens[i+1]);
     }
     catch(std::runtime_error)
     {

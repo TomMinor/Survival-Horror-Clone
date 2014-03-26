@@ -5,41 +5,51 @@
 
 namespace Game {
 
-bool BBox::checkCollision(const BBox & _b) const
+bool BBox::checkCollision(const BBox& _b) const
 {
+  //std::cout << "\nBound: " << *this << std::endl;
+  //std::cout << "\nPlayer : " << _b << std::endl;
+
   return ( ((m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax)) &&
            ((m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax)) &&
            ((m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax)) );
 }
 
 
-Vec4 BBox::intersectionAmount(const BBox &_b)
+Vec4 BBox::getCenter() const
 {
-  return Vec4( m_xmax - _b.m_xmin,
-               m_ymax - _b.m_ymin,
-               m_zmax - _b.m_zmin );
+  return Vec4( (m_xmax+m_xmin)/2,
+               (m_ymax+m_ymin)/2,
+               (m_zmax+m_zmin)/2 );
 }
+
+//Vec4 BBox::getCollisionNormal(const BBox& _b)
+//{
+//  (m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax)
+//  (m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax)
+//  (m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax)
+//}
 
 void BBox::move(Vec4 _pos)
 {
-  m_offset = _pos;
+  //std::cout << "\nBefore : " << *this << "\n";
+  m_xmax += _pos.m_x;   m_xmin += _pos.m_x;
+  m_ymax += _pos.m_y;   m_ymin += _pos.m_y;
+  m_zmax += _pos.m_z;   m_zmin += _pos.m_z;
+  //std::cout << "\nAfter : " << *this << "\n";
 }
 
 void BBox::draw() const
 {
   glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-  float xmax = m_xmax + m_offset.m_x;   float xmin = m_xmin + m_offset.m_x;
-  float ymax = m_ymax + m_offset.m_y;   float ymin = m_ymin + m_offset.m_y;
-  float zmax = m_zmax + m_offset.m_z;   float zmin = m_zmin + m_offset.m_z;
-
   glColor3f( 1.0f, 0.25f, 0.0f );
   glPushMatrix();
-    glTranslatef( (xmax+xmin)/2 , (ymax+ymin)/2, (zmax+zmin)/2);
+    glTranslatef( (m_xmax+m_xmin)/2 , (m_ymax+m_ymin)/2, (m_zmax+m_zmin)/2);
     glPushMatrix();
-      GLFunctions::cube(fabs(xmax - xmin),
-                        fabs(ymax - ymin),
-                        fabs(zmax - zmin));
+      GLFunctions::cube(fabs(m_xmax - m_xmin),
+                        fabs(m_ymax - m_ymin),
+                        fabs(m_zmax - m_zmin));
     glPopMatrix();
   glPopMatrix();
 

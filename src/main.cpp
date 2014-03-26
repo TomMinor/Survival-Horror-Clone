@@ -7,6 +7,7 @@
 #include "model.h"
 #include "World.h"
 
+#include "3dUtilities.h"
 #include "BoundingBox.h"
 #include "Camera.h"
 
@@ -90,6 +91,8 @@ int main()
   Game::Actor player(Vec4(1,2,1), Vec4(0,0,0));
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
+  float yaw=0;
+
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
   while(!quit)
@@ -122,34 +125,25 @@ int main()
 
     if( world.getElapsedTime() >= delay)
     { 
-      float offset = 0;
-      float rotation = 0;
+      if(keystate[SDL_SCANCODE_UP])           { world.playerWalk(0.1);    }
+      if(keystate[SDL_SCANCODE_DOWN])         { world.playerWalk(-0.1);   }
+      if(keystate[SDL_SCANCODE_RIGHT])        { world.playerTurn(-4); yaw-=4;     }
+      if(keystate[SDL_SCANCODE_LEFT])         { world.playerTurn(4);  yaw+=4;    }
+      if(keystate[SDL_SCANCODE_LSHIFT])       { world.playerDash();       }
 
-      if(keystate[SDL_SCANCODE_UP])           { offset+=0.1; }
-      if(keystate[SDL_SCANCODE_DOWN])         { offset-=0.1; }
-      if(keystate[SDL_SCANCODE_RIGHT])        { rotation-=4; }
-      if(keystate[SDL_SCANCODE_LEFT])         { rotation+=4; }
-      if(keystate[SDL_SCANCODE_LSHIFT])       { offset*=2; }  // Dash
+      std::cerr << fmod(yaw, 360.0) << "\n";
 
-      player.move(offset, rotation);
+      // x: 270 & 90
+      // z: 0 & 180
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      util::drawWorldAxis();
+
       current.setView();
-      world.updateTime();
+
       world.update();
       world.draw();
-
-      player.draw();
-
-//      a.draw();
-//      b.draw();
-//      if(a.checkCollision(b))
-//      {
-//        Vec4 offset(a.intersectionAmount(b));
-//        a.move( offset*-1 );
-//        std::cout << offset*-1;
-//      }
 
       // swap the buffers
       SDL_GL_SwapWindow(window);

@@ -1,7 +1,7 @@
 #include "stringUtilities.h"
 #include <sstream>
 
-namespace stringUtils {
+namespace util {
 
 void tokenize(const std::string& _str,std::vector<std::string>& _tokens,const std::string& _delimiters)
 {

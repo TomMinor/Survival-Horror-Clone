@@ -14,6 +14,8 @@ private:
   bool m_debugBBoxDraw;
 
   Actor m_player;
+  float m_playerOffset;
+  float m_playerYaw;
   std::vector<Room> m_rooms;
   int m_currentRoom;
   double m_currentTime;
@@ -23,13 +25,18 @@ private:
 
 public:
   World(const Vec4& _playerSpawn = Vec4()) :
-    m_init(false), m_debugBBoxDraw(true), m_player(Vec4(2,2,2), Vec4(_playerSpawn)),
+    m_init(false), m_debugBBoxDraw(true), m_player(Vec4(1,2,1), Vec4(_playerSpawn)),
     m_currentTime(0), m_lastTime(0), m_currentRoom(0)
   {;}
   bool init(const std::string& _assetpath = "assets/");
   void draw() const;
   void update();
   void changeRoom(const Room & _nextRoom) const;
+
+  // Input - bit of a crappy interface but i need to sort everything else out (BUG)
+  void playerWalk(float _offset);
+  void playerTurn(float _deg)        { m_playerYaw = _deg;        }
+  void playerDash()                 { m_playerOffset *= 2;       }
 
   inline void toggleBBox() { m_debugBBoxDraw ^= 1; }
 

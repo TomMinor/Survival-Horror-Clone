@@ -32,10 +32,19 @@ void Actor::draw() const
 void Actor::move(float _offset, float _deg)
 {
   m_yaw += _deg;
-  m_pos.m_x += _offset * sin((PI*m_yaw)/180);
-  m_pos.m_z += _offset * cos((PI*m_yaw)/180);
 
-  m_bbox.move(m_pos);
+  float offsetX = _offset * sin((PI*m_yaw)/180);
+  float offsetZ = _offset * cos((PI*m_yaw)/180);
+
+  m_pos.m_x += offsetX;
+  m_pos.m_z += offsetZ;
+
+  m_bbox.move(Vec4(offsetX, 0, offsetZ));
+}
+
+void Actor::update()
+{
+
 }
 
 }

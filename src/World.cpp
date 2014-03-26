@@ -54,22 +54,34 @@ void World::draw() const
     }
   }
 
+  m_player.draw();
 }
 
 // Update actor states
 void World::update()
 {
-  bool a = m_rooms[m_currentRoom].checkWallCollide( m_player.getBoundingBox() );
-  std::cout << a << std::endl;
+  updateTime();
 
-  if(a)
+  BBox tmp(m_player.getBoundingBox());
+  tmp.move(m_playerOffset*0.001);
+  if(!m_rooms[m_currentRoom].checkWallCollide(tmp))
   {
-    std::cout << "COLLIDE \n";
+    m_player.move(m_playerOffset, m_playerYaw);
   }
-//  if(m_rooms[m_currentRoom].checkWallCollide( m_player.getBoundingBox() ))
-//  {
-//    std::cout << "COLLIDE\n";
-//  }
+  else
+  {
+    m_player.move(0, m_playerYaw);
+  }
+
+
+
+  m_playerOffset = m_playerYaw = 0; // Reset movement
+}
+
+void World::playerWalk(float _offset)
+{
+
+    m_playerOffset = _offset;
 
 }
 

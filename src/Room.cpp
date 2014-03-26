@@ -3,14 +3,15 @@
 
 namespace Game {
 
-bool Room::checkWallCollide(BBox _player) const
+bool Room::checkWallCollide(const BBox& _actor)
 {
-  for(std::vector<BBox>::const_iterator bound = m_collisionBoxes.begin();
+  for(std::vector<BBox>::iterator bound = m_collisionBoxes.begin();
       bound != m_collisionBoxes.end();
       bound++ )
   {
-    if(bound->checkCollision(_player))
+    if(bound->checkCollision(_actor))
     {
+      m_collidingBBox = &(*bound);
       return true;
     }
   }

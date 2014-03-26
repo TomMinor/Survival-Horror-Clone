@@ -39,6 +39,11 @@ Vec4 Vec4::operator -(const Vec4 &_rhs) const
   return Vec4(m_x - _rhs.m_x, m_y - _rhs.m_y, m_z - _rhs.m_z, 0.0f);
 }
 
+Vec4 Vec4::operator -() const
+{
+  return Vec4(-m_x, -m_y, -m_z);
+}
+
 void Vec4::operator -=(const Vec4 &_rhs)
 {
   m_x -= _rhs.m_x;

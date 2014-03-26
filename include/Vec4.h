@@ -75,6 +75,7 @@ public:
   Vec4 operator *(float _rhs) const; // rhs = right hand side
   void operator *=(float _rhs);
 
+  Vec4 operator -() const;
   Vec4 operator -(const Vec4 &_rhs) const;
   void operator -=(const Vec4 &_rhs);
 
