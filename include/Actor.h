@@ -16,6 +16,7 @@ public:
               _pos.m_x + _scale.m_x,
               _pos.m_y + _scale.m_y,
               _pos.m_z + _scale.m_z) {;}
+
   inline BBox getBoundingBox() const { return m_bbox; }
   void draw() const;
   void move(float _offset, float _deg=0.0f);

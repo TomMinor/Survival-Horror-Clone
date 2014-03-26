@@ -7,10 +7,11 @@ namespace Game {
 
 bool BBox::checkCollision(const BBox & _b) const
 {
-  return ( (m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax) &&
-           (m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax) &&
-           (m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax) );
+  return ( ((m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax)) &&
+           ((m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax)) &&
+           ((m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax)) );
 }
+
 
 Vec4 BBox::intersectionAmount(const BBox &_b)
 {

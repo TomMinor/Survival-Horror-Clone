@@ -2,6 +2,7 @@
 #define VEC4_H__
 
 #include <ostream>
+#include "GLinc.h"
 
 class Vec4
 {
@@ -61,9 +62,10 @@ public:
   //------------------------------------------
   Vec4 cross(const Vec4 &_a, const Vec4 &_b) const;
 
-  void colourGL() const;
-  void normalGL() const;
-  void vertexGL() const;
+  inline void translateGL() const { glTranslatef(m_x, m_y, m_z); }
+  inline void colourGL() const { glColor4f(m_r, m_g, m_b, m_a); }
+  inline void normalGL() const { glNormal3f(m_x, m_y, m_z); }
+  inline void vertexGL() const { glVertex3f(m_x, m_y, m_z); }
 
   void set(float _x, float _y, float _z, float _w=1.0f);
 
@@ -81,13 +83,12 @@ public:
 
   bool operator==(const Vec4 &_rhs) const;
 
-  float* getVector()
-  {
-    return m_openGL;
-  }
+  inline float* getVector() { return m_openGL; }
 
-  union
+  union // Various varieties of accessor names
   {
+    float m_openGL[4];
+
     //XYZW
     struct
     {
@@ -126,8 +127,6 @@ public:
       /// @brief The a element of the colour vector
       float m_a;
     };
-
-    float m_openGL[4];
   };
 
 };

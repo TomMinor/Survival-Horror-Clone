@@ -124,18 +124,3 @@ void Vec4::set(float _x, float _y, float _z, float _w)
   m_z = _z;
   m_w = _w;
 }
-
-void Vec4::colourGL() const
-{
-  glColor4f(m_x, m_y, m_z, m_w);
-}
-
-void Vec4::normalGL() const
-{
-  glNormal3f(m_x, m_y, m_z);
-}
-
-void Vec4::vertexGL() const
-{
-  glVertex3f(m_x, m_y, m_z);
-}

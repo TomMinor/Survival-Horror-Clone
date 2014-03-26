@@ -80,15 +80,15 @@ int main()
 
   unsigned int delay = 30;
 
+  Game::World world;
+
   // Exit if we fail to load for some reason
   // Maybe add exceptions here
-  if ( !Game::World::instance().init() )
+  if ( !world.init() )
       return EXIT_FAILURE;
 
   Game::Actor player(Vec4(1,2,1), Vec4(0,0,0));
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
-
-  bool drawBBox=True;
 
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
@@ -112,7 +112,7 @@ int main()
             case SDLK_ESCAPE :  quit = true; break;
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
-            case SDLK_b : drawBBox ^= 1;
+            case SDLK_b : world.toggleBBox();
             default : break;
           } // end of key process
         } // end of keydown*
@@ -120,26 +120,25 @@ int main()
       } // end of event switch
     } // end of poll events    
 
-    if( Game::World::instance().getCurrentTime() > (Game::World::instance().getLastTime() + delay))
+    if( world.getElapsedTime() >= delay)
     { 
       float offset = 0;
       float rotation = 0;
 
       if(keystate[SDL_SCANCODE_UP])           { offset+=0.1; }
       if(keystate[SDL_SCANCODE_DOWN])         { offset-=0.1; }
-      if(keystate[SDL_SCANCODE_RIGHT])        { rotation+=4; }
-      if(keystate[SDL_SCANCODE_LEFT])         { rotation-=4; }
+      if(keystate[SDL_SCANCODE_RIGHT])        { rotation-=4; }
+      if(keystate[SDL_SCANCODE_LEFT])         { rotation+=4; }
+      if(keystate[SDL_SCANCODE_LSHIFT])       { offset*=2; }  // Dash
 
-      GLFunctions::cube(1,1,1);
-
-      //current.setTransform(rotation, rotation);
       player.move(offset, rotation);
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       current.setView();
-      Game::World::instance().updateTime();
-      Game::World::instance().draw();
+      world.updateTime();
+      world.update();
+      world.draw();
 
       player.draw();
 

@@ -5,7 +5,17 @@ namespace Game {
 
 bool Room::checkWallCollide(BBox _player) const
 {
+  for(std::vector<BBox>::const_iterator bound = m_collisionBoxes.begin();
+      bound != m_collisionBoxes.end();
+      bound++ )
+  {
+    if(bound->checkCollision(_player))
+    {
+      return true;
+    }
+  }
 
+  return false;
 }
 
 void Room::draw() const

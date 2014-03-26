@@ -24,7 +24,7 @@ public:
     ;
   }
 
-  bool checkWallCollide(BBox _player) const;
+  bool checkWallCollide(BBox _actor) const;
   void draw() const;
   void debugDrawBounds() const;
   void updatePlayer();

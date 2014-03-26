@@ -9,14 +9,22 @@ void Actor::draw() const
 {
   m_bbox.draw();
 
-  glColor3f( 0.25f, 1.0f, 0.0f );
   glPushMatrix();
-    // Center the cone within the bbox
+    // Center within bbox
     glTranslatef(m_scale.m_x/2, m_scale.m_y/2, m_scale.m_z/2);
-    glTranslatef(m_pos.m_x, m_pos.m_y, m_pos.m_z);
+    m_pos.translateGL();
     glPushMatrix();
       glRotatef(m_yaw, 0, 1, 0);
-      GLFunctions::cone(m_scale.m_x, m_scale.m_x, 10, 10);
+
+      // Directional arrow
+      glColor3f( 1.0f, 0.0f, 0.0f );
+      GLFunctions::cone(m_scale.m_x/2, m_scale.m_y/2, 10, 10);
+
+      // Cylinder body
+      glRotatef(90, 1, 0, 0);
+      glTranslatef(0, 0, m_scale.m_y/2);
+      glColor3f( 0.8f, 0.8f, 0.25f );
+      GLFunctions::cylinder(m_scale.m_x/2, m_scale.m_y*2, 10, 10);
     glPopMatrix();
   glPopMatrix();
 }

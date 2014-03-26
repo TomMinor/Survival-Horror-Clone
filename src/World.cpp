@@ -11,8 +11,6 @@
 
 namespace Game {
 
-static bool m_init = false;
-
 bool World::init(const std::string& _assetpath)
 {
   if(!m_init)
@@ -46,11 +44,14 @@ bool World::init(const std::string& _assetpath)
 // Draw actors and room
 void World::draw() const
 {
-  // Draw
-  for(std::vector<Room>::const_iterator room = m_rooms.begin();
-      room!= m_rooms.end(); ++room)
+  // Draw room bounds for collision testing
+  if(m_debugBBoxDraw)
   {
-      room->debugDrawBounds();
+    for(std::vector<Room>::const_iterator room = m_rooms.begin();
+        room!= m_rooms.end(); ++room)
+    {
+        room->debugDrawBounds();
+    }
   }
 
 }
@@ -58,6 +59,17 @@ void World::draw() const
 // Update actor states
 void World::update()
 {
+  bool a = m_rooms[m_currentRoom].checkWallCollide( m_player.getBoundingBox() );
+  std::cout << a << std::endl;
+
+  if(a)
+  {
+    std::cout << "COLLIDE \n";
+  }
+//  if(m_rooms[m_currentRoom].checkWallCollide( m_player.getBoundingBox() ))
+//  {
+//    std::cout << "COLLIDE\n";
+//  }
 
 }
 
