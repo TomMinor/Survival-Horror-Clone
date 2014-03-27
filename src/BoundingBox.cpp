@@ -7,9 +7,6 @@ namespace Game {
 
 bool BBox::checkCollision(const BBox& _b) const
 {
-  //std::cout << "\nBound: " << *this << std::endl;
-  //std::cout << "\nPlayer : " << _b << std::endl;
-
   return ( ((m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax)) &&
            ((m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax)) &&
            ((m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax)) );
@@ -32,11 +29,9 @@ Vec4 BBox::getCenter() const
 
 void BBox::move(Vec4 _pos)
 {
-  //std::cout << "\nBefore : " << *this << "\n";
   m_xmax += _pos.m_x;   m_xmin += _pos.m_x;
   m_ymax += _pos.m_y;   m_ymin += _pos.m_y;
   m_zmax += _pos.m_z;   m_zmin += _pos.m_z;
-  //std::cout << "\nAfter : " << *this << "\n";
 }
 
 void BBox::draw() const

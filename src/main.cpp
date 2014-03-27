@@ -56,13 +56,6 @@ int main()
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(1);
 
-  // now clear the screen and swap whilst NGL inits (which may take time)
-  Vec4 red(1,0,0);
-  Vec4 green(0,1,0);
-  Vec4 blue(0,0,1);
-  Vec4 white(1,1,1);
-  Vec4 yellow(1,1,0);
-
   glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
   GLFunctions::perspective(75,float(800/600),0.01,500);
@@ -74,27 +67,30 @@ int main()
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);
+
   // flag to indicate if we need to exit
   bool quit=false;
   // sdl event processing data structure
   SDL_Event event;
 
-  unsigned int delay = 30;
+  const uint worldUpdateDelay = 30;
 
   Game::World world;
 
   // Exit if we fail to load for some reason
-  // Maybe add exceptions here
   if ( !world.init() )
       return EXIT_FAILURE;
 
-  Game::Actor player(Vec4(1,2,1), Vec4(0,0,0));
-  Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
-
-  float yaw=0;
-
+  // Read input
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
+//  Game::Camera current(Vec4(-6.005612475588933f, 8.97664525811908f, 24.51080654590031f),
+//                       Vec4(-14.757877717629409f, -12.537379551671203f, 0.0f),
+//                       53.953475f);
+
+  Game::Camera current(Vec4(0.1, 0.1, 0.1),
+                       Vec4(),
+                       53.953475f);
   while(!quit)
   {
     while ( SDL_PollEvent(&event) )
@@ -123,22 +119,25 @@ int main()
       } // end of event switch
     } // end of poll events    
 
-    if( world.getElapsedTime() >= delay)
+    if( world.getElapsedTime() >= worldUpdateDelay)
     { 
       if(keystate[SDL_SCANCODE_UP])           { world.playerWalk(0.1);    }
       if(keystate[SDL_SCANCODE_DOWN])         { world.playerWalk(-0.1);   }
-      if(keystate[SDL_SCANCODE_RIGHT])        { world.playerTurn(-4); yaw-=4;     }
-      if(keystate[SDL_SCANCODE_LEFT])         { world.playerTurn(4);  yaw+=4;    }
+      if(keystate[SDL_SCANCODE_RIGHT])        { world.playerTurn(-4);     }
+      if(keystate[SDL_SCANCODE_LEFT])         { world.playerTurn(4);      }
       if(keystate[SDL_SCANCODE_LSHIFT])       { world.playerDash();       }
 
-      std::cerr << fmod(yaw, 360.0) << "\n";
+      if(keystate[SDL_SCANCODE_PAGEDOWN])     { world.prevRoom();       }
+      if(keystate[SDL_SCANCODE_PAGEUP])       { world.nextRoom();       }
+
+      //std::cerr << fmod(yaw, 360.0) << "\n";
 
       // x: 270 & 90
       // z: 0 & 180
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      util::drawWorldAxis();
+      //util::drawWorldAxis();
 
       current.setView();
 

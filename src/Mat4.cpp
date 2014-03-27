@@ -49,7 +49,15 @@ void Mat4::transpose()
 
 void Mat4::rotate(Vec4 _rotation)
 {
+  Mat4 x(*this), y(*this), z(*this);
+  x.rotateX( _rotation.m_roll );
+  y.rotateY( _rotation.m_pitch );
+  z.rotateZ( _rotation.m_yaw );
 
+  // Combine rotations
+  *this *= x;
+  *this *= y;
+  *this *= z;
 }
 
 void Mat4::rotateX(float _deg)

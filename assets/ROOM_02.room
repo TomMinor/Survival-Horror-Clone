@@ -1,0 +1,22 @@
+//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
+bbox -7.0 -8.881784197001252e-16 -9.0 7.0 10.000000000000002 -8.0 0 0 0
+bbox  7.0 -2.220446049250313e-15 -7.999999999999997 8.0 10.0 25.999999999999993 0 0 0
+bbox -8.0 -2.6645352591003757e-15 -7.999999999999997 -7.0 10.0 25.999999999999993 0 0 0
+bbox -7.0 -1.7763568394002505e-15 25.5 7.0 10.0 26.5 0 0 0
+bbox -7.0 -2.0 -8.0 7.0 0.0 26.0 0 0 0
+bbox -7.0 9.791847343604017 -8.0 7.0 11.791847343604017 26.0 0 0 0
+
+//camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
+camera -14.757877717629409 -12.537379551671203 0.0 -6.005612475588933 8.97664525811908 24.51080654590031 53.953475 1
+
+//bg <bgID> <ForegroundFileName> <BackgroundFileName>
+bg 1 none BG_02_bg.png
+
+//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
+trigger 0 0 0 1 1 1 0 0 0 1
+
+// spawn x y z
+spawn -4.259611401348419 0.0 -3.48715987304206
+
+//exit <offsetX> <offsetY> <offsetZ> <roomFileName>
+exit 0.5 1 0 ROOM_02.room

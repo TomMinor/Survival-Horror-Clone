@@ -1,5 +1,5 @@
 namespace util {
 
-void drawWorldAxis();
+void drawWorldAxis(float _scale=1.0f);
 
 }

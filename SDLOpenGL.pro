@@ -21,7 +21,8 @@ SOURCES=src/main.cpp \
     src/Door.cpp \
     src/stringUtilities.cpp \
     src/RoomReader.cpp \
-    src/3dUtilities.cpp
+    src/3dUtilities.cpp \
+    src/md2.cpp
 
 
 HEADERS+=include/GLFunctions.h \
@@ -39,7 +40,8 @@ HEADERS+=include/GLFunctions.h \
     include/stringUtilities.h \
     include/RoomReader.h \
     include/GLinc.h \
-    include/3dUtilities.h
+    include/3dUtilities.h \
+    include/md2.h
 
 # add the ngl lib
 # this is where to look for includes

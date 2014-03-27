@@ -18,7 +18,6 @@ private:
   float m_playerYaw;
   std::vector<Room> m_rooms;
   int m_currentRoom;
-  double m_currentTime;
   double m_lastTime;
 
   std::string m_assetPath;
@@ -26,7 +25,7 @@ private:
 public:
   World(const Vec4& _playerSpawn = Vec4()) :
     m_init(false), m_debugBBoxDraw(true), m_player(Vec4(1,2,1), Vec4(_playerSpawn)),
-    m_currentTime(0), m_lastTime(0), m_currentRoom(0)
+    m_lastTime(0), m_currentRoom(0)
   {;}
   bool init(const std::string& _assetpath = "assets/");
   void draw() const;
@@ -35,8 +34,8 @@ public:
 
   // Input - bit of a crappy interface but i need to sort everything else out (BUG)
   void playerWalk(float _offset);
-  void playerTurn(float _deg)        { m_playerYaw = _deg;        }
-  void playerDash()                 { m_playerOffset *= 2;       }
+  void playerTurn(float _deg)     { m_playerYaw = _deg;   }
+  void playerDash()               { m_playerOffset *= 2;  }
 
   inline void toggleBBox() { m_debugBBoxDraw ^= 1; }
 
@@ -44,6 +43,9 @@ public:
   inline double getLastTime() const { return m_lastTime; }
   inline double getCurrentTime() const { return SDL_GetTicks(); }
   inline double getElapsedTime() const { return SDL_GetTicks() - m_lastTime; }
+
+  void nextRoom() { if(m_currentRoom < m_rooms.size()) m_currentRoom=1; }
+  void prevRoom() { if(m_currentRoom > 0) --m_currentRoom; }
 
 private:
   void loadRooms();

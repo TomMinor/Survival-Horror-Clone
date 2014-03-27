@@ -47,11 +47,13 @@ void World::draw() const
   // Draw room bounds for collision testing
   if(m_debugBBoxDraw)
   {
-    for(std::vector<Room>::const_iterator room = m_rooms.begin();
-        room!= m_rooms.end(); ++room)
-    {
-        room->debugDrawBounds();
-    }
+    m_rooms[m_currentRoom].debugDrawBounds();
+
+//    for(std::vector<Room>::const_iterator room = m_rooms.begin();
+//        room!= m_rooms.end(); ++room)
+//    {
+//        room->debugDrawBounds();
+//    }
   }
 
   m_player.draw();

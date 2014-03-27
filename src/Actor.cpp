@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "GLFunctions.h"
 
+#include "3dUtilities.h"
 #include <iostream>
 
 namespace Game {
@@ -16,9 +17,7 @@ void Actor::draw() const
     glPushMatrix();
       glRotatef(m_yaw, 0, 1, 0);
 
-      // Directional arrow
-      glColor3f( 1.0f, 0.0f, 0.0f );
-      GLFunctions::cone(m_scale.m_x/2, m_scale.m_y/2, 10, 10);
+      util::drawWorldAxis(1.25);
 
       // Cylinder body
       glRotatef(90, 1, 0, 0);
@@ -33,6 +32,7 @@ void Actor::move(float _offset, float _deg)
 {
   m_yaw += _deg;
 
+  // Relative
   float offsetX = _offset * sin((PI*m_yaw)/180);
   float offsetZ = _offset * cos((PI*m_yaw)/180);
 

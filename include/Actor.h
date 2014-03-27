@@ -8,17 +8,11 @@ namespace Game {
 
 class Actor
 {
-  enum action{
-    IDLE=0,
-    DASH,
-    WALK,
-    READYATTACK,
-    ATTACK
-  };
+  // Load
 
 public:
   Actor(const Vec4 & _scale, const Vec4 & _pos )
-    : m_state(IDLE), m_timeStep(0), m_pos(_pos), m_scale(_scale), m_yaw(0),
+    : m_timeStep(0), m_pos(_pos), m_scale(_scale), m_yaw(0),
       m_bbox( _pos.m_x, _pos.m_y, _pos.m_z,
               _pos.m_x + _scale.m_x,
               _pos.m_y + _scale.m_y,
@@ -32,7 +26,7 @@ public:
 
 
 private:
-  std::vector<action> m_state;
+  //std::vector<action> m_state;
   int m_timeStep;
   Vec4 m_pos;
   Vec4 m_scale;

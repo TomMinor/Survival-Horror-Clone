@@ -15,12 +15,7 @@ void Camera::setTransform(const Vec4 &_pos, const Vec4 &_rotation )
   m_viewMatrix.identity();
 
   // Rotation
-  Mat4 tmpx(m_viewMatrix); tmpx.rotateX( _rotation.m_roll );
-  Mat4 tmpy(m_viewMatrix); tmpy.rotateY( _rotation.m_pitch );
-  Mat4 tmpz(m_viewMatrix); tmpz.rotateZ( _rotation.m_yaw );
-  m_viewMatrix *= tmpx;
-  m_viewMatrix *= tmpy;
-  m_viewMatrix *= tmpz;
+  m_viewMatrix.rotate(_rotation);
 
   // Translate
   m_viewMatrix.m_m[3][0] = _pos.m_x;
