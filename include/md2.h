@@ -7,6 +7,20 @@
 
 class MeshMd2
 {
+  // Used to verify the file we're loading is the correct type/version
+  const int* MD2_IDENT;
+  const int  MD2_VERSION;
+  const int  NUMVERTEXNORMALS;
+  const int  SHADEDOT_QUANT;
+
+  typedef float fVec3[3];  // Simple float Vec3
+  typedef struct
+  {
+    int firstFrame;
+    int lastFrame;
+    int fps;
+  } anim;
+
 public:
   MeshMd2(std::string _meshPath, std::string _texturePath) :
     m_totalFrames(0),
@@ -35,29 +49,18 @@ public:
 private:
   void animate(float _time);
   void processLighting();
-  void interp();
+  void interp(fVec3* _vertList);
+  void renderFrame();
 
 
 public:
-  typedef float fVec3[3];  // Simple float Vec3
-  typedef struct
-  {
-    int firstFrame;
-    int lastFrame;
-    int fps;
-  } anim;
-
   // Precalculated arrays applicable to every md2 mesh
-  static fVec3 m_normals[ NUMVERTEXNORMALS ];
-  static float m_normalsDot[ SHADEDOT_QUANT][256];  // Dot products
+  const fVec3 m_normals[ NUMVERTEXNORMALS ];
+  const float m_normalsDot[ SHADEDOT_QUANT][256];  // Dot products
 
-  static anim m_animList[21];
+  const anim m_animList[21];
 
 private:
-  // Used to verify the file we're loading is the correct type/version
-  static const int* MD2_IDENT;
-  static const int  MD2_VERSION;
-
   typedef struct
   {
     anim    currentAnim;

@@ -6,8 +6,11 @@
  * Modified from http://tfc.duke.free.fr/old/models/md2.htm
  */
 
-static const int MD2_IDENT[]   = {'I', 'D', 'P', '2'};
-static const int MD2_VERSION = 8;
+const int MD2_IDENT[]   = {'I', 'D', 'P', '2'};
+const int MD2_VERSION = 8;
+const int NUMVERTEXNORMALS = 162;
+const int SHADEDOT_QUANT = 16;
+
 
 MeshMd2::~MeshMd2()
 {
@@ -91,7 +94,12 @@ bool MeshMd2::loadMesh(std::string _filename)
 
 void MeshMd2::drawMesh(float _time)
 {
+  glPushMatrix();
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
 
+    renderFrame();
+  glPopMatrix();
 }
 
 void MeshMd2::drawFrame(int _frame)
@@ -114,7 +122,17 @@ void MeshMd2::processLighting()
 
 }
 
-void MeshMd2::interp()
+void MeshMd2::interp(fVec3* _vertList)
+{
+  for(int i=0; i<m_totalVertices; ++i)
+  {
+    _vertList[i][0] = m_Vertices[i+(m_totalVertices*m_anim.currentFrame)][0]*m_scale;
+    _vertList[i][1] = m_Vertices[i+(m_totalVertices*m_anim.currentFrame)][1]*m_scale;
+    _vertList[i][2] = m_Vertices[i+(m_totalVertices*m_anim.currentFrame)][2]*m_scale;
+  }
+}
+
+void MeshMd2::renderFrame()
 {
 
 }
