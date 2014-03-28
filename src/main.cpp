@@ -10,6 +10,7 @@
 #include "3dUtilities.h"
 #include "BoundingBox.h"
 #include "Camera.h"
+#include "md2.h"
 
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
@@ -76,6 +77,8 @@ int main()
   const uint worldUpdateDelay = 30;
 
   Game::World world;
+  Model_MD2 test;
+  test.Load("assets/actor/warrior", NULL);
 
   // Exit if we fail to load for some reason
   if ( !world.init() )
@@ -88,9 +91,9 @@ int main()
 //                       Vec4(-14.757877717629409f, -12.537379551671203f, 0.0f),
 //                       53.953475f);
 
-  Game::Camera current(Vec4(0.1, 0.1, 0.1),
-                       Vec4(),
-                       53.953475f);
+  Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
+
+
   while(!quit)
   {
     while ( SDL_PollEvent(&event) )
@@ -117,10 +120,10 @@ int main()
         } // end of keydown*
         default : break;
       } // end of event switch
-    } // end of poll events    
+    } // end of poll events
 
     if( world.getElapsedTime() >= worldUpdateDelay)
-    { 
+    {
       if(keystate[SDL_SCANCODE_UP])           { world.playerWalk(0.1);    }
       if(keystate[SDL_SCANCODE_DOWN])         { world.playerWalk(-0.1);   }
       if(keystate[SDL_SCANCODE_RIGHT])        { world.playerTurn(-4);     }
