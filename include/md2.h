@@ -8,11 +8,12 @@
 class MeshMd2
 {
   // Used to verify the file we're loading is the correct type/version
-  const int* MD2_IDENT;
-  const int  MD2_VERSION;
-  const int  NUMVERTEXNORMALS;
-  const int  SHADEDOT_QUANT;
+  #define MD2_IDENT         (('2'<<24) + ('P'<<16) + ('D'<<8) + 'I')  //'IDP2'
+  #define MD2_VERSION       8
+  #define NUMVERTEXNORMALS  162
+  #define SHADEDOT_QUANT    16
 
+public:
   typedef float fVec3[3];  // Simple float Vec3
   typedef struct
   {
@@ -21,7 +22,6 @@ class MeshMd2
     int fps;
   } anim;
 
-public:
   MeshMd2(std::string _meshPath, std::string _texturePath) :
     m_totalFrames(0),
     m_totalVertices(0),
@@ -55,10 +55,10 @@ private:
 
 public:
   // Precalculated arrays applicable to every md2 mesh
-  const fVec3 m_normals[ NUMVERTEXNORMALS ];
-  const float m_normalsDot[ SHADEDOT_QUANT][256];  // Dot products
+  static const fVec3 m_normals[ NUMVERTEXNORMALS ];
+  static const float m_normalsDot[ SHADEDOT_QUANT][256];  // Dot products
 
-  const anim m_animList[21];
+  static const anim m_animList[21];
 
 private:
   typedef struct
@@ -92,7 +92,7 @@ private:
 
   struct MD2Header
   {
-    int ident[4];       // 'IDP2'
+    int ident;       // 'IDP2'
     int version;        // md2 version = 8
 
     int skinWidth;

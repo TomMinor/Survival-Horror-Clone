@@ -77,8 +77,6 @@ int main()
   const uint worldUpdateDelay = 30;
 
   Game::World world;
-  Model_MD2 test;
-  test.Load("assets/actor/warrior", NULL);
 
   // Exit if we fail to load for some reason
   if ( !world.init() )
@@ -93,6 +91,7 @@ int main()
 
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
+  MeshMd2 test("assets/actor/warrior.md2", "assets/actor/soldier.jpg");
 
   while(!quit)
   {
