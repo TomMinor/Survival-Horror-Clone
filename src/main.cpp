@@ -91,7 +91,10 @@ int main()
 
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
-  MeshMd2 test("assets/actor/warrior.md2", "assets/actor/soldier.jpg");
+  MeshMd2 test("assets/actor/mach-body.md2", "assets/actor/soldier.jpg", 0.1f);
+  test.setAnimation(MeshMd2::BOOM);
+
+  float i = 0.0f;
 
   while(!quit)
   {
@@ -140,6 +143,12 @@ int main()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       //util::drawWorldAxis();
+
+      i+=0.1;
+      glPushMatrix();
+        glTranslatef(1.0f, 0.0f, 0.5*sin(i));
+        test.drawMesh(i);
+      glPopMatrix();
 
       current.setView();
 

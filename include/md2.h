@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 #include "Texture.h"
+
 
 class MeshMd2
 {
@@ -22,7 +24,34 @@ public:
     int fps;
   } anim;
 
-  MeshMd2(std::string _meshPath, std::string _texturePath) :
+  typedef enum
+  {
+    STAND,
+    RUN,
+    ATTACK,
+    PAIN_A,
+    PAIN_B,
+    PAIN_C,
+    JUMP,
+    FLIP,
+    SALUTE,
+    FALLBACK,
+    WAVE,
+    POINT,
+    CROUCH_STAND,
+    CROUCH_WALK,
+    CROUCH_ATTACK,
+    CROUCH_PAIN,
+    CROUCH_DEATH,
+    DEATH_FALLBACK,
+    DEATH_FALLFORWARD,
+    DEATH_FALLBACKSLOW,
+    BOOM,
+
+    MAX_ANIMATIONS
+  } animType;
+
+  MeshMd2(std::string _meshPath, std::string _texturePath, float _scale=1.0f) :
     m_totalFrames(0),
     m_totalVertices(0),
     m_totalGLcmds(0),
@@ -30,9 +59,10 @@ public:
     m_GLcmds(0),
     m_lightNormals(0),
     m_texID(0),
-    m_scale(1.0f),
+    m_scale(_scale),
     m_skin(_texturePath)
   {
+    memset(&m_anim, 0, sizeof(m_anim));
     setAnimation(0);
     loadMesh(_meshPath);
   }

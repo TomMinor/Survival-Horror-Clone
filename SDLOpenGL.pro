@@ -72,3 +72,4 @@ linux-clang {
     DEFINES += LINUX
     LIBS+= -lGLEW
 }
+CONFIG+=debug_and_release
