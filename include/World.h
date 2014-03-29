@@ -28,14 +28,14 @@ public:
     m_lastTime(0), m_currentRoom(0)
   {;}
   bool init(const std::string& _assetpath = "assets/");
-  void draw() const;
+  void draw();
   void update();
   void changeRoom(const Room & _nextRoom) const;
 
   // Input - bit of a crappy interface but i need to sort everything else out (BUG)
   void playerWalk(float _offset);
   void playerTurn(float _deg)     { m_playerYaw = _deg;   }
-  void playerDash()               { m_playerOffset *= 2;  }
+  void playerDash()               { if(m_playerOffset > 0) { m_playerOffset *= 2; }  }
 
   inline void toggleBBox() { m_debugBBoxDraw ^= 1; }
 

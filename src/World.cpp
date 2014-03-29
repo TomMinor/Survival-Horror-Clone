@@ -42,7 +42,7 @@ bool World::init(const std::string& _assetpath)
 }
 
 // Draw actors and room
-void World::draw() const
+void World::draw()
 {
   // Draw room bounds for collision testing
   if(m_debugBBoxDraw)
@@ -63,6 +63,8 @@ void World::draw() const
 void World::update()
 {
   updateTime();
+
+  m_player.update();
 
   BBox tmp(m_player.getBoundingBox());
   tmp.move(m_playerOffset*0.001);

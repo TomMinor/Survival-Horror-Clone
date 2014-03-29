@@ -86,7 +86,7 @@ bool MeshMd2::loadMesh(std::string _filename)
   std::ifstream fileStream;
   MD2Header   header;
 
-  char*       frameBuffer;
+  char*       keyFrameBuffer;
   KeyFrame*   frame;
   fVec3*      verts;
   int*        normals;
@@ -112,14 +112,14 @@ bool MeshMd2::loadMesh(std::string _filename)
   m_totalGLcmds   = header.numGlcmds;
 
   // allocate buffers
+  keyFrameBuffer     = new char[ header.frameSize * m_totalFrames ];
   m_Vertices      = new fVec3[ m_totalVertices*m_totalFrames ];
-  m_GLcmds        = new int[ m_totalGLcmds ];
   m_lightNormals  = new int[ m_totalVertices * m_totalFrames ];
-  frameBuffer     = new char[ m_totalFrames * header.frameSize ];
+  m_GLcmds        = new int[ m_totalGLcmds ];
 
   // Read frame data
   fileStream.seekg( header.offsetFrames, std::ios::beg );
-  fileStream.read( reinterpret_cast<char*>(frameBuffer),
+  fileStream.read( reinterpret_cast<char*>(keyFrameBuffer),
                    m_totalFrames*header.frameSize );
 
   // Read GL commands
@@ -134,7 +134,7 @@ bool MeshMd2::loadMesh(std::string _filename)
     int frameIndex = m_totalVertices*j;
     verts   = &m_Vertices[frameIndex];
     normals = &m_lightNormals[frameIndex];
-    frame   = reinterpret_cast<KeyFrame*>(&frameBuffer[header.frameSize*j]);
+    frame   = reinterpret_cast<KeyFrame*>(&keyFrameBuffer[header.frameSize*j]);
 
     // Translate & scale each vertex
     for( int i=0; i<m_totalVertices; ++i )
@@ -147,7 +147,7 @@ bool MeshMd2::loadMesh(std::string _filename)
     }
   }
 
-  delete[] frameBuffer;
+  delete[] keyFrameBuffer;
 
   fileStream.close();
   return true;
@@ -181,11 +181,11 @@ void MeshMd2::drawFrame(int _frame)
   drawMesh(1.0f);
 }
 
-void MeshMd2::setAnimation(int _type)
+void MeshMd2::setAnimation(animType _type)
 {
-  if((_type<0) || (_type>MAX_ANIMATIONS))
+  if((_type < 0) || (_type>MAX_ANIMATIONS))
   {
-    _type=0;
+    _type=STAND;
   }
 
   m_anim.currentAnim.firstFrame = m_animList[_type].firstFrame;
@@ -202,6 +202,7 @@ void MeshMd2::animate(float _time)
   if(m_anim.currentTime - m_anim.lastTime > (1.0f/m_anim.currentAnim.fps))
   {
     m_anim.currentFrame = m_anim.nextFrame++;
+    //m_anim.currentFrame = m_anim.nextFrame;
 
     if(m_anim.nextFrame > m_anim.currentAnim.lastFrame)
     {
@@ -256,6 +257,7 @@ void MeshMd2::renderFrame()
   glFrontFace(GL_BACK);
 
   glEnable(GL_TEXTURE_2D);
+  glEnable(GL_COLOR);
   //glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
@@ -268,7 +270,7 @@ void MeshMd2::renderFrame()
   // Draw triangles
   while(int i = *(triCmds++))
   {
-    if(i<0)
+    if(i < 0)
     {
       glBegin(GL_TRIANGLE_FAN);
       i = -i;
@@ -280,8 +282,8 @@ void MeshMd2::renderFrame()
 
     for(  ; i>0; --i, triCmds+=3)
     {
-      //  triCmds[0] : U
-      //  triCmds[1] : V
+      //  triCmds[0] : texcoord U
+      //  triCmds[1] : texcoord V
       //  triCmds[2] : Vtx id
 
       float l = shadeDots[m_lightNormals[triCmds[2]]];

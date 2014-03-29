@@ -91,10 +91,9 @@ int main()
 
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
-  MeshMd2 test("assets/actor/monkey.md2", "assets/actor/brute.jpg", 0.02f);
-  test.setAnimation(MeshMd2::BOOM);
+  //test.setAnimation(MeshMd2::SALUTE);
 
-  float i = 0.0f;
+  float time = 0.0f;
 
   while(!quit)
   {
@@ -116,7 +115,7 @@ int main()
             case SDLK_ESCAPE :  quit = true; break;
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
-            case SDLK_b : world.toggleBBox();
+            case SDLK_b : world.toggleBBox(); break;
             default : break;
           } // end of key process
         } // end of keydown*
@@ -144,11 +143,8 @@ int main()
 
       //util::drawWorldAxis();
 
-      i+=0.1;
-      glPushMatrix();
-        glTranslatef(1.0f, 0.0f, 0.5*sin(i));
-        test.drawMesh(i);
-      glPopMatrix();
+//      body.drawMesh(world.getCurrentTime() * 0.003f);
+//      head.drawMesh(world.getCurrentTime() * 0.003f);
 
       current.setView();
 

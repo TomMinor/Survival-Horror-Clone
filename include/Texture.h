@@ -2,6 +2,9 @@
 #define Texture_H
 #include <iostream>
 #include "GLinc.h"
+#include <SDL.h>
+#include <SDL_image.h>
+
 
 namespace Game {
 
@@ -13,8 +16,12 @@ public:
 
   void setCurrent() const;
 
+  int textureHeight() const { return m_texture->h; }
+  int textureWidth() const  { return m_texture->w; }
+
 private:
   GLuint m_texID;
+  SDL_Surface* m_texture;
 };
 
 }

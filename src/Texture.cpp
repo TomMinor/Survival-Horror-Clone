@@ -1,13 +1,14 @@
 #include "Texture.h"
-#include <SDL.h>
-#include <SDL_image.h>
 #include <stdexcept>
 
 namespace Game {
 
-  Texture::Texture(std::string _fileName) : m_texID(0)
+  Texture::Texture(std::string _fileName) : m_texID(0), m_texture(NULL)
   {
     glGenTextures(1,&m_texID);
+
+    // BUG crashes when i use m_texture, why?
+    m_texture=0;
 
     SDL_Surface* texture = IMG_Load(_fileName.c_str());
 
@@ -27,10 +28,13 @@ namespace Game {
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //m_texture = texture;
   }
 
   Texture::~Texture()
   {
+    free(m_texture);
     glDeleteTextures(1,&m_texID);
   }
 

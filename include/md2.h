@@ -63,7 +63,7 @@ public:
     m_skin(_texturePath)
   {
     memset(&m_anim, 0, sizeof(m_anim));
-    setAnimation(0);
+    setAnimation(STAND);
     loadMesh(_meshPath);
   }
 
@@ -75,7 +75,9 @@ public:
   void drawMesh(float _time);
   void drawFrame(int _frame);
 
-  void setAnimation(int _type);
+  void setAnimation(animType _type);
+
+  void incrementKeyFrame() { std::cout << m_anim.nextFrame++ << std::endl; }
 
 private:
   void animate(float _time);
