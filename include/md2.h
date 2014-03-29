@@ -70,6 +70,7 @@ public:
   ~MeshMd2();
 
   bool loadMesh(std::string _filename);
+  bool loadSkin(std::string _filename);
 
   void drawMesh(float _time);
   void drawFrame(int _frame);

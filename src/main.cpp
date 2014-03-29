@@ -91,7 +91,7 @@ int main()
 
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
-  MeshMd2 test("assets/actor/mach-body.md2", "assets/actor/soldier.jpg", 0.1f);
+  MeshMd2 test("assets/actor/monkey.md2", "assets/actor/brute.jpg", 0.02f);
   test.setAnimation(MeshMd2::BOOM);
 
   float i = 0.0f;

@@ -153,6 +153,11 @@ bool MeshMd2::loadMesh(std::string _filename)
   return true;
 }
 
+bool loadSkin(std::string _filename)
+{
+
+}
+
 void MeshMd2::drawMesh(float _time)
 {
   if(_time>0.0f) { animate(_time ); }
@@ -196,9 +201,7 @@ void MeshMd2::animate(float _time)
 
   if(m_anim.currentTime - m_anim.lastTime > (1.0f/m_anim.currentAnim.fps))
   {
-    //m_anim.currentFrame = m_anim.nextFrame++;
-    m_anim.currentFrame = m_anim.nextFrame;
-    m_anim.nextFrame++;
+    m_anim.currentFrame = m_anim.nextFrame++;
 
     if(m_anim.nextFrame > m_anim.currentAnim.lastFrame)
     {
@@ -252,14 +255,15 @@ void MeshMd2::renderFrame()
   glPushAttrib(GL_POLYGON_BIT);
   glFrontFace(GL_BACK);
 
-  glEnable(GL_CULL_FACE);
+  glEnable(GL_TEXTURE_2D);
+  //glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
   processLighting();
 
   interp(vertList);
 
-  glBindTexture(GL_TEXTURE_2D, m_texID);
+  m_skin.setCurrent();
 
   // Draw triangles
   while(int i = *(triCmds++))
@@ -297,6 +301,7 @@ void MeshMd2::renderFrame()
     glEnd();
   }
 
-  glDisable(GL_CULL_FACE);
+  glDisable(GL_TEXTURE_2D);
+  //glDisable(GL_CULL_FACE);
   glPopAttrib();
 }

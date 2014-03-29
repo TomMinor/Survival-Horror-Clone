@@ -21,12 +21,12 @@ namespace Game {
       std::cerr << SDL_GetError() << ", using fallback material\n";
     }
 
-//    glBindTexture(GL_TEXTURE_2D, m_texID);
-//    glTexImage2D(GL_TEXTURE_2D, 0 ,GL_RGBA, texture->w, texture->h, 0,
-//                 GL_RGBA, GL_UNSIGNED_BYTE, texture->pixels);
+    glBindTexture(GL_TEXTURE_2D, m_texID);
+    glTexImage2D(GL_TEXTURE_2D, 0 ,GL_RGB, texture->w, texture->h, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, texture->pixels);
 
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   }
 
   Texture::~Texture()

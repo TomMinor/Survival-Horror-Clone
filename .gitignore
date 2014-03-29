@@ -20,4 +20,5 @@
 *.out
 *.app
 
-*.md2
+*.mtl
+*.jpg
