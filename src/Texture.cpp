@@ -34,7 +34,7 @@ namespace Game {
 
   Texture::~Texture()
   {
-    free(m_texture);
+    SDL_FreeSurface(m_texture);
     glDeleteTextures(1,&m_texID);
   }
 
