@@ -7,7 +7,66 @@
 #include "Texture.h"
 
 
-class MeshMd2
+namespace md2
+{
+struct Header
+{
+  int ident;       // 'IDP2'
+  int version;        // md2 version = 8
+
+  int skinWidth;
+  int skinHeight;
+  int frameSize;
+
+  int numSkins;
+  int numVertices;
+  int numUVs;
+  int numTriangles;
+  int numGlcmds;
+  int numFrames;
+
+  int offsetSkins;
+  int offsetUV;
+  int offsetTriangles;
+  int frameOffset;
+  int glCmdsOffset;
+  int offsetEof;
+};
+
+// Stores compressed verts & the (unused) normal lookup index
+typedef struct
+{
+  unsigned char v[3];
+  unsigned char lightNormalIndex;
+} Vertex;
+
+// Stores compressed coords
+typedef struct
+{
+  short u;
+  short v;
+} UvCoord;
+
+typedef struct
+{
+  // Use these to decompress the Vertex data by scaling &
+  // translating each keyframe
+  float   scale[3];
+  float   translate[3];
+  char    name[16];
+  Vertex  vertices[1];
+} KeyFrame;
+
+// Stores the vertex/UV indices for a triangle
+typedef struct
+{
+  short   indexVertices[3];
+  short   indexUVs[3];
+} Triangle;
+
+}
+
+class Mesh
 {
   // Used to verify the file we're loading is the correct type/version
   #define MD2_IDENT         (('2'<<24) + ('P'<<16) + ('D'<<8) + 'I')  //'IDP2'
@@ -112,60 +171,7 @@ private:
 
   Game::Texture m_skin;
 
-  struct MD2Header
-  {
-    int ident;       // 'IDP2'
-    int version;        // md2 version = 8
 
-    int skinWidth;
-    int skinHeight;
-    int frameSize;
-
-    int numSkins;
-    int numVertices;
-    int numUVs;
-    int numTriangles;
-    int numGlcmds;
-    int numFrames;
-
-    int offsetSkins;
-    int offsetUV;
-    int offsetTriangles;
-    int frameOffset;
-    int glCmdsOffset;
-    int offsetEof;
-  };
-
-  // Stores compressed verts & the (unused) normal lookup index
-  typedef struct
-  {
-    unsigned char v[3];
-    unsigned char lightNormalIndex;
-  } Vertex;
-
-  // Stores compressed coords
-  typedef struct
-  {
-    short u;
-    short v;
-  } UvCoord;
-
-  typedef struct
-  {
-    // Use these to decompress the Vertex data by scaling &
-    // translating each keyframe
-    float   scale[3];
-    float   translate[3];
-    char    name[16];
-    Vertex  vertices[1];
-  } KeyFrame;
-
-  // Stores the vertex/UV indices for a triangle
-  typedef struct
-  {
-    short   indexVertices[3];
-    short   indexUVs[3];
-  } Triangle;
 };
 
 #endif // MD2_H

@@ -10,7 +10,7 @@
 #include "3dUtilities.h"
 #include "BoundingBox.h"
 #include "Camera.h"
-#include "md2.h"
+#include "Actor.h"
 
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
@@ -28,16 +28,17 @@ int main()
     SDLErrorExit("Unable to initialize SDL");
   }
 
-  // now get the size of the display and create a window we need to init the video
-  SDL_Rect rect;
-  SDL_GetDisplayBounds(0,&rect);
+  // Use a 4:3 aspect ratio to match the backgrounds
+  SDL_Rect windowBounds = {0, 0, 800, 600};
+
+  //SDL_GetDisplayBounds(0,&rect);
   // now create our window
   SDL_Window *window=SDL_CreateWindow("SDLGL",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
-                                      rect.w/2,
-                                      rect.h/2,
-                                      SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+                                      windowBounds.w,
+                                      windowBounds.h,
+                                      SDL_WINDOW_OPENGL
                                      );
   // check to see if that worked or exit
   if (!window)
@@ -52,25 +53,29 @@ int main()
    {
      SDLErrorExit("Problem creating OpenGL context");
    }
-   // make this our current GL context (we can have more than one window but in this case not)
-   SDL_GL_MakeCurrent(window, glContext);
+
+  // make this our current GL context (we can have more than one window but in this case not)
+  SDL_GL_MakeCurrent(window, glContext);
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(1);
 
   glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  GLFunctions::perspective(75,float(800/600),0.01,500);
+  GLFunctions::perspective(75, float(4/3), 0.01, 500);
 
   SDL_GL_SwapWindow(window);
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-  glColor3f(1,1,0);
+
   glEnable(GL_COLOR_MATERIAL);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glColor3f(1,0,1);
 
-  // flag to indicate if we need to exit
+
+  // Flag to indicate if we need to exit
   bool quit=false;
+
   // sdl event processing data structure
   SDL_Event event;
 
@@ -91,7 +96,8 @@ int main()
 
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
-  //test.setAnimation(MeshMd2::SALUTE);
+  Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
+  test.forceAnimation(MeshMd2::DEATH_IDLE);
 
   float time = 0.0f;
 
@@ -142,6 +148,9 @@ int main()
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       //util::drawWorldAxis();
+
+      test.update();
+      test.draw();
 
 //      body.drawMesh(world.getCurrentTime() * 0.003f);
 //      head.drawMesh(world.getCurrentTime() * 0.003f);

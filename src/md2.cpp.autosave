@@ -173,15 +173,15 @@ void MeshMd2::animate(float _time)
 void MeshMd2::processLighting()
 {
   MeshMd2::fVec3  gLightColor  = {1.0f, 1.0f, 1.0f};
-
+  
   float gAngle = 180.0f;
   float gShadeLight   = 128;
   int   gAmbientLight = 32;
   float lightVar = static_cast<float>((gShadeLight + gAmbientLight)/256.0f);
 
-  lightColour[0] = gLightColor[0] - lightVar;
-  lightColour[1] = gLightColor[1] - lightVar;
-  lightColour[2] = gLightColor[2] - lightVar;
+  lightColour[0] = gLightColor[0] + lightVar;
+  lightColour[1] = gLightColor[1] + lightVar;
+  lightColour[2] = gLightColor[2] + lightVar;
 
   shadeDots = m_normalsDot[static_cast<int>((gAngle*(SHADEDOT_QUANT/360.0f))) & (SHADEDOT_QUANT-1)];
 }

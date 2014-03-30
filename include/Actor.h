@@ -28,6 +28,9 @@ public:
   void update();
   void move(float _offset, float _deg=0.0f);
 
+  void forceAnimation(MeshMd2::animType _type) {  m_meshBody.setAnimation(_type);
+                                                  m_meshHead.setAnimation(_type); }
+
 private:
   //std::vector<action> m_state;
   int m_time;
