@@ -17,11 +17,8 @@ void Actor::draw()
     m_pos.translateGL();
     glPushMatrix();
       glRotatef(m_yaw, 0, 1, 0);
-
       m_meshBody.drawMesh(m_time*0.05f);
       m_meshHead.drawMesh(m_time*0.05f);
-
-
       util::drawWorldAxis(1.25);
     glPopMatrix();
   glPopMatrix();

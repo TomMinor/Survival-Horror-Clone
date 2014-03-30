@@ -19,8 +19,8 @@ public:
               _pos.m_y + _scale.m_y,
               _pos.m_z + _scale.m_z)
   {
-    m_meshBody.setAnimation(MeshMd2::DEATH);
-    m_meshHead.setAnimation(MeshMd2::DEATH);
+    m_meshBody.setAnimation(MeshMd2::WALK);
+    m_meshHead.setAnimation(MeshMd2::WALK);
   }
 
   const BBox& getBoundingBox() const { return m_bbox; }
