@@ -27,29 +27,57 @@ public:
   typedef enum
   {
     STAND,
+    WALK,
     RUN,
     ATTACK,
-    PAIN_A,
-    PAIN_B,
-    PAIN_C,
-    JUMP,
-    FLIP,
-    SALUTE,
-    FALLBACK,
-    WAVE,
-    POINT,
-    CROUCH_STAND,
-    CROUCH_WALK,
-    CROUCH_ATTACK,
-    CROUCH_PAIN,
-    CROUCH_DEATH,
-    DEATH_FALLBACK,
-    DEATH_FALLFORWARD,
-    DEATH_FALLBACKSLOW,
-    BOOM,
+    PREP_ATTACK,
+    PAIN,
+    DEATH,
+    DEATH_IDLE,
+    UNUSED0,
+    UNUSED1,
+    UNUSED2,
+    UNUSED3,
+    UNUSED4,
+    UNUSED5,
+    UNUSED6,
+    UNUSED7,
+    UNUSED8,
+    UNUSED9,
+    UNUSED10,
+    UNUSED11,
+    UNUSED12,
+    UNUSED13,
 
     MAX_ANIMATIONS
   } animType;
+
+//  typedef enum
+//  {
+//    STAND,
+//    RUN,
+//    ATTACK,
+//    PAIN_A,
+//    PAIN_B,
+//    PAIN_C,
+//    JUMP,
+//    FLIP,
+//    SALUTE,
+//    FALLBACK,
+//    WAVE,
+//    POINT,
+//    CROUCH_STAND,
+//    CROUCH_WALK,
+//    CROUCH_ATTACK,
+//    CROUCH_PAIN,
+//    CROUCH_DEATH,
+//    DEATH_FALLBACK,
+//    DEATH_FALLFORWARD,
+//    DEATH_FALLBACKSLOW,
+//    BOOM,
+
+//    MAX_ANIMATIONS
+//  } animType;
 
   MeshMd2(std::string _meshPath, std::string _texturePath, float _scale=1.0f) :
     m_totalFrames(0),
@@ -75,7 +103,7 @@ public:
   void drawMesh(float _time);
   void drawFrame(int _frame);
 
-  void setAnimation(animType _type);
+  void MeshMd2::setAnimation(int _type);
 
   void incrementKeyFrame() { std::cout << m_anim.nextFrame++ << std::endl; }
 

@@ -18,16 +18,11 @@ void Actor::draw()
     glPushMatrix();
       glRotatef(m_yaw, 0, 1, 0);
 
-      body.drawMesh(m_time*0.05f);
-      head.drawMesh(m_time*0.05f);
+      m_meshBody.drawMesh(m_time*0.05f);
+      m_meshHead.drawMesh(m_time*0.05f);
+
 
       util::drawWorldAxis(1.25);
-
-      // Cylinder body
-      //glRotatef(90, 1, 0, 0);
-      //glColor3f( 0.8f, 0.8f, 0.25f );
-      //glTranslatef(0, 0, m_scale.m_y/2);
-      //GLFunctions::cylinder(m_scale.m_x/2, m_scale.m_y*2, 10, 10);
     glPopMatrix();
   glPopMatrix();
 }
@@ -44,10 +39,36 @@ void Actor::move(float _offset, float _deg)
   m_pos.m_z += offsetZ;
 
   m_bbox.move(Vec4(offsetX, 0, offsetZ));
+
+  m_state = WALK;
 }
 
 void Actor::update()
 {
+//  if(m_state != m_previousState)
+//  {
+//    switch(m_state)
+//    {
+//      case WALK:          { m_meshBody.setAnimation(MeshMd2::WALK);
+//                            m_meshHead.setAnimation(MeshMd2::WALK);   break; }
+//      case DASH:          { m_meshBody.setAnimation(MeshMd2::RUN);
+//                            m_meshHead.setAnimation(MeshMd2::RUN);    break; }
+//      case PREPARE_ATTACK:{ m_meshBody.setAnimation(MeshMd2::PREPARE);
+//                            m_meshBody.setAnimation(MeshMd2::PREPARE);break; }
+//      case ATTACK:        { m_meshBody.setAnimation(MeshMd2::ATTACK);
+//                            m_meshBody.setAnimation(MeshMd2::ATTACK);  break; }
+//      case PAIN:          { m_meshBody.setAnimation(MeshMd2::PAIN_A);
+//                            m_meshBody.setAnimation(MeshMd2::PAIN_A);  break;}
+//      default:
+//      {
+//        m_meshBody.setAnimation(MeshMd2::STAND);
+//        m_meshHead.setAnimation(MeshMd2::STAND);  break;
+//      }
+//    }
+//  }
+
+  //m_previousState = m_state;
+
   m_time++;
 }
 

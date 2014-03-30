@@ -10,7 +10,7 @@
 #define SHADEDOT_QUANT  16
 
 const MeshMd2::fVec3 MeshMd2::m_normals[NUMVERTEXNORMALS] = {
-  #include "anorms.h";
+  #include "anorms.h"
 };
 
 const float MeshMd2::m_normalsDot[SHADEDOT_QUANT][256] = {
@@ -49,29 +49,54 @@ float           gAngle        = 0.0f;
 const MeshMd2::anim MeshMd2::m_animList[21] =
 {
   // Frame 0,   Frame n,  FPS
-
-  {   0,  39,  9 },   // STAND
-  {  40,  45, 10 },   // RUN
-  {  46,  53, 10 },   // ATTACK
-  {  54,  57,  7 },   // PAIN_A
-  {  58,  61,  7 },   // PAIN_B
-  {  62,  65,  7 },   // PAIN_C
-  {  66,  71,  7 },   // JUMP
-  {  72,  83,  7 },   // FLIP
-  {  84,  94,  7 },   // SALUTE
-  {  95, 111, 10 },   // FALLBACK
-  { 112, 122,  7 },   // WAVE
-  { 123, 134,  6 },   // POINT
-  { 135, 153, 10 },   // CROUCH_STAND
-  { 154, 159,  7 },   // CROUCH_WALK
-  { 160, 168, 10 },   // CROUCH_ATTACK
-  { 196, 172,  7 },   // CROUCH_PAIN
-  { 173, 177,  5 },   // CROUCH_DEATH
-  { 178, 183,  7 },   // DEATH_FALLBACK
-  { 184, 189,  7 },   // DEATH_FALLFORWARD
-  { 190, 197,  7 },   // DEATH_FALLBACKSLOW
-  { 198, 198,  5 },   // BOOM
+  {  11, 11, 9 },    // STAND
+  {  0,  7,  5  },   // WALK
+  {  0,  7,  10 },   // RUN
+  {  13, 13, 10 },   // ATTACK
+  {  7,  13, 10 },   // PREP_ATTACK
+  {  15, 19, 6 },    // PAIN
+  {  19, 25, 10 },   // DEATH
+  {  25, 25, 10 },   // DEATH_IDLE
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
+  {  0,  0,  0 },   // UNUSED
 };
+
+//const MeshMd2::anim MeshMd2::m_animList[21] =
+//{
+//  // Frame 0,   Frame n,  FPS
+//  {  11,  11,  9 },    // STAND
+//  {   0,  7,  2 },    // WALK
+//  {   0,  7,  9 },    // RUN
+//  {   7,  53, 10 },   // ATTACK
+//  {  54,  57,  7 },   // PAIN_A
+//  {  58,  61,  7 },   // PAIN_B
+//  {  62,  65,  7 },   // PAIN_C
+//  {   6,  6,  9 },    // PREPARE_ATTACK
+//  {  72,  83,  7 },   // FLIP
+//  {  95, 111, 10 },   // FALLBACK
+//  { 112, 122,  7 },   // WAVE
+//  { 123, 134,  6 },   // POINT
+//  { 135, 153, 10 },   // CROUCH_STAND
+//  { 154, 159,  7 },   // CROUCH_WALK
+//  { 160, 168, 10 },   // CROUCH_ATTACK
+//  { 196, 172,  7 },   // CROUCH_PAIN
+//  { 173, 177,  5 },   // CROUCH_DEATH
+//  { 178, 183,  7 },   // DEATH_FALLBACK
+//  { 184, 189,  7 },   // DEATH_FALLFORWARD
+//  { 190, 197,  7 },   // DEATH_FALLBACKSLOW
+//  { 198, 198,  5 },   // BOOM
+//};
 
 MeshMd2::~MeshMd2()
 {
@@ -112,7 +137,7 @@ bool MeshMd2::loadMesh(std::string _filename)
   m_totalGLcmds   = header.numGlcmds;
 
   // allocate buffers
-  keyFrameBuffer     = new char[ header.frameSize * m_totalFrames ];
+  keyFrameBuffer  = new char[ header.frameSize * m_totalFrames ];
   m_Vertices      = new fVec3[ m_totalVertices*m_totalFrames ];
   m_lightNormals  = new int[ m_totalVertices * m_totalFrames ];
   m_GLcmds        = new int[ m_totalGLcmds ];
@@ -153,11 +178,6 @@ bool MeshMd2::loadMesh(std::string _filename)
   return true;
 }
 
-bool loadSkin(std::string _filename)
-{
-
-}
-
 void MeshMd2::drawMesh(float _time)
 {
   if(_time>0.0f) { animate(_time ); }
@@ -181,17 +201,18 @@ void MeshMd2::drawFrame(int _frame)
   drawMesh(1.0f);
 }
 
-void MeshMd2::setAnimation(animType _type)
+void MeshMd2::setAnimation(int _type)
 {
   if((_type < 0) || (_type>MAX_ANIMATIONS))
   {
-    _type=STAND;
+    _type=0;
   }
 
   m_anim.currentAnim.firstFrame = m_animList[_type].firstFrame;
   m_anim.currentAnim.lastFrame  = m_animList[_type].lastFrame;
   m_anim.currentAnim.fps        = m_animList[_type].fps;
-  m_anim.nextFrame = m_animList[_type].firstFrame+1;
+  m_anim.nextFrame = m_anim.currentAnim.firstFrame + 1;
+
   m_anim.type= _type;
 }
 
@@ -258,8 +279,8 @@ void MeshMd2::renderFrame()
 
   glEnable(GL_TEXTURE_2D);
   glEnable(GL_COLOR);
-  //glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_FRONT);
 
   processLighting();
 

@@ -7,31 +7,26 @@ namespace Game {
 
 bool BBox::checkCollision(const BBox& _b) const
 {
-  return ( ((m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax)) &&
-           ((m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax)) &&
-           ((m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax)) );
+  return ( ((m_max.m_x > _b.m_min.m_x) && (m_min.m_x < _b.m_max.m_x)) &&
+           ((m_max.m_y > _b.m_min.m_y) && (m_min.m_y < _b.m_max.m_y)) &&
+           ((m_max.m_z > _b.m_min.m_z) && (m_min.m_z < _b.m_max.m_z)) );
 }
 
 
 Vec4 BBox::getCenter() const
 {
-  return Vec4( (m_xmax+m_xmin)/2,
-               (m_ymax+m_ymin)/2,
-               (m_zmax+m_zmin)/2 );
+  return Vec4( (m_max.m_x+m_min.m_x)/2,
+               (m_max.m_y+m_min.m_y)/2,
+               (m_max.m_z+m_min.m_z)/2 );
 }
-
-//Vec4 BBox::getCollisionNormal(const BBox& _b)
-//{
-//  (m_xmax > _b.m_xmin) && (m_xmin < _b.m_xmax)
-//  (m_ymax > _b.m_ymin) && (m_ymin < _b.m_ymax)
-//  (m_zmax > _b.m_zmin) && (m_zmin < _b.m_zmax)
-//}
 
 void BBox::move(Vec4 _pos)
 {
-  m_xmax += _pos.m_x;   m_xmin += _pos.m_x;
-  m_ymax += _pos.m_y;   m_ymin += _pos.m_y;
-  m_zmax += _pos.m_z;   m_zmin += _pos.m_z;
+  m_max.m_x += _pos.m_x;   m_min.m_x += _pos.m_x;
+  m_max.m_y += _pos.m_y;   m_min.m_y += _pos.m_y;
+  m_max.m_z += _pos.m_z;   m_min.m_z += _pos.m_z;
+//  m_max += _pos;
+//  m_min += _pos;
 }
 
 void BBox::draw() const
@@ -40,26 +35,27 @@ void BBox::draw() const
 
   glColor3f( 1.0f, 0.25f, 0.0f );
   glPushMatrix();
-    glTranslatef( (m_xmax+m_xmin)/2 , (m_ymax+m_ymin)/2, (m_zmax+m_zmin)/2);
+    glTranslatef( (m_max.m_x+m_min.m_x)/2 ,
+                  (m_max.m_y+m_min.m_y)/2,
+                  (m_max.m_z+m_min.m_z)/2);
     glPushMatrix();
-      GLFunctions::cube(fabs(m_xmax - m_xmin),
-                        fabs(m_ymax - m_ymin),
-                        fabs(m_zmax - m_zmin));
+      GLFunctions::cube(fabs(m_max.m_x - m_min.m_x),
+                        fabs(m_max.m_y - m_min.m_y),
+                        fabs(m_max.m_z - m_min.m_z));
     glPopMatrix();
   glPopMatrix();
-
 
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 std::ostream & operator<<(std::ostream &_output, const BBox &_b)
 {
-  _output << "Min x: " << _b.m_xmin
-        << "\nMin y: " << _b.m_ymin
-        << "\nMin z: " << _b.m_zmin
-        << "\nMax x: " << _b.m_xmax
-        << "\nMax y: " << _b.m_ymax
-        << "\nMax z: " << _b.m_zmax;
+  _output << "Min x: " << _b.m_min.m_x
+        << "\nMin y: " << _b.m_min.m_y
+        << "\nMin z: " << _b.m_min.m_z
+        << "\nMax x: " << _b.m_max.m_x
+        << "\nMax y: " << _b.m_max.m_y
+        << "\nMax z: " << _b.m_max.m_z;
 
   return _output;
 }

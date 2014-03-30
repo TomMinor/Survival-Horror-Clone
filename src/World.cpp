@@ -45,16 +45,7 @@ bool World::init(const std::string& _assetpath)
 void World::draw()
 {
   // Draw room bounds for collision testing
-  if(m_debugBBoxDraw)
-  {
-    m_rooms[m_currentRoom].debugDrawBounds();
-
-//    for(std::vector<Room>::const_iterator room = m_rooms.begin();
-//        room!= m_rooms.end(); ++room)
-//    {
-//        room->debugDrawBounds();
-//    }
-  }
+  if(m_debugBBoxDraw) { m_rooms[m_currentRoom].debugDrawBounds(); }
 
   m_player.draw();
 }
@@ -74,7 +65,7 @@ void World::update()
   }
   else
   {
-    m_player.move(0, m_playerYaw);
+  m_player.move(-0.01, m_playerYaw);
   }
 
 
@@ -84,9 +75,7 @@ void World::update()
 
 void World::playerWalk(float _offset)
 {
-
     m_playerOffset = _offset;
-
 }
 
 void World::loadRooms()
