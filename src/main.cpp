@@ -97,7 +97,7 @@ int main()
   Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
 
   Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
-  test.forceAnimation(MeshMd2::DEATH_IDLE);
+  test.forceAnimation(Md2::Animation::DEATH_IDLE);
 
   float time = 0.0f;
 

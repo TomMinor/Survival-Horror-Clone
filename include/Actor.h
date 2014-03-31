@@ -3,7 +3,7 @@
 #include <vector>
 #include "Vec4.h"
 #include "BoundingBox.h"
-#include "md2.h"
+#include "md2mesh.h"
 
 namespace Game {
 
@@ -19,8 +19,8 @@ public:
               _pos.m_y + _scale.m_y,
               _pos.m_z + _scale.m_z)
   {
-    m_meshBody.setAnimation(MeshMd2::WALK);
-    m_meshHead.setAnimation(MeshMd2::WALK);
+    m_meshBody.setAnimation(Md2::Animation::WALK);
+    m_meshHead.setAnimation(Md2::Animation::WALK);
   }
 
   const BBox& getBoundingBox() const { return m_bbox; }
@@ -28,8 +28,8 @@ public:
   void update();
   void move(float _offset, float _deg=0.0f);
 
-  void forceAnimation(MeshMd2::animType _type) {  m_meshBody.setAnimation(_type);
-                                                  m_meshHead.setAnimation(_type); }
+  void forceAnimation(Md2::Animation::Sequence _type) { m_meshBody.setAnimation(_type);
+                                                        m_meshHead.setAnimation(_type); }
 
 private:
   //std::vector<action> m_state;
@@ -38,8 +38,8 @@ private:
   Vec4 m_scale;
   float m_yaw;
 
-  MeshMd2 m_meshBody;
-  MeshMd2 m_meshHead;
+  Md2::Mesh m_meshBody;
+  Md2::Mesh m_meshHead;
 
   BBox m_bbox;
 
