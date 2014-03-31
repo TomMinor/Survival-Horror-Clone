@@ -5,14 +5,14 @@ namespace Md2
 {
 
 // Pre-calculated tables
-const Vec3 m_normals[TOTALVERTEXNORMALS] = {
+const Vec3 normals[TOTALVERTEXNORMALS] = {
   #include "anorms.h"
 };
-static const float m_normalsDot[SHADEDOT_QUANT][256] = {
+static const float normalsDot[SHADEDOT_QUANT][256] = {
   #include "anormtab.h"
 };
 
-const float* Mesh::m_shadeDots = m_normalsDot[0];
+const float* Mesh::m_shadeDots = normalsDot[0];
 Vec3  lightColour;     // Final light colour
 
 Mesh::Mesh(std::string _meshPath, std::string _texturePath, float _scale) :
@@ -92,7 +92,7 @@ void Mesh::processLighting()
 {
   Vec3  gLightColor  = {1.0f, 1.0f, 1.0f};
 
-  float gAngle = 180.0f;
+  float gAngle = 0.0f;
   float gShadeLight   = 128;
   int   gAmbientLight = 32;
   float lightVar = static_cast<float>((gShadeLight + gAmbientLight)/256.0f);
@@ -101,7 +101,7 @@ void Mesh::processLighting()
   lightColour[1] = gLightColor[1] + lightVar;
   lightColour[2] = gLightColor[2] + lightVar;
 
-  m_shadeDots = m_normalsDot[static_cast<int>((gAngle*(SHADEDOT_QUANT/360.0f))) & (SHADEDOT_QUANT-1)];
+  m_shadeDots = normalsDot[static_cast<int>((gAngle*(SHADEDOT_QUANT/360.0f))) & (SHADEDOT_QUANT-1)];
 }
 
 void Mesh::interp(Vec3* _vtxList)
@@ -157,13 +157,17 @@ void Mesh::renderFrame()
       //  triCmds[1] : texcoord V
       //  triCmds[2] : Vtx id
 
-      float l = m_shadeDots[m_lightNormals[triCmds[2]]];
-      glColor3f( l*lightColour[0], l*lightColour[1], l*lightColour[2] );
+
+      // BUG : using the shadeDots as a scalar makes the colours black
+      float l = m_shadeDots[ m_lightNormals[triCmds[2]] ];
+      //glColor3f( l*lightColour[0], l*lightColour[1], l*lightColour[2] );
+      glColor3f( lightColour[0], lightColour[1], lightColour[2] );
+
       glTexCoord2f( reinterpret_cast<float*>(triCmds)[0],
                     reinterpret_cast<float*>(triCmds)[1] );
 
       // GL lighting
-      glNormal3fv( m_normals[m_lightNormals[triCmds[2]]] );
+      glNormal3fv( normals[m_lightNormals[triCmds[2]]] );
 
       glVertex3fv(vertList[triCmds[2]]);
     }
