@@ -51,9 +51,11 @@ public:
   void drawMesh(float _time);
 
   void setAnimation(int _type);
+  int currentAnimation()  { return m_anim.type; }
+  int timesLooped()       { return m_loopCount; }
 
   // The Loader class is used to move all the file handling out of this
-  // mesh class and to ensure
+  // mesh class
   friend class Loader;
 private:
   void animate(float _time);
@@ -65,16 +67,16 @@ private:
   static const float* m_shadeDots; // Used by process lighting
 
   // Data arrays
-  Vec3*  m_Vertices;
-  int*    m_GLcmds;
-  int*    m_lightNormals;
+  Vec3* m_Vertices;
+  int*  m_GLcmds;
+  int*  m_lightNormals;
   int   m_totalFrames;
   int   m_totalVertices;
   int   m_totalGLcmds;
 
-//  unsigned int  m_texID;
-  animState     m_anim;
-  float         m_scale;
+  float      m_scale;
+  animState  m_anim;
+  int        m_loopCount;
 
   Game::Texture m_skin;
 };

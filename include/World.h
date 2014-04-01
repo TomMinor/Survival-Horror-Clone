@@ -47,6 +47,8 @@ public:
   void nextRoom() { if(m_currentRoom < m_rooms.size()) m_currentRoom=1; }
   void prevRoom() { if(m_currentRoom > 0) --m_currentRoom; }
 
+  void damagePlayer(int _val) { m_player.damage(_val); }
+
 private:
   void loadRooms();
   bool loadRoom(const std::string& _fileName);

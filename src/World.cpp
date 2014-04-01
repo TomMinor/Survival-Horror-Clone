@@ -45,7 +45,7 @@ bool World::init(const std::string& _assetpath)
 void World::draw()
 {
   // Draw room bounds for collision testing
-  if(m_debugBBoxDraw) { m_rooms[m_currentRoom].debugDrawBounds(); }
+  m_rooms[m_currentRoom].debugDrawBounds();
 
   m_player.draw();
 }

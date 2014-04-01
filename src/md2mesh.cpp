@@ -17,6 +17,7 @@ Vec3  lightColour;     // Final light colour
 
 Mesh::Mesh(std::string _meshPath, std::string _texturePath, float _scale) :
   m_scale(_scale),
+  m_loopCount(0),
   m_skin(_texturePath)
 {
   loadMesh(_meshPath);
@@ -61,6 +62,8 @@ void Mesh::setAnimation(int _type)
   m_anim.nextFrame = m_anim.currentAnim.firstFrame + 1;
 
   m_anim.type= _type;
+
+  m_loopCount = 0;
 }
 
 void Mesh::animate(float _time)
@@ -76,6 +79,7 @@ void Mesh::animate(float _time)
     if(m_anim.nextFrame > m_anim.currentAnim.lastFrame)
     {
        m_anim.nextFrame = m_anim.currentAnim.firstFrame;
+       m_loopCount++;
     }
 
     m_anim.lastTime = m_anim.currentTime;

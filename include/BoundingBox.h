@@ -19,8 +19,11 @@ public:
   Vec4 getCollisionNormal(const BBox& _b);
   bool checkCollision(const BBox& _b) const;
 
+  static void toggleDebugDraw() { m_debugDraw ^= 1;}
   friend std::ostream & operator<<(std::ostream &, const BBox &);
 private:
+  // A flag to toggle drawing of all bounding boxes for debugging purposes
+  static bool m_debugDraw;
   Vec4 m_min;
   Vec4 m_max;
 };

@@ -26,8 +26,7 @@ void Actor::draw()
 
 void Actor::move(float _offset, float _deg)
 {
-  damage(1);
-  if(m_state == IDLE)
+  if(m_state != PAIN && m_state != DYING && m_state != DEAD)
   {
     // Only set the walk animation when the player moves
     if(_offset != 0 || _deg != 0) { m_state = WALK; }
@@ -35,14 +34,18 @@ void Actor::move(float _offset, float _deg)
 
     m_yaw += _deg;
 
-    // Correct the actor's translation to move along it's local (rotated) axis
-    float offsetX = _offset * sin((PI*m_yaw)/180);
-    float offsetZ = _offset * cos((PI*m_yaw)/180);
+    // Only allow rotation while preparing to attack
+    if(m_state != PREPARE_ATTACK)
+    {
+      // Correct the actor's translation to move along it's local (rotated) axis
+      float offsetX = _offset * sin((PI*m_yaw)/180);
+      float offsetZ = _offset * cos((PI*m_yaw)/180);
 
-    m_pos.m_x += offsetX;
-    m_pos.m_z += offsetZ;
+      m_pos.m_x += offsetX;
+      m_pos.m_z += offsetZ;
 
-    m_bbox.move(Vec4(offsetX, 0, offsetZ));
+      m_bbox.move(Vec4(offsetX, 0, offsetZ));
+    }
   }
 }
 
@@ -69,19 +72,49 @@ void Actor::update()
     }
   }
 
+  //std::cout << m_meshBody.timesLooped() << "\n";
+
+  std::cout << m_state << "\n";
+
   m_previousState = m_state;
+}
+
+void Actor::onAttack()
+{
+  if(m_state == ATTACK  && m_meshBody.timesLooped() >= 1) { m_state = IDLE; }
+}
+
+void Actor::onDamage()
+{
+  if(m_state == PAIN  && m_meshBody.timesLooped() >= 1) { m_state = IDLE; }
+}
+
+void Actor::onDeath()
+{
+  if(m_state == DYING && m_meshBody.timesLooped() >= 1)
+  {
+    m_state = DEAD;
+  }
+  else
+  {
+    forceAnimation(Md2::Animation::DEATH);
+  }
 }
 
 void Actor::damage(int _value)
 {
-  m_health -= _value;
-  if(m_health <= 0) { m_state = DYING; }
-  else              { m_state = PAIN;  }
+  std::cout << m_health << "\n";
+
+  if(m_health > 0)
+  {
+    m_health -= _value;
+    m_state = PAIN;
+  }
+  else
+  {
+    m_state = DYING;
+  }
 }
 
-void Actor::die()
-{
-
-}
 
 }

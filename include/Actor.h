@@ -32,11 +32,12 @@ public:
 
   void forceAnimation(Md2::Animation::Sequence _type) { m_meshBody.setAnimation(_type);
                                                         m_meshHead.setAnimation(_type); }
-private:
-  void die();
 
 private:
-  //std::vector<action> m_state;
+  void onAttack();
+  void onDamage();
+  void onDeath();
+
   int m_time;
   Vec4 m_pos;
   Vec4 m_scale;
