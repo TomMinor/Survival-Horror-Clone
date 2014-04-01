@@ -1,6 +1,7 @@
 #ifndef DOOR_H
 #define DOOR_H
 
+#include <string>
 #include "Room.h"
 
 namespace Game {

@@ -61,14 +61,14 @@ void World::update()
   tmp.move(m_playerOffset*0.001);
   if(!m_rooms[m_currentRoom].checkWallCollide(tmp))
   {
-    m_player.move(m_playerOffset, m_playerYaw);
+//    m_player.move(m_playerOffset, m_playerYaw);
   }
-  else
-  {
-  m_player.move(-0.01, m_playerYaw);
-  }
+//  else
+//  {
+//  m_player.move(-0.01, m_playerYaw);
+//  }
 
-
+  m_player.move(m_playerOffset, m_playerYaw);
 
   m_playerOffset = m_playerYaw = 0; // Reset movement
 }

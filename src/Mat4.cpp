@@ -60,6 +60,17 @@ void Mat4::rotate(Vec4 _rotation)
   *this *= z;
 }
 
+void Mat4::reflect()
+{
+  Mat4 tmp;
+
+  tmp.m_00 = -1;
+  tmp.m_11 = -1;
+  tmp.m_22 = -1;
+
+  *this *= tmp;
+}
+
 void Mat4::rotateX(float _deg)
 {
   float beta = (_deg/180.0f) * M_PI;

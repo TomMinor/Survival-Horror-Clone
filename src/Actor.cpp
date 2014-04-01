@@ -26,47 +26,62 @@ void Actor::draw()
 
 void Actor::move(float _offset, float _deg)
 {
-  m_yaw += _deg;
+  damage(1);
+  if(m_state == IDLE)
+  {
+    // Only set the walk animation when the player moves
+    if(_offset != 0 || _deg != 0) { m_state = WALK; }
+    else                          { m_state = IDLE; }
 
-  // Correct the actor's translation to move along it's local (rotated) axis
-  float offsetX = _offset * sin((PI*m_yaw)/180);
-  float offsetZ = _offset * cos((PI*m_yaw)/180);
+    m_yaw += _deg;
 
-  m_pos.m_x += offsetX;
-  m_pos.m_z += offsetZ;
+    // Correct the actor's translation to move along it's local (rotated) axis
+    float offsetX = _offset * sin((PI*m_yaw)/180);
+    float offsetZ = _offset * cos((PI*m_yaw)/180);
 
-  m_bbox.move(Vec4(offsetX, 0, offsetZ));
+    m_pos.m_x += offsetX;
+    m_pos.m_z += offsetZ;
 
-  m_state = WALK;
+    m_bbox.move(Vec4(offsetX, 0, offsetZ));
+  }
 }
 
 void Actor::update()
 {
-//  if(m_state != m_previousState)
-//  {
-//    switch(m_state)
-//    {
-//      case WALK:          { m_meshBody.setAnimation(MeshMd2::WALK);
-//                            m_meshHead.setAnimation(MeshMd2::WALK);   break; }
-//      case DASH:          { m_meshBody.setAnimation(MeshMd2::RUN);
-//                            m_meshHead.setAnimation(MeshMd2::RUN);    break; }
-//      case PREPARE_ATTACK:{ m_meshBody.setAnimation(MeshMd2::PREPARE);
-//                            m_meshBody.setAnimation(MeshMd2::PREPARE);break; }
-//      case ATTACK:        { m_meshBody.setAnimation(MeshMd2::ATTACK);
-//                            m_meshBody.setAnimation(MeshMd2::ATTACK);  break; }
-//      case PAIN:          { m_meshBody.setAnimation(MeshMd2::PAIN_A);
-//                            m_meshBody.setAnimation(MeshMd2::PAIN_A);  break;}
-//      default:
-//      {
-//        m_meshBody.setAnimation(MeshMd2::STAND);
-//        m_meshHead.setAnimation(MeshMd2::STAND);  break;
-//      }
-//    }
-//  }
-
-  //m_previousState = m_state;
-
   m_time++;
+
+  // Update animations
+  if(m_state != m_previousState)
+  {
+    switch(m_state)
+    {
+      case WALK:          { forceAnimation(Md2::Animation::WALK);       break; }
+      case DASH:          { forceAnimation(Md2::Animation::RUN);        break; }
+      case PREPARE_ATTACK:{ forceAnimation(Md2::Animation::PREP_ATTACK);break; }
+      case ATTACK:        { forceAnimation(Md2::Animation::ATTACK);     break; }
+      case PAIN:          { forceAnimation(Md2::Animation::PAIN);       break; }
+      case DYING:         { forceAnimation(Md2::Animation::DEATH);      break; }
+      case DEAD:          { forceAnimation(Md2::Animation::DEATH_IDLE); break; }
+      default:
+      {
+        forceAnimation(Md2::Animation::STAND);  break;
+      }
+    }
+  }
+
+  m_previousState = m_state;
+}
+
+void Actor::damage(int _value)
+{
+  m_health -= _value;
+  if(m_health <= 0) { m_state = DYING; }
+  else              { m_state = PAIN;  }
+}
+
+void Actor::die()
+{
+
 }
 
 }

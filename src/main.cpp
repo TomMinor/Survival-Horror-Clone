@@ -61,8 +61,9 @@ int main()
 
   glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  GLFunctions::perspective(75, float(4/3), 0.01, 500);
+  //GLFunctions::perspective(90, float(4/3), 0.01, 500);
 
+  GLFunctions::perspective(90, float(800.0f/600.0f), 0.01, 500);
   SDL_GL_SwapWindow(window);
 
   glEnable(GL_COLOR_MATERIAL);
@@ -90,16 +91,31 @@ int main()
   // Read input
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
-//  Game::Camera current(Vec4(-6.005612475588933f, 8.97664525811908f, 24.51080654590031f),
-//                       Vec4(-14.757877717629409f, -12.537379551671203f, 0.0f),
-//                       53.953475f);
+  Vec4 position(-1.3169258356997249, 1.9582303618833887, 1.785959369300033);
+  Vec4 rotation(0.0, -7.545061101644754, 0.0);
 
-  Game::Camera current(Vec4(0,-2,-4), Vec4(-58, -15, -2), 50);
+//  Vec4 position(1.7525374190842373, 1.624190772456883, 1.154906337937287);
+//  Vec4 rotation(0.0, 86.090, 0.0);
 
-  Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
-  test.forceAnimation(Md2::Animation::DEATH_IDLE);
+  Game::Camera tits(  Vec4(-position.m_x, -position.m_y, -position.m_z),
+                      Vec4(-rotation.m_y, -rotation.m_x, -rotation.m_z),
+                      90.0f);
 
+//  Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
+//  test.forceAnimation(Md2::Animation::DEATH_IDLE);
   float time = 0.0f;
+  Vec4 cameraPos;
+
+  //float tmp[] = { 0.6962864869302063, 0.6851291113894016, 0.21397015877257444, 0.0, -0.3256486830215435, 0.5672002014874894, -0.7564633941433556, 0.0, -0.6396390101961622, 0.4570361387891777, 0.6180452285035081, 0.0, 10.019665073440814, 7.789568673257114, 9.253249521312483, 1.0 };
+  //float tmp[] = { 0.952889998609198, 0.0, 0.303316090161011, 0.0, -0.0, 1.0, 0.0, 0.0, -0.303316090161011, -0.0, 0.952889998609198, 0.0, 0.0, 0.0, -2.1060597064697046, 1.0 };
+  //float tmp[] = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.8768467576273767, 1.3902824917133552, 1.7579394038775344, 1.0} ;
+//  Mat4  tmp2;
+//  memcpy(tmp2.m_openGL, tmp, sizeof(tmp));
+
+//  tmp2.m_m[2][3] *= -1;
+//  tmp2.m_m[3][2] *= -1;
+
+  //tmp2.transpose();
 
   while(!quit)
   {
@@ -138,24 +154,23 @@ int main()
       if(keystate[SDL_SCANCODE_LSHIFT])       { world.playerDash();       }
 
       if(keystate[SDL_SCANCODE_PAGEDOWN])     { world.prevRoom();       }
-      if(keystate[SDL_SCANCODE_PAGEUP])       { world.nextRoom();       }
+      if(keystate[SDL_SCANCODE_PAGEUP])       { world.nextRoom(); }
 
+//      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z++;   }
+//      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z--;   }
+//      if(keystate[SDL_SCANCODE_Q])            { cameraPos.m_y++;   }
+//      if(keystate[SDL_SCANCODE_E])            { cameraPos.m_y--;   }
+//      if(keystate[SDL_SCANCODE_D])            { cameraPos.m_x++;   }
+//      if(keystate[SDL_SCANCODE_A])            { cameraPos.m_x--;   }
+//      if(keystate[SDL_SCANCODE_J])        { current.setView();   }
+      //if(keystate[SDL_SCANCODE_K])        { tits.setView();   }
       //std::cerr << fmod(yaw, 360.0) << "\n";
-
       // x: 270 & 90
       // z: 0 & 180
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      //util::drawWorldAxis();
-
-      test.update();
-      test.draw();
-
-//      body.drawMesh(world.getCurrentTime() * 0.003f);
-//      head.drawMesh(world.getCurrentTime() * 0.003f);
-
-      current.setView();
+      tits.setView();
 
       world.update();
       world.draw();
@@ -163,7 +178,6 @@ int main()
       // swap the buffers
       SDL_GL_SwapWindow(window);
     }
-
   }
 
   // now tidy up and exit SDL

@@ -15,6 +15,7 @@ public:
   void setTransform(const Vec4 &_pos, const Vec4 &_rotation );
   inline Mat4 getMatrix() const { return m_viewMatrix; }
   void setView() const;
+  void draw() const;
 
 private:
   Mat4 m_viewMatrix;

@@ -8,7 +8,7 @@ namespace Game {
 
 // Expected amount of tokens for respective line identifier - 1(identifier) + parameters
 const uint RoomReader::c_identifierSize[] = { 1+10, //  TRIGGER
-                                              1+ 9,  //  BBOX
+                                              1+ 6,  //  BBOX
                                               1+ 8,  //  CAMERA
                                               1+ 4,  //  EXIT
                                               1+ 3,  //  BACKGROUND
@@ -133,17 +133,12 @@ void RoomReader::load()
     }
   }
 
-
-
 //  // Calculate exits
   std::vector<Door> roomExits;
-//  for( int bgID = 0; bgID < maxbgID; ++bgID )
-//  {
-//    roomBackgrounds.push_back( Background(m_roomTriggers[bgID],
-//                                          m_roomBackground[bgID],
-//                                          m_roomForeground[bgID],
-//                                          m_roomCameras[bgID] ) );
-//  }
+  for( int bgID = 0; bgID < maxbgID; ++bgID )
+  {
+    ;
+  }
 
   m_roomsContainer.push_back( Room(m_fileName,
                                    m_spawnPosition,
@@ -242,8 +237,10 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
     throw;
   }
 
-  m_roomCameras[o_backgroundID] = Camera( Vec4(offset[0], offset[1], offset[2]),
-                                          Vec4(rotation[0], rotation[1], rotation[2]), fov );
+  // http://www.evl.uic.edu/ralph/508S98/coordinates.html
+  // These are inverted to compensate the maya rotations
+  m_roomCameras[o_backgroundID] = Camera( Vec4(-offset[0], -offset[1], -offset[2]),
+                                          Vec4(-rotation[1], -rotation[0], -rotation[2]), fov );
 }
 
 void RoomReader::addExit(const std::vector<std::string>& i_tokens)
