@@ -9,7 +9,7 @@ bbox  2.13753061428 0.0 -1.33226762955e-15 2.31565816547 2.85004081904 2.1375306
 camera 0 0 0 1 1 1 75 1
 
 //bg <bgID> <ForegroundFileName> <BackgroundFileName>
-bg 1 BG_01_fg.tga BG_01_bg.tga
+bg 1 BG_02_fg.png BG_02_bg.png
 
 //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
 trigger 0 0 0 1 1 1 0 0 0 1
