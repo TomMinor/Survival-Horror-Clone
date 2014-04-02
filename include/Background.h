@@ -12,20 +12,28 @@ class Background
 {
 public:
   Background( const BBox& _triggerVolume,
-                          const std::string& _bgPath,
-                          const std::string& _fgPath,
-                          const Camera& _cameraView  ) :
+              const std::string& _bgPath,
+              const Camera& _cameraView  ) :
     m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
-    m_bgTexture(Texture(_bgPath)), m_fgTexture(Texture(_fgPath)) {;}
+    m_bgTexture(Texture(_bgPath)),
+    // Choose a random trigger volume colour (to differentiate different triggers)
+    m_triggerColour( (float)rand()/(float)(RAND_MAX/1.0),
+                     (float)rand()/(float)(RAND_MAX/1.0),
+                     (float)rand()/(float)(RAND_MAX/1.0) )
+    {;}
 
   void drawBG() const;
   void drawFG() const;
+  void drawTrigger() const;
 
 private:
   Camera m_cameraView;
   BBox m_triggerVolume;
-  Texture m_bgTexture; // Background Texture
-  Texture m_fgTexture; // Foreground Texture
+  // This stores an RGBA background image, where the alpha channel is used
+  // as a mask for the foreground (actors can walk behind it etc)
+  Texture m_bgTexture;
+
+  Vec4 m_triggerColour;
 };
 
 }

@@ -39,10 +39,8 @@ void Mesh::loadMesh(std::string _filename)
   model.load();
 }
 
-void Mesh::drawMesh(float _time)
+void Mesh::drawMesh() const
 {
-  if(_time>0.0f) { animate(_time ); }
-
   glPushMatrix();
     // Correct the mesh rotation
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
@@ -50,6 +48,20 @@ void Mesh::drawMesh(float _time)
 
     renderFrame();
   glPopMatrix();
+}
+
+void Mesh::updateAnimation(float _time)
+{
+  if(_time>0.0f)
+  {
+    animate(_time );
+
+    processLighting();
+
+    m_keyframeVerts = new Vec3[m_totalVertices];
+
+    interp(m_keyframeVerts);
+  }
 }
 
 void Mesh::setAnimation(int _type)
@@ -108,7 +120,7 @@ void Mesh::processLighting()
   m_shadeDots = normalsDot[static_cast<int>((gAngle*(SHADEDOT_QUANT/360.0f))) & (SHADEDOT_QUANT-1)];
 }
 
-void Mesh::interp(Vec3* _vtxList)
+void Mesh::interp(Vec3* _frameVtx)
 {
   Vec3* crntVtx = &m_Vertices[m_totalVertices*m_anim.currentFrame];
   Vec3* nextVtx = &m_Vertices[m_totalVertices*m_anim.nextFrame];
@@ -116,15 +128,14 @@ void Mesh::interp(Vec3* _vtxList)
   // Interpolate between the current & next vertex, then scale the result
   for(int i=0; i<m_totalVertices; ++i)
   {
-    _vtxList[i][0] = m_scale * (crntVtx[i][0] + m_anim.interp * (nextVtx[i][0]-crntVtx[i][0]));
-    _vtxList[i][1] = m_scale * (crntVtx[i][1] + m_anim.interp * (nextVtx[i][1]-crntVtx[i][1]));
-    _vtxList[i][2] = m_scale * (crntVtx[i][2] + m_anim.interp * (nextVtx[i][2]-crntVtx[i][2]));
+    _frameVtx[i][0] = m_scale * (crntVtx[i][0] + m_anim.interp * (nextVtx[i][0]-crntVtx[i][0]));
+    _frameVtx[i][1] = m_scale * (crntVtx[i][1] + m_anim.interp * (nextVtx[i][1]-crntVtx[i][1]));
+    _frameVtx[i][2] = m_scale * (crntVtx[i][2] + m_anim.interp * (nextVtx[i][2]-crntVtx[i][2]));
   }
 }
 
-void Mesh::renderFrame()
+void Mesh::renderFrame() const
 {
-  Vec3  vertList[m_totalVertices];
   int*  triCmds = m_GLcmds;
 
   // Reverse face orientation to counter glCmd's clockwise winding
@@ -135,10 +146,6 @@ void Mesh::renderFrame()
   glEnable(GL_COLOR);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
-
-  processLighting();
-
-  interp(vertList);
 
   m_skin.setCurrent();
 
@@ -155,32 +162,33 @@ void Mesh::renderFrame()
       glBegin(GL_TRIANGLE_STRIP);
     }
 
-    for(  ; i>0; --i, triCmds+=3)
+    for(/* */; i>0; --i, triCmds+=3)
     {
       //  triCmds[0] : texcoord U
       //  triCmds[1] : texcoord V
       //  triCmds[2] : Vtx id
 
-
-      // BUG : using the shadeDots as a scalar makes the colours black
+      // Lookup the vertex colours from anormtab.h for fake shading
       float l = m_shadeDots[ m_lightNormals[triCmds[2]] ];
-      //glColor3f( l*lightColour[0], l*lightColour[1], l*lightColour[2] );
+      glColor3f( l*lightColour[0], l*lightColour[1], l*lightColour[2] );
       glColor3f( lightColour[0], lightColour[1], lightColour[2] );
 
+      // UV coords
       glTexCoord2f( reinterpret_cast<float*>(triCmds)[0],
                     reinterpret_cast<float*>(triCmds)[1] );
 
       // GL lighting
       glNormal3fv( normals[m_lightNormals[triCmds[2]]] );
 
-      glVertex3fv(vertList[triCmds[2]]);
+      // Push the vertices from the current keyframe
+      glVertex3fv(m_keyframeVerts[triCmds[2]]);
     }
 
     glEnd();
   }
 
   glDisable(GL_TEXTURE_2D);
-  //glDisable(GL_CULL_FACE);
+  glDisable(GL_CULL_FACE);
   glPopAttrib();
 }
 

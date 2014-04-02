@@ -1,16 +1,18 @@
-//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
+//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax>
 bbox  -5.0 0.0 -5.0 -4.0 3.0 6.0 
 bbox  -4.0 0.0 -6.0 3.0 3.0 -5.0 
 bbox  -4.0 0.0 6.0 2.0 3.0 7.0 
 bbox  2.0 0.0 -5.0 3.0 3.0 6.0 
 
 //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
-camera 0 0 0 1 1 1 75 1
+camera 0.0 7.545061101644754 0.0 1.3169258356997249 -1.9582303618833887 -1.785959369300033 90 1
+camera 0.0 3.545061101644754 0.0 0.3169258356997249 -1.9582303618833887 -1.785959369300033 90 2
 
-//bg <bgID> <ForegroundFileName> <BackgroundFileName>
-bg 1 BG_01_fg.tga BG_01_bg.tga
+//bg <bgID> <BackgroundFileName>
+bg 1 BG_01_bg.png
+bg 2 BG_02_bg.png
 
-//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
+//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <bgID>
 trigger -4.0 0.0 -5.0 2.0 3.0 0.0 1
 trigger -4.0 0.0 0.0 2.0 3.0 6.0 2
 
@@ -18,4 +20,4 @@ trigger -4.0 0.0 0.0 2.0 3.0 6.0 2
 spawn 0 0 0
 
 //exit <offsetX> <offsetY> <offsetZ> <roomFileName>
-0.5 1 0 ROOM_02.room
+exit 0.5 1 0 ROOM_02.room

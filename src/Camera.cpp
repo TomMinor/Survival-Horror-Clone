@@ -47,7 +47,7 @@ void Camera::setView() const
 
 void Camera::draw() const
 {
-    std::cout << m_viewMatrix << "\n";
+//    std::cout << m_viewMatrix << "\n";
 
   glPushMatrix();
     // Center within bbox

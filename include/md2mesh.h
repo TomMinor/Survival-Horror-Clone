@@ -48,7 +48,8 @@ public:
 
   void loadMesh(std::string _filename);
 
-  void drawMesh(float _time);
+  void drawMesh() const;
+  void updateAnimation(float _time);
 
   void setAnimation(int _type);
   int currentAnimation()  { return m_anim.type; }
@@ -61,13 +62,14 @@ private:
   void animate(float _time);
   void processLighting();
   void interp(Vec3* _vertList);
-  void renderFrame();
+  void renderFrame() const;
 
 private:
   static const float* m_shadeDots; // Used by process lighting
 
   // Data arrays
   Vec3* m_Vertices;
+  Vec3* m_keyframeVerts;
   int*  m_GLcmds;
   int*  m_lightNormals;
   int   m_totalFrames;

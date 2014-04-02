@@ -1,5 +1,8 @@
 #include "FileSystem.h"
 
+namespace Game
+{
+
 FileSystem::FileSystem() :
   m_assetPath("assets"), m_roomPath("backgrounds"), m_actorPath("actor"),
   m_roomManifest("manifest.bg"), m_fallbackTexture("error.png")
@@ -20,22 +23,4 @@ std::string FileSystem::actorPath(const std::string& _fileName)
   return (m_assetPath + m_actorPath + _fileName);
 }
 
-//const std::string& combinePath(const std::vector<std::string>& _pathTokens)
-//{
-//  std::string path;
-//  if(!_pathTokens.empty())
-//  {
-//    // Combine the folders into an A/B/C/ structure
-//    for(std::vector<std::string>::iterator token = _pathTokens.begin();
-//        token != _pathTokens.end()-1;
-//        ++token)
-//    {
-//      path += *token + "/";
-//    }
-
-//    // Add the filename to the end to get A/B/C/d.file
-//    path += _pathTokens.end();
-//  }
-
-//  return path;
-//}
+}

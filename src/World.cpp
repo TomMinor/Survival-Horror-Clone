@@ -12,7 +12,7 @@
 namespace Game {
 
 World::World(const Vec4& _playerSpawn) :
-  m_fileSystem(FileSystem::instance()), m_init(false),
+  m_fileSystem( Game::FileSystem::instance() ), m_init(false),
   m_player(Vec4(1,2,1), Vec4(_playerSpawn)),
   m_lastTime(0), m_currentRoom(NULL)
 {;}
@@ -23,9 +23,9 @@ bool World::init()
   {
     // Read assets
     //    Store in m_rooms
-    std::cout << "Loading assets :" <<  m_fileSystem->assetFolder() << "\n";
+    std::cout << "Loading assets :" <<  m_fileSystem.assetFolder() << "\n";
 
-    if(!loadRoom("ROOM_01.room"))
+    if(!loadRoom("ROOM_02a.room"))
     {
       return false;
     }
@@ -35,19 +35,25 @@ bool World::init()
   }
   else
   {
-    std::cerr << "World already loaded, not reinitialising\n";
+    std::cerr << "World already loaded, not reinitrialising\n";
   }
 
   return true;
 }
 
 // Draw actors and room
-void World::draw()
+void World::draw() const
 {
-  // Draw room bounds for collision testing
-  m_currentRoom->debugDrawBounds();
+  m_currentRoom->draw();
+  drawActors();
+  m_currentRoom->drawFG();
+}
 
+void World::drawActors() const
+{
   m_player.draw();
+
+  // Draw enemies here too
 }
 
 // Update actor states
@@ -85,6 +91,11 @@ bool World::loadRoom(const std::string& _fileName)
     m_currentRoom = RoomReader(_fileName).load();
   }
   catch(std::ios_base::failure &msg)
+  {
+    std::cerr << msg.what() << "\n";
+    return false;
+  }
+  catch(std::runtime_error &msg)
   {
     std::cerr << msg.what() << "\n";
     return false;

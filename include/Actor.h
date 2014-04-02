@@ -12,9 +12,9 @@ class Actor
 public:
   Actor(const Vec4 & _scale, const Vec4 & _pos )
     : m_time(0), m_pos(_pos), m_scale(_scale), m_yaw(0), m_health(100),
-      m_state(IDLE), m_previousState(IDLE),
       m_meshBody("assets/actor/mach-body.md2", "assets/actor/soldier.jpg", 0.05f),
       m_meshHead("assets/actor/mach-head.md2", "assets/actor/mach-head.jpg", 0.05f),
+      m_previousState(IDLE), m_state(IDLE),
       m_bbox( _pos.m_x, _pos.m_y, _pos.m_z,
               _pos.m_x + _scale.m_x,
               _pos.m_y + _scale.m_y,
@@ -25,7 +25,7 @@ public:
   }
 
   const BBox& getBoundingBox() const { return m_bbox; }
-  void draw();
+  void draw() const;
   void update();
   void damage(int _value);
   void move(float _offset, float _deg=0.0f);

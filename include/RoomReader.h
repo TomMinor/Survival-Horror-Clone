@@ -35,7 +35,6 @@ private:
   // a single Room object later
   std::map<int, Camera> m_roomCameras;
   std::map<int, BBox> m_roomTriggers;
-  std::map<int, std::string> m_roomForeground;
   std::map<int, std::string> m_roomBackground;
 
   // Stores the filenames of the rooms the exits lead to

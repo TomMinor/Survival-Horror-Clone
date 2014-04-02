@@ -3,13 +3,16 @@
 
 #include <iostream>
 
+namespace Game
+{
+
 class FileSystem
 {
 public:
-  static FileSystem* instance()
+  static FileSystem& instance()
   {
     static FileSystem* instance = new FileSystem();
-    return instance;
+    return *instance;
   }
 
   std::string roomPath(const std::string& _fileName);
@@ -34,5 +37,7 @@ private:
   std::string m_roomManifest;
   std::string m_fallbackTexture;
 };
+
+}
 
 #endif // FILESYSTEM_H

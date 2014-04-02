@@ -23,11 +23,19 @@ void tokenize(const std::string& _str,std::vector<std::string>& _tokens,const st
 
 float tokenToFloat(const std::string& _token)
 {
-  float output;
-  std::istringstream ss(_token);
-  if(!(ss >> output))
+  float output = 0.0f;
+
+  if(!_token.empty())
   {
-    throw std::runtime_error("Could not convert token to float");
+    std::istringstream ss(_token);
+    if(!(ss >> output))
+    {
+      throw std::runtime_error("Could not convert token to float");
+    }
+  }
+  else
+  {
+    throw std::runtime_error("Empty token when attempting to convert to float");
   }
 
   return output;

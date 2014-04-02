@@ -7,11 +7,11 @@
 namespace Game {
 
 // Expected amount of tokens for respective line identifier - 1(identifier) + parameters
-const uint RoomReader::c_identifierSize[] = { 1+10, //  TRIGGER
+const uint RoomReader::c_identifierSize[] = { 1+ 7, //  TRIGGER
                                               1+ 6,  //  BBOX
                                               1+ 8,  //  CAMERA
                                               1+ 4,  //  EXIT
-                                              1+ 3,  //  BACKGROUND
+                                              1+ 2,  //  BACKGROUND
                                               1+ 3,  //  SPAWN
                                               ~0    //  ERROR
                                             };
@@ -19,7 +19,7 @@ const uint RoomReader::c_identifierSize[] = { 1+10, //  TRIGGER
 RoomReader::RoomReader(const std::string& _fileName)
   : m_fileName(_fileName)
 {
-  std::string filePath = FileSystem::instance()->roomPath(_fileName);
+  std::string filePath = FileSystem::instance().roomPath(_fileName);
   m_fileStream.open( filePath.c_str(), std::ios::in );
   if( !m_fileStream.is_open() )
   {
@@ -34,7 +34,7 @@ RoomReader::~RoomReader()
 
 Room* RoomReader::load()
 {
-  int bgID;
+  int bgID = 0;
   int maxbgID = 0;
   int lineCount = 0;
   std::string line;
@@ -66,15 +66,14 @@ Room* RoomReader::load()
             // Each background is linked to a trigger and camera, bgID is used to link them
             case TRIGGER: //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
             {
-              parseBgID(tokens[10], bgID);
+              parseBgID(tokens[7], bgID);
               m_roomTriggers[bgID] = parseBBox(tokens);
               break;
             }
-            case BACKGROUND: //bg <bgID> <ForegroundFileName> <BackgroundFileName>
+            case BACKGROUND: //bg <bgID> <BackgroundFileName>
             {
               parseBgID(tokens[1], bgID);
-              m_roomForeground[bgID]= tokens[2];
-              m_roomBackground[bgID]= tokens[3];
+              m_roomBackground[bgID]= tokens[2];
               break;
             }
             case CAMERA: //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
@@ -112,7 +111,7 @@ Room* RoomReader::load()
       }
     } // end empty line/comment check
 
-    // Hopefully
+    // Keep track of the maximum background ID
     if (bgID > maxbgID) { maxbgID = bgID; }
   }// end get line
 
@@ -122,14 +121,14 @@ Room* RoomReader::load()
   }
 
   std::vector<Background> roomBackgrounds;
-  for( int bgID = 0; bgID < maxbgID; ++bgID )
+  for( int bgID = 1; bgID <= maxbgID; ++bgID )
   {
-    if( (m_roomBackground.count(bgID)>0) && (m_roomTriggers.count(bgID)>0) &&
-        (m_roomForeground.count(bgID)>0) && (m_roomCameras.count(bgID)>0) )
+    if( (m_roomBackground.count(bgID)>0) &&
+        (m_roomTriggers.count(bgID)>0) &&
+        (m_roomCameras.count(bgID)>0) )
     {
       roomBackgrounds.push_back( Background(m_roomTriggers[bgID],
                                             m_roomBackground[bgID],
-                                            m_roomForeground[bgID],
                                             m_roomCameras[bgID] ) );
     }
   }
@@ -155,8 +154,6 @@ unsigned int RoomReader::getIdentifier(const std::string& _token) const
   // None-empty line, but invalid identifier
   else                         { return ERROR;     }
 }
-
-
 
 BBox RoomReader::parseBBox(const std::vector<std::string>& i_tokens) const
 {
@@ -190,6 +187,7 @@ void RoomReader::parseBgID(const std::string& i_token, int &o_backgroundID) cons
     std::cerr << "Invalid background ID\n";
     throw;
   }
+
 }
 
 void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_backgroundID)

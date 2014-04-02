@@ -21,6 +21,9 @@ SDL_GLContext createOpenGLContext( SDL_Window *window);
 
 int main()
 {
+  // rand() is later used to randomly choose colours for trigger volumes
+  srand((unsigned int)time(NULL));
+
   // Initialize SDL's Video subsystem
   if (SDL_Init(SDL_INIT_VIDEO) < 0 )
   {
@@ -168,7 +171,7 @@ int main()
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      tits.setView();
+//      tits.setView();
 
       world.update();
       world.draw();

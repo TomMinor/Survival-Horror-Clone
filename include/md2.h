@@ -63,7 +63,6 @@ struct Header
   int frameOffset;
   int glCmdsOffset;
   int offsetEof;      // Unused
-
 };
 
 // Stores compressed verts & the (unused) normal lookup index

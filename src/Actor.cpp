@@ -6,7 +6,7 @@
 
 namespace Game {
 
-void Actor::draw()
+void Actor::draw() const
 {
   glPushMatrix();
     // Center within bbox
@@ -15,19 +15,18 @@ void Actor::draw()
     m_pos.translateGL();
     glPushMatrix();
       glRotatef(m_yaw, 0, 1, 0);
-      m_meshBody.drawMesh(m_time*0.05f);
-      m_meshHead.drawMesh(m_time*0.05f);
+      m_meshBody.drawMesh();
+      m_meshHead.drawMesh();
       util::drawWorldAxis(1.25);
     glPopMatrix();
   glPopMatrix();
 
-  glColor3f(0.5, 0.5, 0.5f);
+  glColor3f( 0.0f, 0.25f, 1.0f );
   m_bbox.draw();
 }
 
 void Actor::move(float _offset, float _deg)
 {
-  std::cout << m_pos << "\n";
   if(m_state != PAIN && m_state != DYING && m_state != DEAD)
   {
     // Only set the walk animation when the player moves
@@ -74,9 +73,8 @@ void Actor::update()
     }
   }
 
-  //std::cout << m_meshBody.timesLooped() << "\n";
-
-  std::cout << m_state << "\n";
+  m_meshBody.updateAnimation(m_time*0.05f);
+  m_meshHead.updateAnimation(m_time*0.05f);
 
   m_previousState = m_state;
 }
@@ -105,8 +103,6 @@ void Actor::onDeath()
 
 void Actor::damage(int _value)
 {
-  std::cout << m_health << "\n";
-
   if(m_health > 0)
   {
     m_health -= _value;

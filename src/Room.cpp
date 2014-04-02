@@ -21,16 +21,30 @@ bool Room::checkWallCollide(const BBox& _actor)
 
 void Room::draw() const
 {
+  // ----- Debug BBox drawing ----------------
 
-}
-
-void Room::debugDrawBounds() const
-{
+  // Draw room bounds
   for(std::vector<BBox>::const_iterator bbox = m_collisionBoxes.begin();
       bbox!= m_collisionBoxes.end(); ++bbox)
   {
-      bbox->draw();
+    glColor3f( 0.0f, 0.25f, 0.0f );
+    bbox->draw();
   }
+
+  // Draw background triggers
+  for(std::vector<Background>::const_iterator background = m_backgrounds.begin();
+      background!= m_backgrounds.end(); ++background)
+  {
+    background->drawTrigger();
+  }
+
+
+  //m_backgrounds[]
+}
+
+void Room::drawFG() const
+{
+
 }
 
 void Room::updatePlayer()

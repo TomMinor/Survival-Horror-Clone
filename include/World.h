@@ -12,7 +12,7 @@ class World
 {
 private:
   //-----File Handling-------
-  FileSystem* m_fileSystem;
+  FileSystem& m_fileSystem;
   bool m_init;
 
   //----World---------
@@ -29,7 +29,8 @@ public:
 
   bool init();
 
-  void draw();
+  void draw() const;
+  void drawActors() const;
   void update();
   void changeRoom(const std::string& _nextRoom);
 
@@ -37,7 +38,7 @@ public:
   void playerWalk(float _offset);
   void playerTurn(float _deg)     { m_playerYaw = _deg;   }
   void playerDash()               { if(m_playerOffset > 0) { m_playerOffset *= 2; }  }
-  void damagePlayer(int _val) { m_player.damage(_val); }
+  void damagePlayer(int _val)     { m_player.damage(_val); }
 
   //------Time Functions-------------
   inline void updateTime() { m_lastTime = SDL_GetTicks(); }

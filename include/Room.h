@@ -24,7 +24,11 @@ public:
 
   bool checkWallCollide(const BBox& _actor);
   Vec4 closestCenter(const Vec4& _b);
+
+  // This takes an external draw function as a function pointer
+  // so it can render the background, the scene & then render the foreground on top
   void draw() const;
+  void drawFG() const;
   void debugDrawBounds() const;
   void updatePlayer();
 
