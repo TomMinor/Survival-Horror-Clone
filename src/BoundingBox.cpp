@@ -24,23 +24,12 @@ Vec4 BBox::getCenter() const
 
 void BBox::move(Vec4 _pos)
 {
-//  Vec4 tmp1(m_max);
-//  tmp1 += _pos;
-
-//  Vec4 tmp2(m_min);
-//  tmp2 += _pos;
-//  std::cout << tmp1 << tmp2 << "\n";
-
 //  m_max.m_x += _pos.m_x;   m_min.m_x += _pos.m_x;
 //  m_max.m_y += _pos.m_y;   m_min.m_y += _pos.m_y;
 //  m_max.m_z += _pos.m_z;   m_min.m_z += _pos.m_z;
 
   m_max += _pos;
   m_min += _pos;
-
-  std::cout << m_max << m_min << "\n";
-
-
 }
 
 void BBox::draw() const

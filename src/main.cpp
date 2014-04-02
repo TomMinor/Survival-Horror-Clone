@@ -153,17 +153,12 @@ int main()
       if(keystate[SDL_SCANCODE_LEFT])         { world.playerTurn(4);      }
       if(keystate[SDL_SCANCODE_LSHIFT])       { world.playerDash();       }
 
-      if(keystate[SDL_SCANCODE_PAGEDOWN])     { world.prevRoom();       }
-      if(keystate[SDL_SCANCODE_PAGEUP])       { world.nextRoom(); }
-
 //      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z++;   }
 //      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z--;   }
 //      if(keystate[SDL_SCANCODE_Q])            { cameraPos.m_y++;   }
 //      if(keystate[SDL_SCANCODE_E])            { cameraPos.m_y--;   }
 //      if(keystate[SDL_SCANCODE_D])            { cameraPos.m_x++;   }
 //      if(keystate[SDL_SCANCODE_A])            { cameraPos.m_x--;   }
-//      if(keystate[SDL_SCANCODE_J])        { current.setView();   }
-//      if(keystate[SDL_SCANCODE_K])        { tits.setView();   }
 
       if(keystate[SDL_SCANCODE_SPACE])        { world.damagePlayer(10);   }
 

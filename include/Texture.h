@@ -16,12 +16,13 @@ public:
 
   void setCurrent() const;
 
-  int textureHeight() const { return m_texture->h; }
-  int textureWidth() const  { return m_texture->w; }
+  int textureHeight() const { return texHeight; }
+  int textureWidth() const  { return texWidth; }
 
 private:
   GLuint m_texID;
-  SDL_Surface* m_texture;
+  int texHeight;
+  int texWidth;
 };
 
 }

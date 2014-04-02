@@ -1,8 +1,9 @@
 #ifndef DOOR_H
 #define DOOR_H
 
-#include <string>
+#include <iostream>
 #include "Room.h"
+#include "Vec4.h"
 
 namespace Game {
 
@@ -11,12 +12,20 @@ class Room;
 class Door
 {
 public:
-  Door();
-  void playAnimation() const;
-  inline Room *getNextRoom() const;
+  Door(Vec4 _position, Vec4 _triggerVolume = Vec4(2.0f, 2.0f, 2.0f)):
+    m_position(_position), m_triggerSize(_triggerVolume), m_time(0)
+  {;}
+
+  void displayLoadingScreen();
+  inline std::string getNextRoom() const { return m_nextRoom; }
 
 private:
-  Room *m_nextRoom;
+  Vec4 m_position;
+  Vec4 m_triggerSize;
+
+  int m_time;
+
+  std::string m_nextRoom; // The name of the file to load when this door is triggered
 };
 
 }

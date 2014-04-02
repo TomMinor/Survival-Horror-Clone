@@ -20,9 +20,7 @@ public:
         const std::vector<Door>& _exits ) :
     m_name(_name), m_playerSpawn(_spawnPos), m_collisionBoxes(_bboxes),
     m_backgrounds(_backgrounds), m_exits(_exits)
-  {
-    ;
-  }
+  {;}
 
   bool checkWallCollide(const BBox& _actor);
   Vec4 closestCenter(const Vec4& _b);

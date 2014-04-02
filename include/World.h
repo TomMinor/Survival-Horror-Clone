@@ -4,53 +4,49 @@
 #include <vector>
 #include "Actor.h"
 #include "Room.h"
+#include "FileSystem.h"
 
 namespace Game {
 
 class World
 {
 private:
+  //-----File Handling-------
+  FileSystem* m_fileSystem;
   bool m_init;
-  bool m_debugBBoxDraw;
 
+  //----World---------
+  Room* m_currentRoom;
+  double m_lastTime;
+
+  //----Actors---------
   Actor m_player;
   float m_playerOffset;
   float m_playerYaw;
-  std::vector<Room> m_rooms;
-  int m_currentRoom;
-  double m_lastTime;
-
-  std::string m_assetPath;
 
 public:
-  World(const Vec4& _playerSpawn = Vec4()) :
-    m_init(false), m_debugBBoxDraw(true), m_player(Vec4(1,2,1), Vec4(_playerSpawn)),
-    m_lastTime(0), m_currentRoom(0)
-  {;}
-  bool init(const std::string& _assetpath = "assets/");
+  World(const Vec4& _playerSpawn = Vec4());
+
+  bool init();
+
   void draw();
   void update();
-  void changeRoom(const Room & _nextRoom) const;
+  void changeRoom(const std::string& _nextRoom);
 
-  // Input - bit of a crappy interface but i need to sort everything else out (BUG)
+  // Input - bit of a crappy interface but i need to sort everything else out
   void playerWalk(float _offset);
   void playerTurn(float _deg)     { m_playerYaw = _deg;   }
   void playerDash()               { if(m_playerOffset > 0) { m_playerOffset *= 2; }  }
+  void damagePlayer(int _val) { m_player.damage(_val); }
 
-  inline void toggleBBox() { m_debugBBoxDraw ^= 1; }
-
+  //------Time Functions-------------
   inline void updateTime() { m_lastTime = SDL_GetTicks(); }
   inline double getLastTime() const { return m_lastTime; }
   inline double getCurrentTime() const { return SDL_GetTicks(); }
   inline double getElapsedTime() const { return SDL_GetTicks() - m_lastTime; }
 
-  void nextRoom() { if(m_currentRoom < m_rooms.size()) m_currentRoom=1; }
-  void prevRoom() { if(m_currentRoom > 0) --m_currentRoom; }
-
-  void damagePlayer(int _val) { m_player.damage(_val); }
-
 private:
-  void loadRooms();
+//  void loadRooms();
   bool loadRoom(const std::string& _fileName);
 
 

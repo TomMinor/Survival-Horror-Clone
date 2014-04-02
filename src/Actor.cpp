@@ -8,8 +8,6 @@ namespace Game {
 
 void Actor::draw()
 {
-  m_bbox.draw();
-
   glPushMatrix();
     // Center within bbox
     glTranslatef(m_scale.m_x/2, 0.0f, m_scale.m_z/2);
@@ -22,10 +20,14 @@ void Actor::draw()
       util::drawWorldAxis(1.25);
     glPopMatrix();
   glPopMatrix();
+
+  glColor3f(0.5, 0.5, 0.5f);
+  m_bbox.draw();
 }
 
 void Actor::move(float _offset, float _deg)
 {
+  std::cout << m_pos << "\n";
   if(m_state != PAIN && m_state != DYING && m_state != DEAD)
   {
     // Only set the walk animation when the player moves

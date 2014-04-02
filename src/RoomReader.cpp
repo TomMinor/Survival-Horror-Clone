@@ -16,10 +16,10 @@ const uint RoomReader::c_identifierSize[] = { 1+10, //  TRIGGER
                                               ~0    //  ERROR
                                             };
 
-RoomReader::RoomReader(const std::string& _fileName, std::vector<Room>& _roomsContainer, const std::string& _assetFolder)
-  : m_fileName(_fileName), m_assetFolder(_assetFolder), m_roomsContainer(_roomsContainer)
+RoomReader::RoomReader(const std::string& _fileName)
+  : m_fileName(_fileName)
 {
-  std::string filePath = m_assetFolder + m_fileName;
+  std::string filePath = FileSystem::instance()->roomPath(_fileName);
   m_fileStream.open( filePath.c_str(), std::ios::in );
   if( !m_fileStream.is_open() )
   {
@@ -32,7 +32,7 @@ RoomReader::~RoomReader()
   m_fileStream.close();
 }
 
-void RoomReader::load()
+Room* RoomReader::load()
 {
   int bgID;
   int maxbgID = 0;
@@ -112,6 +112,7 @@ void RoomReader::load()
       }
     } // end empty line/comment check
 
+    // Hopefully
     if (bgID > maxbgID) { maxbgID = bgID; }
   }// end get line
 
@@ -140,12 +141,7 @@ void RoomReader::load()
     ;
   }
 
-  m_roomsContainer.push_back( Room(m_fileName,
-                                   m_spawnPosition,
-                                   m_roomBounds,
-                                   roomBackgrounds,
-                                   roomExits) );
-
+  return new Room(m_fileName, m_spawnPosition, m_roomBounds, roomBackgrounds, roomExits);
 }
 
 unsigned int RoomReader::getIdentifier(const std::string& _token) const
@@ -245,25 +241,7 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
 
 void RoomReader::addExit(const std::vector<std::string>& i_tokens)
 {
-//  std::istringstream ss(_token);
-//  int _ID;
-//  // Check if the token is valid before placing it's value into bg ID
-//  if( ss >> _ID )
-//  {
-//    ss >> _backgroundID;
-//  }
-//  else
-//  {
-//    throw std::runtime_error("Non-integer background ID");
-//  }
 
-//  std::string exitRoomPath = tokens[4];
-//  Vec4 offset = Vec4( atof(tokens[1].c_str()),
-//                      atof(tokens[2].c_str()),
-//                      atof(tokens[3].c_str()) );
-
-//  roomExits.push_back( exitRoomPath );
-//  roomExitPosition.push_back( offset );
 }
 
 void RoomReader::setSpawn(const std::vector<std::string>& i_tokens)

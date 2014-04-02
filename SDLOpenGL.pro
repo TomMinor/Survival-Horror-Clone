@@ -23,7 +23,8 @@ SOURCES=src/main.cpp \
     src/RoomReader.cpp \
     src/3dUtilities.cpp \
     src/md2loader.cpp \
-    src/md2mesh.cpp
+    src/md2mesh.cpp \
+    src/FileSystem.cpp
 
 
 HEADERS+=include/GLFunctions.h \

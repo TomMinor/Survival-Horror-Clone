@@ -11,22 +11,22 @@
 
 namespace Game {
 
-bool World::init(const std::string& _assetpath)
+World::World(const Vec4& _playerSpawn) :
+  m_fileSystem(FileSystem::instance()), m_init(false),
+  m_player(Vec4(1,2,1), Vec4(_playerSpawn)),
+  m_lastTime(0), m_currentRoom(NULL)
+{;}
+
+bool World::init()
 {
   if(!m_init)
   {
     // Read assets
     //    Store in m_rooms
-    m_assetPath = _assetpath;
-    std::cout << "Loading assets :" <<  m_assetPath << "\n";
+    std::cout << "Loading assets :" <<  m_fileSystem->assetFolder() << "\n";
 
-    try
+    if(!loadRoom("ROOM_01.room"))
     {
-      loadRooms();
-    }
-    catch(std::ios_base::failure &msg)
-    {
-      std::cerr << msg.what() << "\n";
       return false;
     }
 
@@ -45,7 +45,7 @@ bool World::init(const std::string& _assetpath)
 void World::draw()
 {
   // Draw room bounds for collision testing
-  m_rooms[m_currentRoom].debugDrawBounds();
+  m_currentRoom->debugDrawBounds();
 
   m_player.draw();
 }
@@ -57,12 +57,10 @@ void World::update()
 
   m_player.update();
 
-  BBox tmp(m_player.getBoundingBox());
-  tmp.move(m_playerOffset*0.001);
-  if(!m_rooms[m_currentRoom].checkWallCollide(tmp))
-  {
+//  if(!m_currentRoom->checkWallCollide(tmp))
+//  {
 //    m_player.move(m_playerOffset, m_playerYaw);
-  }
+//  }
 //  else
 //  {
 //  m_player.move(-0.01, m_playerYaw);
@@ -78,40 +76,55 @@ void World::playerWalk(float _offset)
     m_playerOffset = _offset;
 }
 
-void World::loadRooms()
+bool World::loadRoom(const std::string& _fileName)
 {
-  std::ifstream manifestFile;
-  std::string path = m_assetPath + "manifest.bg";
-  std::string line;
+  if(m_currentRoom) { delete m_currentRoom; }
 
-  manifestFile.open(path.c_str(), std::ios::in);
-  if( manifestFile.is_open() )
+  try
   {
-    while(std::getline(manifestFile, line))
-    {
-      try
-      {
-        RoomReader(line, m_rooms, m_assetPath).load();
-      }
-      catch(std::invalid_argument &msg)
-      {
-        std::cerr << msg.what() << "\n";
-      }
-      catch(std::runtime_error &msg)
-      {
-        std::cerr << "Failed loading file " << line << "\n" <<
-                     "(Parse error) " << msg.what() << "\n";
-      }
-    }
-    manifestFile.close();
+    m_currentRoom = RoomReader(_fileName).load();
   }
-  else
+  catch(std::ios_base::failure &msg)
   {
-    // Throw an error
-    throw std::ios_base::failure("Could not load manifest file\n");
+    std::cerr << msg.what() << "\n";
+    return false;
   }
 
-
+  return true;
 }
+
+//void World::loadRooms()
+//{
+//  std::ifstream manifestFile;
+//  std::string line;
+
+//  std::cout << m_fileSystem->roomManifest();
+//  manifestFile.open(m_fileSystem->roomManifest().c_str(), std::ios::in);
+//  if( manifestFile.is_open() )
+//  {
+//    while(std::getline(manifestFile, line))
+//    {
+//      try
+//      {
+//        m_currentRoom = RoomReader(line);
+//      }
+//      catch(std::invalid_argument &msg)
+//      {
+//        std::cerr << msg.what() << "\n";
+//      }
+//      catch(std::runtime_error &msg)
+//      {
+//        std::cerr << "Failed loading file " << line << "\n" <<
+//                     "(Parse error) " << msg.what() << "\n";
+//      }
+//    }
+//    manifestFile.close();
+//  }
+//  else
+//  {
+//    // Throw an error
+//    throw std::ios_base::failure("Could not load manifest file\n");
+//  }
+//}
 
 }

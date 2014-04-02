@@ -2,18 +2,9 @@
 
 namespace Game {
 
-Door::Door()
+void Door::displayLoadingScreen()
 {
-
-}
-
-void Door::playAnimation() const
-{
-
-}
-
-inline Room *Door::getNextRoom() const
-{
+  m_time++;
 
 }
 

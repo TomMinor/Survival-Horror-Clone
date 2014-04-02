@@ -19,21 +19,19 @@ namespace Game {
 class RoomReader
 {
 public:
-  RoomReader(const std::string& _fileName, std::vector<Room>& _roomsContainer, const std::string& _assetFolder = "assets/");
+  RoomReader(const std::string& _fileName);
   ~RoomReader();
-  void load();
+  Room* load();
 
 private:
   enum { TRIGGER, BBOX, CAMERA, EXIT, BACKGROUND, SPAWN, ERROR };
   static const uint c_identifierSize[];
 
   std::string m_fileName;
-  std::string m_assetFolder;
   std::fstream m_fileStream;
-  std::vector<Room>& m_roomsContainer;
 
   // To avoid parsing the file twice to get all the background IDs,
-  // use the IDs as keys as we find them then sort out the data into
+  // use the bgIDs as a key as we find them then copy the data into
   // a single Room object later
   std::map<int, Camera> m_roomCameras;
   std::map<int, BBox> m_roomTriggers;
