@@ -11,35 +11,21 @@
 
 namespace Game {
 
-World::World(const Vec4& _playerSpawn) :
+World::World() :
   m_fileSystem( Game::FileSystem::instance() ), m_init(false),
-  m_player(Vec4(1,2,1), Vec4(_playerSpawn)),
-  m_lastTime(0), m_currentRoom(NULL)
-{;}
-
-bool World::init()
-{
-  if(!m_init)
+  m_currentRoom(NULL), m_lastTime(0),
+  m_player(Vec4(1,2,1), Vec4(0.0f, 0.0f, 0.0f))
   {
-    // Read assets
-    //    Store in m_rooms
     std::cout << "Loading assets :" <<  m_fileSystem.assetFolder() << "\n";
 
     if(!loadRoom("ROOM_02a.room"))
     {
-      return false;
+      throw std::runtime_error("Error loading assets");
     }
 
     updateTime();
-    m_init = true;
-  }
-  else
-  {
-    std::cerr << "World already loaded, not reinitrialising\n";
   }
 
-  return true;
-}
 
 // Draw actors and room
 void World::draw() const
@@ -61,6 +47,8 @@ void World::update()
 {
   updateTime();
 
+  m_player.move(m_playerOffset, m_playerYaw);
+
   m_player.update();
 
 //  if(!m_currentRoom->checkWallCollide(tmp))
@@ -71,8 +59,6 @@ void World::update()
 //  {
 //  m_player.move(-0.01, m_playerYaw);
 //  }
-
-  m_player.move(m_playerOffset, m_playerYaw);
 
   m_playerOffset = m_playerYaw = 0; // Reset movement
 }

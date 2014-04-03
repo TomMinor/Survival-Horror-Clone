@@ -97,6 +97,19 @@ void GLFunctions::perspective(float _fovy,float _aspect, float _zNear, float _zF
   result.loadProjection();
 }
 
+void GLFunctions::orthographic(float _width,float _height, float _zNear, float _zFar)
+{
+  float right = _width/2.0f;
+  float top = _height/2.0f;
+  Mat4 result;
+  result.m_00 = 1.0f / right;
+  result.m_11 = 1.0f / top;
+  result.m_22 = -2.0f / (_zFar - _zNear);
+  result.m_23 = -(_zFar + _zNear) / (_zFar - _zNear);
+  result.loadProjection();
+}
+
+
  float GLFunctions::radians(float _deg )
 {
   return (_deg/180.0f) * M_PI;

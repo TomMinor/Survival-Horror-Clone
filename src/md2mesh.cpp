@@ -29,6 +29,7 @@ Mesh::Mesh(std::string _meshPath, std::string _texturePath, float _scale) :
 Mesh::~Mesh()
 {
   delete[] m_Vertices;
+  delete[] m_keyframeVerts;
   delete[] m_GLcmds;
   delete[] m_lightNormals;
 }

@@ -17,6 +17,7 @@ class GLFunctions
     static void cube(GLfloat _w, GLfloat _h, GLfloat _d);
     static void lookAt(Vec4 _eye, Vec4 _look, Vec4 _up);
     static void perspective(float _fovy,float _aspect, float _zNear, float _zFar);
+    static void orthographic(float _width,float _height, float _zNear, float _zFar);
     static float radians(float _deg );
     static void sphere(float _radius, int _precision );
     static void capsule(float _radius,  float _height,   int _precision );

@@ -10,7 +10,6 @@ SOURCES=src/main.cpp \
         src/GLFunctions.cpp \
         src/Vec4.cpp \
         src/Mat4.cpp \
-    src/model.cpp \
     src/World.cpp \
     src/Actor.cpp \
     src/Room.cpp \
@@ -30,7 +29,6 @@ SOURCES=src/main.cpp \
 HEADERS+=include/GLFunctions.h \
          include/Vec4.h \
          include/Mat4.h \
-    include/model.h \
     include/World.h \
     include/Actor.h \
     include/Room.h \

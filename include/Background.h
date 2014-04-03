@@ -5,6 +5,7 @@
 #include "BoundingBox.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "FileSystem.h"
 
 namespace Game {
 
@@ -15,7 +16,7 @@ public:
               const std::string& _bgPath,
               const Camera& _cameraView  ) :
     m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
-    m_bgTexture(Texture(_bgPath)),
+    m_bgTexture(Texture(FileSystem::instance().roomPath(_bgPath))),
     // Choose a random trigger volume colour (to differentiate different triggers)
     m_triggerColour( (float)rand()/(float)(RAND_MAX/1.0),
                      (float)rand()/(float)(RAND_MAX/1.0),
@@ -27,6 +28,8 @@ public:
   void drawTrigger() const;
 
 private:
+  void drawBillboard() const;
+
   Camera m_cameraView;
   BBox m_triggerVolume;
   // This stores an RGBA background image, where the alpha channel is used

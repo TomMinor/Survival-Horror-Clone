@@ -25,7 +25,7 @@ private:
   float m_playerYaw;
 
 public:
-  World(const Vec4& _playerSpawn = Vec4());
+  World();
 
   bool init();
 

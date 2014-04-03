@@ -38,13 +38,12 @@ void Room::draw() const
     background->drawTrigger();
   }
 
-
-  //m_backgrounds[]
+  m_backgrounds[0].drawBG();
 }
 
 void Room::drawFG() const
 {
-
+  m_backgrounds[0].drawFG();
 }
 
 void Room::updatePlayer()

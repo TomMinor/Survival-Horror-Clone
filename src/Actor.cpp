@@ -6,12 +6,24 @@
 
 namespace Game {
 
+Actor::Actor(const Vec4 & _scale, const Vec4 & _pos )
+  : m_time(0), m_pos(_pos), m_scale(_scale), m_yaw(0), m_health(100),
+    m_meshBody("assets/actor/mach-body.md2", "assets/actor/soldier.jpg", 0.05f),
+    m_meshHead("assets/actor/mach-head.md2", "assets/actor/mach-head.jpg", 0.05f),
+    m_state(IDLE), m_previousState(IDLE),
+    m_bbox(_pos, _scale)
+//    m_bbox( _pos.m_x, _pos.m_y, _pos.m_z,
+//            _pos.m_x + _scale.m_x,
+//            _pos.m_y + _scale.m_y,
+//            _pos.m_z + _scale.m_z)
+{
+  m_meshBody.setAnimation(Md2::Animation::STAND);
+  m_meshHead.setAnimation(Md2::Animation::STAND);
+}
+
 void Actor::draw() const
 {
   glPushMatrix();
-    // Center within bbox
-    glTranslatef(m_scale.m_x/2, 0.0f, m_scale.m_z/2);
-
     m_pos.translateGL();
     glPushMatrix();
       glRotatef(m_yaw, 0, 1, 0);
@@ -23,6 +35,8 @@ void Actor::draw() const
 
   glColor3f( 0.0f, 0.25f, 1.0f );
   m_bbox.draw();
+
+  glColor3f( 1.0f, 1.0f, 1.0f );
 }
 
 void Actor::move(float _offset, float _deg)

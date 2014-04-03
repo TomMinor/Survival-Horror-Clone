@@ -9,8 +9,8 @@ camera 0.0 7.545061101644754 0.0 1.3169258356997249 -1.9582303618833887 -1.78595
 camera 0.0 3.545061101644754 0.0 0.3169258356997249 -1.9582303618833887 -1.785959369300033 90 2
 
 //bg <bgID> <BackgroundFileName>
-bg 1 BG_01_bg.png
-bg 2 BG_02_bg.png
+bg 1 BG_01_bg.tif
+bg 2 BG_01_bg.tif
 
 //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <bgID>
 trigger -4.0 0.0 -5.0 2.0 3.0 0.0 1

@@ -14,14 +14,10 @@ public:
     m_min(_xmin, _ymin, _zmin ), m_max(_xmax, _ymax, _zmax )
   {;}
 
-  // Calculate min/max based on the size around a position vector
+  // Centre the bbox around the position, and set it's height to _size
   BBox(Vec4 _position, Vec4 _size) :
-    m_min(_position.m_x - _size.m_x/2,
-          _position.m_y - _size.m_y/2,
-          _position.m_z - _size.m_z/2),
-    m_max(_position.m_x + _size.m_x/2,
-          _position.m_y + _size.m_y/2,
-          _position.m_z + _size.m_z/2)
+    m_min(_position.m_x - _size.m_x/2, _position.m_y,             _position.m_z - _size.m_z/2),
+    m_max(_position.m_x + _size.m_x/2, _position.m_y + _size.m_y, _position.m_z + _size.m_z/2)
   {;}
 
   void move(Vec4 _pos);
