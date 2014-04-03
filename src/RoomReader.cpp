@@ -133,14 +133,12 @@ Room* RoomReader::load()
     }
   }
 
-//  // Calculate exits
-  std::vector<Door> roomExits;
-  for( int bgID = 0; bgID < maxbgID; ++bgID )
-  {
-    ;
-  }
+  // Disallow incomplete rooms
+  if(roomBackgrounds.empty()) { throw std::runtime_error( "No backgrounds found" ); }
+  if(m_roomBounds.empty()   ) { throw std::runtime_error( "No bounds found" );      }
+  if(m_exits.empty()        ) { throw std::runtime_error( "No room exits found" );  }
 
-  return new Room(m_fileName, m_spawnPosition, m_roomBounds, roomBackgrounds, roomExits);
+  return new Room(m_fileName, m_spawnPosition, m_roomBounds, roomBackgrounds, m_exits);
 }
 
 unsigned int RoomReader::getIdentifier(const std::string& _token) const
@@ -192,7 +190,6 @@ void RoomReader::parseBgID(const std::string& i_token, int &o_backgroundID) cons
 
 void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_backgroundID)
 {
-  //std::stringstream ss( std::string );  // Empty stream
   float rotation[3]; // pitch, yaw, roll
   float offset[3]; // x,y,z
   float fov;
@@ -231,25 +228,42 @@ void RoomReader::addCamera(const std::vector<std::string>& i_tokens, int &o_back
     throw;
   }
 
-  // http://www.evl.uic.edu/ralph/508S98/coordinates.html
-  // These are inverted to compensate the maya rotations
-  m_roomCameras[o_backgroundID] = Camera( Vec4(-offset[0], -offset[1], -offset[2]),
-                                          Vec4(-rotation[1], -rotation[0], -rotation[2]), fov );
+  // BUG (maya uses different coord system) http://www.evl.uic.edu/ralph/508S98/coordinates.html
+  m_roomCameras[o_backgroundID] = Camera( Vec4(offset[0], offset[1], offset[2]),
+                                          Vec4(rotation[1], rotation[0], rotation[2]), fov );
 }
 
 void RoomReader::addExit(const std::vector<std::string>& i_tokens)
 {
+  float coord[3];
+  std::string nextRoom;
 
+  for(int i=0; i<3; ++i)
+  {
+    // Try to parse the offset
+    try
+    {
+      coord[i] = util::tokenToFloat( i_tokens[i+1]);
+    }
+    catch(std::runtime_error)
+    {
+      std::cerr << "Invalid  exit position";
+      throw;
+    }
+  }
+
+  // File name of the room that should load when this exit is used
+  nextRoom = i_tokens[4];
+
+  m_exits.push_back( Door(nextRoom, Vec4(coord[0], coord[1], coord[2])) );
 }
 
 void RoomReader::setSpawn(const std::vector<std::string>& i_tokens)
 {
-  //std::stringstream ss(std::string);  // Empty stream
   float coord[3];
 
   for(int i=0; i<3; ++i)
   {
-    // Try to parse the rotation
     try
     {
       coord[i] = util::tokenToFloat( i_tokens[i+1]);

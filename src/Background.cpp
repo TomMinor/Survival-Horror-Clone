@@ -5,6 +5,11 @@
 
 namespace Game {
 
+bool Background::touchesTrigger(const BBox& _actor)
+{
+  return m_triggerVolume.checkCollision(_actor);
+}
+
 void Background::drawBG() const
 {
   glColor3f(1,1,1);
@@ -14,7 +19,7 @@ void Background::drawBG() const
   Game::Texture tmp("assets/backgrounds/BG_01_bg.tif");
   tmp.setCurrent();
 
-  drawBillboard(-499.0f);
+  drawFacade(-499.0f);
 
   glDisable(GL_TEXTURE_2D);
 }
@@ -37,7 +42,7 @@ void Background::drawFG() const
   glAlphaFunc(GL_GREATER, 0.1f);
   glDisable(GL_DEPTH_TEST);
 
-  drawBillboard(0.0f);
+  drawFacade(0.0f);
 
   glDisable(GL_ALPHA_TEST);
   glEnable(GL_DEPTH_TEST);
@@ -47,7 +52,7 @@ void Background::drawFG() const
   glEnable(GL_LIGHTING);
 }
 
-void Background::drawBillboard(float _zOffset) const
+void Background::drawFacade(float _zOffset) const
 {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
@@ -75,19 +80,15 @@ void Background::drawBillboard(float _zOffset) const
   glMatrixMode(GL_MODELVIEW);
 }
 
-/*
-** Screen aligned billboard (text)
-*/
-void		screen_billboard (void)
-{
-
-}
-
 void Background::drawTrigger() const
 {
-
   m_triggerColour.colourGL();
   m_triggerVolume.draw();
+}
+
+void Background::setCameraView() const
+{
+  m_cameraView.setView();
 }
 
 }

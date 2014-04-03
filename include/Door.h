@@ -12,8 +12,8 @@ class Room;
 class Door
 {
 public:
-  Door(Vec4 _position, Vec4 _triggerVolume = Vec4(2.0f, 2.0f, 2.0f)):
-    m_position(_position), m_triggerSize(_triggerVolume), m_time(0)
+  Door(const std::string& _nextRoom, const Vec4& _position, const Vec4& _triggerVolume = Vec4(2.0f, 2.0f, 2.0f)):
+    m_position(_position), m_triggerSize(_triggerVolume), m_nextRoom(_nextRoom), m_time(0)
   {;}
 
   void displayLoadingScreen();

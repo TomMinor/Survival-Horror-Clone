@@ -32,7 +32,7 @@ void World::draw() const
 {
   m_currentRoom->draw();
   drawActors();
-  m_currentRoom->drawFG();
+  m_currentRoom->drawForeground();
 }
 
 void World::drawActors() const
@@ -50,6 +50,8 @@ void World::update()
   m_player.move(m_playerOffset, m_playerYaw);
 
   m_player.update();
+
+  m_currentRoom->updateCurrentBackground(m_player.getBoundingBox());
 
 //  if(!m_currentRoom->checkWallCollide(tmp))
 //  {

@@ -18,25 +18,26 @@ public:
         const std::vector<BBox>& _bboxes,
         const std::vector<Background>& _backgrounds,
         const std::vector<Door>& _exits ) :
-    m_name(_name), m_playerSpawn(_spawnPos), m_collisionBoxes(_bboxes),
-    m_backgrounds(_backgrounds), m_exits(_exits)
+    m_name(_name), m_playerSpawn(_spawnPos),
+    m_collisionBoxes(_bboxes), m_backgrounds(_backgrounds), m_exits(_exits), m_currentBG(0)
   {;}
 
   bool checkWallCollide(const BBox& _actor);
   Vec4 closestCenter(const Vec4& _b);
 
-  // This takes an external draw function as a function pointer
-  // so it can render the background, the scene & then render the foreground on top
+  void updateCurrentBackground(const BBox& _actor);
+
   void draw() const;
-  void drawFG() const;
+  void drawForeground() const;
   void debugDrawBounds() const;
-  void updatePlayer();
 
 private:
+  int m_currentBG;  // The currently active background
+  //int m_lastBG;     // Prevent the player from
   std::string m_name;
   Vec4 m_playerSpawn;
+  //BBox* m_collidingBBox;  // Points to the last room bound to collide
   std::vector<BBox> m_collisionBoxes;
-  BBox* m_collidingBBox;  // Points to the last room bound to collide
 
   std::vector<Background> m_backgrounds;
   std::vector<Door> m_exits;

@@ -17,7 +17,7 @@ public:
               const Camera& _cameraView  ) :
     m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
     m_bgTexture(Texture(FileSystem::instance().roomPath(_bgPath))),
-    // Choose a random trigger volume colour (to differentiate different triggers)
+    // Choose a random trigger volume colour (to make each trigger volume unique, for debugging)
     m_triggerColour( (float)rand()/(float)(RAND_MAX/1.0),
                      (float)rand()/(float)(RAND_MAX/1.0),
                      (float)rand()/(float)(RAND_MAX/1.0) )
@@ -26,9 +26,11 @@ public:
   void drawBG() const;
   void drawFG() const;
   void drawTrigger() const;
+  void setCameraView() const;
+  bool touchesTrigger(const BBox& _actor);
 
 private:
-  void drawBillboard(float _zOffset) const;
+  void drawFacade(float _zOffset) const;
 
   Camera m_cameraView;
   BBox m_triggerVolume;

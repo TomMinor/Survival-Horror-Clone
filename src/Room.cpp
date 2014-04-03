@@ -11,7 +11,7 @@ bool Room::checkWallCollide(const BBox& _actor)
   {
     if(bound->checkCollision(_actor))
     {
-      m_collidingBBox = &(*bound);
+      //m_collidingBBox = &(*bound);
       return true;
     }
   }
@@ -38,17 +38,28 @@ void Room::draw() const
     background->drawTrigger();
   }
 
-  m_backgrounds[0].drawBG();
+  m_backgrounds[m_currentBG].drawBG();
 }
 
-void Room::drawFG() const
+void Room::drawForeground() const
 {
-  m_backgrounds[0].drawFG();
+  m_backgrounds[m_currentBG].drawFG();
 }
 
-void Room::updatePlayer()
+void Room::updateCurrentBackground(const BBox& _actor)
 {
-
+  for(std::vector<Background>::iterator bg = m_backgrounds.begin();
+      bg != m_backgrounds.end();
+      bg++ )
+  {
+    if(bg->touchesTrigger(_actor))
+    {
+      std::cout << "Trigger " << m_currentBG << " touched\n";
+      // Update the background to the index of the trigger
+      m_currentBG = (bg - m_backgrounds.begin());
+      m_backgrounds[m_currentBG].setCameraView();
+    }
+  }
 }
 
 }

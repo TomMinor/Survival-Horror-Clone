@@ -37,9 +37,7 @@ private:
   std::map<int, BBox> m_roomTriggers;
   std::map<int, std::string> m_roomBackground;
 
-  // Stores the filenames of the rooms the exits lead to
-  std::vector<std::string> m_roomExits;
-  std::vector<Vec4> m_roomExitPosition;
+  std::vector<Door> m_exits;
   std::vector<BBox> m_roomBounds;
 
   Vec4 m_spawnPosition;
