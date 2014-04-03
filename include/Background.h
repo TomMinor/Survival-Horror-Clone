@@ -28,7 +28,7 @@ public:
   void drawTrigger() const;
 
 private:
-  void drawBillboard() const;
+  void drawBillboard(float _zOffset) const;
 
   Camera m_cameraView;
   BBox m_triggerVolume;
