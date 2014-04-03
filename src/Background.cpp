@@ -8,7 +8,6 @@ namespace Game {
 
 bool Background::touchesTrigger(const BBox& _actor)
 {
-  //m_bgTexture.setCurrent();
   return m_triggerVolume.checkCollision(_actor);
 }
 
@@ -21,52 +20,37 @@ void Background::loadBackgroundTexture()
 
 void Background::drawBG() const
 {
-  if(m_bgTexture) { m_bgTexture->setCurrent(); }
-//  glColor3f(1,1,1);
-//  glEnable(GL_TEXTURE_2D);
-
-
-//  Game::Texture tmp("assets/backgrounds/BG_01_bg.tif");
-//  tmp.setCurrent();
-
-  //m_bgTexture->setCurrent();
-
+  // Draw facade very close to the farZ plane
+  // This should be far enough back from the origin for the player to never reach it
   drawFacade(-499.0f);
-
-//  glDisable(GL_TEXTURE_2D);
 }
 
 void Background::drawFG() const
 {  
-//  glDisable(GL_LIGHTING);
-//  glEnable(GL_TEXTURE_2D);
-
-  // Enable alpha blending & disable the depth test so the opaque pixels
-  // (specified by the bg texture mask) are drawn on top of everything
+  // Enable alpha blending & draw the opaque pixels on a plane very close to the nearZ plane
+  // This gives the effect of being infront of the scene
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-//  glColor3f(1.0f, 1.0f, 1.0f);
-
-  if(m_bgTexture) { m_bgTexture->setCurrent(); }
-
   glEnable(GL_ALPHA_TEST);
   glAlphaFunc(GL_GREATER, 0.1f);
-  glDisable(GL_DEPTH_TEST);
 
-  drawFacade(0.0f);
+  if(m_bgTexture && m_bgTexture->hasAlphaMask())
+  {
+    drawFacade(0.0f);
+  }
 
   glDisable(GL_ALPHA_TEST);
-  glEnable(GL_DEPTH_TEST);
-
   glDisable( GL_BLEND );
-//  glEnable(GL_LIGHTING);
 }
 
 void Background::drawFacade(float _zOffset) const
 {
-  if(m_bgTexture)   // Don't draw if no texture was loaded
+  // Don't draw if no texture was loaded or the fallback texture was used
+  if(m_bgTexture && !m_bgTexture->usingFallback())
   {
+    m_bgTexture->setCurrent();
+
     // Draw in orthographic projection
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -79,6 +63,7 @@ void Background::drawFacade(float _zOffset) const
         glDisable(GL_LIGHTING);
         glEnable(GL_TEXTURE_2D);
 
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glColor3f(1.0f, 1.0f, 1.0f);
         // Draw the facade so that it fills the screen
         glTranslatef(0, 0, _zOffset);

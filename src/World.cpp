@@ -13,12 +13,12 @@ namespace Game {
 
 World::World() :
   m_init(false),
-  m_currentRoom(NULL), m_lastTime(0), m_playerOffset(0), m_playerYaw(0),
+  m_currentRoom(NULL), m_lastTime(0), m_playerYaw(0), m_playerOffset(0),
   m_player(Vec4(1,2,1), Vec4(0.0f, 0.0f, 0.0f))
   {
     std::cout << "Loading assets :" <<  FileSystem().assetFolder() << "\n";
 
-    if(!loadRoom("ROOM_02a.room"))
+    if(!loadRoom("ROOM_01.room"))
     {
       throw std::runtime_error("Error loading assets");
     }
@@ -72,58 +72,41 @@ void World::playerWalk(float _offset)
 
 bool World::loadRoom(const std::string& _fileName)
 {
-  if(m_currentRoom) { delete m_currentRoom; }
+  Room* nextRoom = 0;
 
   try
   {
-    m_currentRoom = RoomReader(_fileName).load();
+    nextRoom = RoomReader(_fileName).load();
   }
   catch(std::ios_base::failure &msg)
   {
     std::cerr << msg.what() << "\n";
-    return false;
+    nextRoom = 0;
   }
   catch(std::runtime_error &msg)
   {
     std::cerr << msg.what() << "\n";
+    nextRoom = 0;
+  }
+  catch(...)
+  {
+    nextRoom = 0;
+  }
+
+  if(nextRoom)
+  {
+    delete m_currentRoom;
+    m_currentRoom = nextRoom;
+  }
+
+  if(!m_currentRoom || !nextRoom)
+  {
+    std::cout << "room load failed\n";
     return false;
   }
 
+  std::cout << "room load success\n";
   return true;
 }
-
-//void World::loadRooms()
-//{
-//  std::ifstream manifestFile;
-//  std::string line;
-
-//  std::cout << m_fileSystem->roomManifest();
-//  manifestFile.open(m_fileSystem->roomManifest().c_str(), std::ios::in);
-//  if( manifestFile.is_open() )
-//  {
-//    while(std::getline(manifestFile, line))
-//    {
-//      try
-//      {
-//        m_currentRoom = RoomReader(line);
-//      }
-//      catch(std::invalid_argument &msg)
-//      {
-//        std::cerr << msg.what() << "\n";
-//      }
-//      catch(std::runtime_error &msg)
-//      {
-//        std::cerr << "Failed loading file " << line << "\n" <<
-//                     "(Parse error) " << msg.what() << "\n";
-//      }
-//    }
-//    manifestFile.close();
-//  }
-//  else
-//  {
-//    // Throw an error
-//    throw std::ios_base::failure("Could not load manifest file\n");
-//  }
-//}
 
 }

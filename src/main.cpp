@@ -93,20 +93,27 @@ int main()
   // Read input
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
-  Vec4 position(-1.3169258356997249, 1.9582303618833887, 1.785959369300033);
-  Vec4 rotation(0.0, -7.545061101644754, 0.0);
+//  Vec4 position(-1.3169258356997249, 1.9582303618833887, 1.785959369300033);
+//  Vec4 rotation(0.0, -7.545061101644754, 0.0);
 
 //  Vec4 position(1.7525374190842373, 1.624190772456883, 1.154906337937287);
 //  Vec4 rotation(0.0, 86.090, 0.0);
 
-  Game::Camera tits(  Vec4(-position.m_x, -position.m_y, -position.m_z),
-                      Vec4(-rotation.m_y, -rotation.m_x, -rotation.m_z),
-                      90.0f);
+//  Game::Camera tits(  Vec4(-position.m_x, -position.m_y, -position.m_z),
+//                      Vec4(-rotation.m_y, -rotation.m_x, -rotation.m_z),
+//                      90.0f);
 
 //  Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
 //  test.forceAnimation(Md2::Animation::DEATH_IDLE);
-  float time = 0.0f;
-  Vec4 cameraPos;
+//  float time = 0.0f;
+//  Vec4 cameraPos;
+
+  int i = 0;
+  std::string rooms[] = { "ROOM_01.room",
+                          "ROOM_02.room",
+                          "ROOM_03.room",
+                          "ROOM_Example_ErrorFile"
+                        };
 
   //float tmp[] = { 0.6962864869302063, 0.6851291113894016, 0.21397015877257444, 0.0, -0.3256486830215435, 0.5672002014874894, -0.7564633941433556, 0.0, -0.6396390101961622, 0.4570361387891777, 0.6180452285035081, 0.0, 10.019665073440814, 7.789568673257114, 9.253249521312483, 1.0 };
   //float tmp[] = { 0.952889998609198, 0.0, 0.303316090161011, 0.0, -0.0, 1.0, 0.0, 0.0, -0.303316090161011, -0.0, 0.952889998609198, 0.0, 0.0, 0.0, -2.1060597064697046, 1.0 };
@@ -140,12 +147,32 @@ int main()
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
             case SDLK_b : Game::BBox::toggleDebugDraw(); break;
+            case SDLK_PAGEUP :
+            {
+              i++;
+              i%=2;
+              std::cerr << i << "\n";
+              std::cerr << rooms[(i)] << "\n";
+              world.loadRoom(rooms[i]);
+              break;
+            }
+            case SDLK_PAGEDOWN :
+            {
+              i--;
+              i%=2;
+              i = abs(i);
+              std::cerr << i << "\n";
+              std::cerr << rooms[(i)] << "\n";
+              world.loadRoom(rooms[(i)]);
+              break;
+            }
             default : break;
           } // end of key process
         } // end of keydown*
         default : break;
       } // end of event switch
     } // end of poll events
+
 
     if( world.getElapsedTime() >= worldUpdateDelay)
     {
@@ -154,6 +181,8 @@ int main()
       if(keystate[SDL_SCANCODE_RIGHT])        { world.playerTurn(-4);     }
       if(keystate[SDL_SCANCODE_LEFT])         { world.playerTurn(4);      }
       if(keystate[SDL_SCANCODE_LSHIFT])       { world.playerDash();       }
+
+
 
 //      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z++;   }
 //      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z--;   }

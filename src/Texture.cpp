@@ -4,7 +4,7 @@
 
 namespace Game {
 
-  Texture::Texture(std::string _fileName) : m_texID(0)
+  Texture::Texture(std::string _fileName) : m_texID(0), m_usingFallback(false), m_hasAlpha(false)
   {
     glGenTextures(1,&m_texID);
 
@@ -17,6 +17,7 @@ namespace Game {
       {
         throw std::invalid_argument(" Could not load fallback material ");
       }
+      m_usingFallback = true;
       std::cerr << SDL_GetError() << ", using fallback material\n";
     }
 
@@ -33,10 +34,12 @@ namespace Game {
     if(numColours == 4)   // Alpha
     {
       texFormat = GL_RGBA;
+      m_hasAlpha = true;
     }
     else if(numColours== 3)  // No alpha
     {
       texFormat = GL_RGB;
+      m_hasAlpha = false;
     }
     else
     {
@@ -51,8 +54,8 @@ namespace Game {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    texHeight = texture->h;
-    texWidth = texture->w;
+    m_texHeight = texture->h;
+    m_texWidth = texture->w;
 
     SDL_FreeSurface(texture);
   }

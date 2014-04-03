@@ -1,0 +1,23 @@
+//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax>
+bbox -7.0 -8.881784197001252e-16 -9.0 7.0 10.000000000000002 -8.0
+bbox  7.0 -2.220446049250313e-15 -7.999999999999997 8.0 10.0 25.999999999999993
+bbox -7.0 -1.7763568394002505e-15 25.5 7.0 10.0 26.5
+bbox -7.0 -2.0 -8.0 7.0 0.0 26.0
+bbox -7.0 9.791847343604017 -8.0 7.0 11.791847343604017 26.0
+
+//camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
+camera 0 0 0 1 1 1 75 1
+
+//bg <bgID> <BackgroundFileName>
+bg 1 NotABackground.tif
+bg 2 ohno.tif
+
+//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <bgID>
+trigger 0 0 0 d b c 1
+trigger 0 -1 0 2 2 1 2
+
+// spawn x y
+spawn 0.0 -3.0
+
+//exit <offsetX> <offsetY> <offsetZ> <roomFileName>
+exit 10 3 4 non-existentRoom.room

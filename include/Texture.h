@@ -16,13 +16,19 @@ public:
 
   void setCurrent() const;
 
-  int height() const { return texHeight; }
-  int width() const  { return texWidth; }
+  inline int height() const { return m_texHeight; }
+  inline int width() const  { return m_texWidth; }
+  inline bool usingFallback() const { return m_usingFallback; }
+  inline bool hasAlphaMask() const { return m_hasAlpha; }
 
 private:
   GLuint m_texID;
-  int texHeight;
-  int texWidth;
+
+  bool m_usingFallback;
+  bool m_hasAlpha;
+
+  int m_texHeight;
+  int m_texWidth;
 };
 
 }

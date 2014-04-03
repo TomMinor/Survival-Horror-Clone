@@ -44,9 +44,10 @@ public:
   inline double getCurrentTime() const { return SDL_GetTicks(); }
   inline double getElapsedTime() const { return SDL_GetTicks() - m_lastTime; }
 
-private:
-//  void loadRooms();
   bool loadRoom(const std::string& _fileName);
+
+private:
+  //bool loadRoom(const std::string& _fileName);
 
 
 };
