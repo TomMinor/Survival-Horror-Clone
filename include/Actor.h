@@ -21,6 +21,7 @@ public:
   void forceAnimation(Md2::Animation::Sequence _type) { m_meshBody.setAnimation(_type);
                                                         m_meshHead.setAnimation(_type); }
 
+  void setPosition(const Vec4& _pos) { m_pos = _pos; }
 private:
   void onAttack();
   void onDamage();

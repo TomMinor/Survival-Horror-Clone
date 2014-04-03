@@ -13,7 +13,7 @@ namespace Game {
     if(!texture)
     {
       // Attempt to load a fallback texture that should be guaranteed to exist
-      if( !(texture = IMG_Load(FileSystem::instance().fallbackTexture().c_str())) )
+      if( !(texture = IMG_Load(FileSystem().fallbackTexture().c_str())) )
       {
         throw std::invalid_argument(" Could not load fallback material ");
       }

@@ -16,8 +16,10 @@ void Background::drawBG() const
   glEnable(GL_TEXTURE_2D);
   glDisable(GL_LIGHTING);
 
-  Game::Texture tmp("assets/backgrounds/BG_01_bg.tif");
-  tmp.setCurrent();
+//  Game::Texture tmp("assets/backgrounds/BG_01_bg.tif");
+//  tmp.setCurrent();
+
+  m_bgTexture.setCurrent();
 
   drawFacade(-499.0f);
 

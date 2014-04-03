@@ -12,11 +12,11 @@
 namespace Game {
 
 World::World() :
-  m_fileSystem( Game::FileSystem::instance() ), m_init(false),
-  m_currentRoom(NULL), m_lastTime(0),
+  m_init(false),
+  m_currentRoom(NULL), m_lastTime(0), m_playerOffset(0), m_playerYaw(0),
   m_player(Vec4(1,2,1), Vec4(0.0f, 0.0f, 0.0f))
   {
-    std::cout << "Loading assets :" <<  m_fileSystem.assetFolder() << "\n";
+    std::cout << "Loading assets :" <<  FileSystem().assetFolder() << "\n";
 
     if(!loadRoom("ROOM_02a.room"))
     {

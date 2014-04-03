@@ -11,8 +11,6 @@ namespace Game {
 class World
 {
 private:
-  //-----File Handling-------
-  FileSystem& m_fileSystem;
   bool m_init;
 
   //----World---------

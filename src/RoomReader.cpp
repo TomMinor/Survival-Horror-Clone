@@ -19,7 +19,7 @@ const uint RoomReader::c_identifierSize[] = { 1+ 7, //  TRIGGER
 RoomReader::RoomReader(const std::string& _fileName)
   : m_fileName(_fileName)
 {
-  std::string filePath = FileSystem::instance().roomPath(_fileName);
+  std::string filePath = FileSystem().roomPath(_fileName);
   m_fileStream.open( filePath.c_str(), std::ios::in );
   if( !m_fileStream.is_open() )
   {

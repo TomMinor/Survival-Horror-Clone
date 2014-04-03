@@ -9,33 +9,22 @@ namespace Game
 class FileSystem
 {
 public:
-  static FileSystem& instance()
-  {
-    static FileSystem* instance = new FileSystem();
-    return *instance;
-  }
+  static std::string roomPath(const std::string& _fileName);
+  static std::string actorPath(const std::string& _fileName);
 
-  std::string roomPath(const std::string& _fileName);
-  std::string actorPath(const std::string& _fileName);
+  static std::string assetFolder()     { return m_assetPath;   }
 
-  std::string assetFolder()     { return m_assetPath;   }
-
-  std::string fallbackTexture() { return (m_assetPath + m_actorPath + m_fallbackTexture); }
-  std::string roomManifest()    { return (m_assetPath + m_roomPath + m_roomManifest);    }
-
+  static std::string fallbackTexture() { return (m_assetPath + m_actorPath + m_fallbackTexture); }
 private:
-  FileSystem();
-
   // Root folder for assets
-  std::string m_assetPath;
+  static const std::string m_assetPath;
 
   // Child folders
-  std::string m_roomPath;
-  std::string m_actorPath;
+  static const std::string m_roomPath;
+  static const std::string m_actorPath;
 
   // Hard-coded resource files
-  std::string m_roomManifest;
-  std::string m_fallbackTexture;
+  static const std::string m_fallbackTexture;
 };
 
 }

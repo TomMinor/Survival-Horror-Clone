@@ -11,7 +11,7 @@ namespace Game {
 class Texture
 {
 public:
-  Texture(std::string _fileName);
+  Texture(std::string _fileName = "error.png");
   ~Texture();
 
   void setCurrent() const;

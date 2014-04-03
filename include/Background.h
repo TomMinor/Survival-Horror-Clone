@@ -16,12 +16,13 @@ public:
               const std::string& _bgPath,
               const Camera& _cameraView  ) :
     m_cameraView(_cameraView), m_triggerVolume(_triggerVolume),
-    m_bgTexture(Texture(FileSystem::instance().roomPath(_bgPath))),
     // Choose a random trigger volume colour (to make each trigger volume unique, for debugging)
     m_triggerColour( (float)rand()/(float)(RAND_MAX/1.0),
                      (float)rand()/(float)(RAND_MAX/1.0),
                      (float)rand()/(float)(RAND_MAX/1.0) )
-    {;}
+    {
+      m_bgTexture = Texture(FileSystem().roomPath(_bgPath));
+    }
 
   void drawBG() const;
   void drawFG() const;
