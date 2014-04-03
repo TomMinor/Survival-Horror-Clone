@@ -181,41 +181,6 @@ int main()
       world.update();
       world.draw();
 
-//      glMatrixMode(GL_PROJECTION);
-//      glPushMatrix();
-//      glLoadIdentity();
-//      glOrtho(0.0, 800, 0.0, 600, -500.0, 500.0);
-//      glMatrixMode(GL_MODELVIEW);
-//      glPushMatrix();
-
-//      glLoadIdentity();
-//      glDisable(GL_LIGHTING);
-
-//      glColor3f(1,1,1);
-//      glEnable(GL_TEXTURE_2D);
-//      //glBindTexture(GL_TEXTURE_2D, mark_textures[0].id);
-
-//      Game::Texture tmp("assets/backgrounds/BG_01_bg.tif");
-//      tmp.setCurrent();
-
-//      // Draw a textured quad
-//      glTranslatef(0, 0, -499);
-//      glBegin(GL_QUADS);
-//        glTexCoord2f(0, 1); glVertex3f(0, 0, 0);
-//        glTexCoord2f(0, 0); glVertex3f(0, 1024, 0);
-//        glTexCoord2f(1, 0); glVertex3f(1024, 1024, 0);
-//        glTexCoord2f(1, 1); glVertex3f(1024, 0, 0);
-//      glEnd();
-
-//      glDisable(GL_TEXTURE_2D);
-//      glPopMatrix();
-
-//      glMatrixMode(GL_PROJECTION);
-//      glPopMatrix();
-
-//      glMatrixMode(GL_MODELVIEW);
-
-
       // swap the buffers
       SDL_GL_SwapWindow(window);
     }

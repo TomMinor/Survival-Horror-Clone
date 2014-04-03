@@ -52,12 +52,18 @@ void Room::updateCurrentBackground(const BBox& _actor)
       bg != m_backgrounds.end();
       bg++ )
   {
-    if(bg->touchesTrigger(_actor))
+    //Don't bother updating the view if the player triggers the current background again
+    if(bg->touchesTrigger(_actor) )
     {
-      std::cout << "Trigger " << m_currentBG << " touched\n";
-      // Update the background to the index of the trigger
       m_currentBG = (bg - m_backgrounds.begin());
-      m_backgrounds[m_currentBG].setCameraView();
+      // Only reload the background texture when the view changes
+      if(m_lastBG != m_currentBG)
+      {
+        m_lastBG = m_currentBG;
+        m_backgrounds[m_currentBG].loadBackgroundTexture();
+        m_backgrounds[m_currentBG].setCameraView();
+      }
+      return;
     }
   }
 }

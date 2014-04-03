@@ -19,8 +19,10 @@ public:
         const std::vector<Background>& _backgrounds,
         const std::vector<Door>& _exits ) :
     m_name(_name), m_playerSpawn(_spawnPos),
-    m_collisionBoxes(_bboxes), m_backgrounds(_backgrounds), m_exits(_exits), m_currentBG(0)
-  {;}
+    m_currentBG(0), m_lastBG(m_currentBG), m_collisionBoxes(_bboxes), m_backgrounds(_backgrounds), m_exits(_exits)
+  {
+    m_backgrounds[m_currentBG].loadBackgroundTexture();
+  }
 
   bool checkWallCollide(const BBox& _actor);
   Vec4 closestCenter(const Vec4& _b);
@@ -33,7 +35,7 @@ public:
 
 private:
   int m_currentBG;  // The currently active background
-  //int m_lastBG;     // Prevent the player from
+  int m_lastBG;
   std::string m_name;
   Vec4 m_playerSpawn;
   //BBox* m_collidingBBox;  // Points to the last room bound to collide
