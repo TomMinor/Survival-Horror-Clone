@@ -13,13 +13,16 @@ class Door;
 class Room
 {
 public:
-  Room( const std::string& _name,
+  Room(
+        const std::string& _name,
         const Vec4& _spawnPos,
         const std::vector<BBox>& _bboxes,
         const std::vector<Background>& _backgrounds,
-        const std::vector<Door>& _exits ) :
-    m_name(_name), m_playerSpawn(_spawnPos),
-    m_currentBG(0), m_lastBG(m_currentBG), m_collisionBoxes(_bboxes), m_backgrounds(_backgrounds), m_exits(_exits)
+        const std::vector<Door>& _exits
+      ) :
+    m_currentBG(0), m_lastBG(m_currentBG), m_name(_name),
+    m_playerSpawn(_spawnPos), m_collisionBoxes(_bboxes),
+    m_backgrounds(_backgrounds), m_exits(_exits)
   {
     m_backgrounds[m_currentBG].loadBackgroundTexture();
   }
@@ -32,6 +35,8 @@ public:
   void draw() const;
   void drawForeground() const;
   void debugDrawBounds() const;
+
+  Vec4 playerSpawn() const { return m_playerSpawn; }
 
 private:
   int m_currentBG;  // The currently active background

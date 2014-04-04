@@ -9,7 +9,7 @@ bool Room::checkWallCollide(const BBox& _actor)
       bound != m_collisionBoxes.end();
       bound++ )
   {
-    if(bound->checkCollision(_actor))
+    if(bound->checkIntersection(_actor))
     {
       //m_collidingBBox = &(*bound);
       return true;
@@ -36,6 +36,14 @@ void Room::draw() const
       background!= m_backgrounds.end(); ++background)
   {
     background->drawTrigger();
+  }
+
+  // Draw exit volumes
+  for(std::vector<Door>::const_iterator exitDoor = m_exits.begin();
+      exitDoor!= m_exits.end(); ++exitDoor)
+  {
+    glColor3f( 1.0f, 0.0f, 0.0f );
+    exitDoor->drawVolume();
   }
 
   m_backgrounds[m_currentBG].drawBG();

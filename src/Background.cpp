@@ -8,13 +8,12 @@ namespace Game {
 
 bool Background::touchesTrigger(const BBox& _actor)
 {
-  return m_triggerVolume.checkCollision(_actor);
+  return m_triggerVolume.checkIntersectOrTouch(_actor);
 }
 
 void Background::loadBackgroundTexture()
 {
   delete m_bgTexture;
-  std::cout << "Current BG : " << FileSystem().roomPath(m_bgPath) << "\n";
   m_bgTexture = new Texture(FileSystem().roomPath(m_bgPath));
 }
 
@@ -26,7 +25,7 @@ void Background::drawBG() const
 }
 
 void Background::drawFG() const
-{  
+{
   // Enable alpha blending & draw the opaque pixels on a plane very close to the nearZ plane
   // This gives the effect of being infront of the scene
   glEnable(GL_BLEND);

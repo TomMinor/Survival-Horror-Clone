@@ -12,16 +12,17 @@ class Room;
 class Door
 {
 public:
-  Door(const std::string& _nextRoom, const Vec4& _position, const Vec4& _triggerVolume = Vec4(2.0f, 2.0f, 2.0f)):
-    m_position(_position), m_triggerSize(_triggerVolume), m_nextRoom(_nextRoom), m_time(0)
+  Door(const std::string& _nextRoom, const Vec4& _position, const Vec4& _triggerVolume = Vec4(1.0f, 1.5f, 1.0f)) :
+    m_trigger(_position, _triggerVolume), m_time(0), m_nextRoom(_nextRoom)
   {;}
 
   void displayLoadingScreen();
+  void drawVolume() const;
+  bool canTrigger(const BBox& _bounds) const;
   inline std::string getNextRoom() const { return m_nextRoom; }
 
 private:
-  Vec4 m_position;
-  Vec4 m_triggerSize;
+  BBox m_trigger;
 
   int m_time;
 

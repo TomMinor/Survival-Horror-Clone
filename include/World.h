@@ -6,13 +6,12 @@
 #include "Room.h"
 #include "FileSystem.h"
 
+
 namespace Game {
 
 class World
 {
 private:
-  bool m_init;
-
   //----World---------
   Room* m_currentRoom;
   double m_lastTime;
@@ -23,7 +22,7 @@ private:
   float m_playerYaw;
 
 public:
-  World();
+  World(const std::string& _firstRoom = "ROOM_01.room");
 
   bool init();
 

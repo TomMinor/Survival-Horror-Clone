@@ -11,6 +11,18 @@
 #include "Camera.h"
 #include "Actor.h"
 
+/* TODO
+ * - Add copy constructors to all classes with pointers
+ * - Ensure all pointers are freed in the destructor
+ * - Fix collision (duh)
+ * - Document
+ * - Figure out a nice way to get input
+ * - Put the window size somewhere nice
+ * - Make some example rooms, no need to worry about converting from mayas coordinate system
+ * if there is no time, just blag it manually
+ */
+
+
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
 void SDLErrorExit(const std::string &_msg);
@@ -33,8 +45,6 @@ int main()
   // Use a 4:3 aspect ratio to match the backgrounds
   SDL_Rect windowBounds = {0, 0, 800, 600};
 
-  //SDL_GetDisplayBounds(0,&rect);
-  // now create our window
   SDL_Window *window=SDL_CreateWindow("SDLGL",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
@@ -63,9 +73,7 @@ int main()
 
   glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  //GLFunctions::perspective(90, float(4/3), 0.01, 500);
 
-  GLFunctions::perspective(90, float(800.0f/600.0f), 0.01, 500);
   SDL_GL_SwapWindow(window);
 
   glEnable(GL_COLOR_MATERIAL);
@@ -75,20 +83,28 @@ int main()
   glEnable(GL_LIGHT0);
   glColor3f(1,0,1);
 
-
   // Flag to indicate if we need to exit
   bool quit=false;
 
   // sdl event processing data structure
   SDL_Event event;
 
+
   const uint worldUpdateDelay = 30;
+  Game::World* world;
 
-  Game::World world;
-
-//  // Exit if we fail to load for some reason
-//  if ( !world.init() )
-//      return EXIT_FAILURE;
+  // Instantiate the world and try to load the first room,
+  // if this room can't be loaded consider it a critical error and exit
+  try
+  {
+    world = new Game::World;
+  }
+  catch(std::runtime_error &msg)
+  {
+    std::cerr << msg.what() << "\n";
+    SDL_Quit();
+    exit(EXIT_FAILURE);
+  }
 
   // Read input
   const Uint8* keystate = SDL_GetKeyboardState(0);
@@ -96,11 +112,18 @@ int main()
 //  Vec4 position(-1.3169258356997249, 1.9582303618833887, 1.785959369300033);
 //  Vec4 rotation(0.0, -7.545061101644754, 0.0);
 
-//  Vec4 position(1.7525374190842373, 1.624190772456883, 1.154906337937287);
-//  Vec4 rotation(0.0, 86.090, 0.0);
+//  Vec4 position(6.91449,-4.21061,-2.78206);
+//  Vec4 rotation(199,10,-2,1);
 
-//  Game::Camera tits(  Vec4(-position.m_x, -position.m_y, -position.m_z),
-//                      Vec4(-rotation.m_y, -rotation.m_x, -rotation.m_z),
+
+  Vec4 position;
+  Vec4 rotation;
+
+  Vec4 cameraPos(position);
+  Vec4 cameraRot(rotation);
+
+//  Game::Camera tits(  Vec4(position.m_x, position.m_y, position.m_z),
+//                      Vec4(rotation.m_y, rotation.m_x, rotation.m_z),
 //                      90.0f);
 
 //  Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
@@ -114,6 +137,8 @@ int main()
                           "ROOM_03.room",
                           "ROOM_Example_ErrorFile"
                         };
+
+
 
   //float tmp[] = { 0.6962864869302063, 0.6851291113894016, 0.21397015877257444, 0.0, -0.3256486830215435, 0.5672002014874894, -0.7564633941433556, 0.0, -0.6396390101961622, 0.4570361387891777, 0.6180452285035081, 0.0, 10.019665073440814, 7.789568673257114, 9.253249521312483, 1.0 };
   //float tmp[] = { 0.952889998609198, 0.0, 0.303316090161011, 0.0, -0.0, 1.0, 0.0, 0.0, -0.303316090161011, -0.0, 0.952889998609198, 0.0, 0.0, 0.0, -2.1060597064697046, 1.0 };
@@ -134,8 +159,6 @@ int main()
       {
         // this is the window x being clicked.
         case SDL_QUIT : quit = true; break;
-        // if the window is re-sized pass it to the ngl class to change gl viewport
-        // note this is slow as the context is re-create by SDL each time
 
         // now we look for a keydown event
         case SDL_KEYDOWN:
@@ -150,20 +173,15 @@ int main()
             case SDLK_PAGEUP :
             {
               i++;
-              i%=2;
-              std::cerr << i << "\n";
-              std::cerr << rooms[(i)] << "\n";
-              world.loadRoom(rooms[i]);
+              i%=4;
+              world->loadRoom(rooms[i]);
               break;
             }
             case SDLK_PAGEDOWN :
             {
               i--;
-              i%=2;
-              i = abs(i);
-              std::cerr << i << "\n";
-              std::cerr << rooms[(i)] << "\n";
-              world.loadRoom(rooms[(i)]);
+              if(i == -1) i+=sizeof(rooms)/sizeof(rooms[0]);
+              world->loadRoom(rooms[(i)]);
               break;
             }
             default : break;
@@ -174,41 +192,66 @@ int main()
     } // end of poll events
 
 
-    if( world.getElapsedTime() >= worldUpdateDelay)
+    if( world->getElapsedTime() >= worldUpdateDelay)
     {
-      if(keystate[SDL_SCANCODE_UP])           { world.playerWalk(0.1);    }
-      if(keystate[SDL_SCANCODE_DOWN])         { world.playerWalk(-0.1);   }
-      if(keystate[SDL_SCANCODE_RIGHT])        { world.playerTurn(-4);     }
-      if(keystate[SDL_SCANCODE_LEFT])         { world.playerTurn(4);      }
-      if(keystate[SDL_SCANCODE_LSHIFT])       { world.playerDash();       }
+      if(keystate[SDL_SCANCODE_UP])           { world->playerWalk(0.1);    }
+      if(keystate[SDL_SCANCODE_DOWN])         { world->playerWalk(-0.1);   }
+      if(keystate[SDL_SCANCODE_RIGHT])        { world->playerTurn(-4);     }
+      if(keystate[SDL_SCANCODE_LEFT])         { world->playerTurn(4);      }
+      if(keystate[SDL_SCANCODE_LSHIFT])       { world->playerDash();       }
 
+      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z+=0.25;   }
+      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z-=0.25;   }
+      if(keystate[SDL_SCANCODE_Q])            { cameraPos.m_y+=0.25;   }
+      if(keystate[SDL_SCANCODE_E])            { cameraPos.m_y-=0.25;   }
+      if(keystate[SDL_SCANCODE_D])            { cameraPos.m_x+=0.25;   }
+      if(keystate[SDL_SCANCODE_A])            { cameraPos.m_x-=0.25;   }
 
+      if(keystate[SDL_SCANCODE_J])            { cameraRot.m_z+=0.25;   }
+      if(keystate[SDL_SCANCODE_L])            { cameraRot.m_z-=0.25;   }
 
-//      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z++;   }
-//      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z--;   }
-//      if(keystate[SDL_SCANCODE_Q])            { cameraPos.m_y++;   }
-//      if(keystate[SDL_SCANCODE_E])            { cameraPos.m_y--;   }
-//      if(keystate[SDL_SCANCODE_D])            { cameraPos.m_x++;   }
-//      if(keystate[SDL_SCANCODE_A])            { cameraPos.m_x--;   }
+      if(keystate[SDL_SCANCODE_I])            { cameraRot.m_y+=0.25;   }
+      if(keystate[SDL_SCANCODE_K])            { cameraRot.m_y-=0.25;   }
 
-      if(keystate[SDL_SCANCODE_SPACE])        { world.damagePlayer(10);   }
+      if(keystate[SDL_SCANCODE_U])            { cameraRot.m_x+=0.25;   }
+      if(keystate[SDL_SCANCODE_O])            { cameraRot.m_x-=0.25;   }
 
-      //std::cerr << fmod(yaw, 360.0) << "\n";
-      // x: 270 & 90
-      // z: 0 & 180
+      if(keystate[SDL_SCANCODE_SPACE])        { world->damagePlayer(10);   }
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      Game::BBox a(Vec4(0,0,0), Vec4(1.0f, 1.0f, 1.0f));
+      Game::BBox b(Vec4(0,1.0f,0), Vec4(2.0f, 2.0f, 1.0f));
+
+//      glPushMatrix();
+//        //glTranslatef(2.0f, 0.0f, -2.0f);
+//        if(a.checkIntersectOrTouch(b))
+//        {
+//          Vec4 offset = -a.getIntersectOffset(b);
+//          std::cout << offset;
+//          if(!a.checkTouch(b))
+//          {
+//            Vec4 offset = -a.getIntersectOffset(b);
+//            std::cout << offset;
+//            b.move(Vec4(0, -0.2, 0.0));
+////            if(a.checkTouch(b))
+////            {
+////              std::cout << "boop";
+////            }
+//          }
+//          a.draw();
+//          b.draw();
+//          util::drawWorldAxis();
+//        }
+//      glPopMatrix();
+
+//      tits.setTransform(cameraPos, cameraRot);
+      std::cout << cameraPos << "\n";
+      std::cout << cameraRot << "\n";
 //      tits.setView();
-
-      //glDisable(GL_DEPTH_TEST);
-      //glDepthMask(GL_TRUE);
-      //glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-
-      //glEnable(GL_DEPTH_TEST);
-
-      world.update();
-      world.draw();
+      world->update();
+      world->draw();
+//      tits.setView();
 
       // swap the buffers
       SDL_GL_SwapWindow(window);

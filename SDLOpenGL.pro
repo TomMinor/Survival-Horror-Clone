@@ -45,7 +45,8 @@ HEADERS+=include/GLFunctions.h \
     include/md2loader.h \
     include/md2mesh.h \
     include/md2.h \
-    include/FileSystem.h
+    include/FileSystem.h \
+    include/Player.h
 
 # add the ngl lib
 # this is where to look for includes

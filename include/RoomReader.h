@@ -54,20 +54,20 @@ private:
 };
 
 /*  ----- Example input file ------
-//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ>
-bbox 0 0 0 1 1 1 0 0 0
-bbox 2 2 0 3 3 1 1 1 0
-bbox 0 0 0 -1 -1 1 0 0 0
-bbox -2 0 3 -3 -1 -1 1 0
+//bbox <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax>
+bbox 0 0 0 1 1 1
+bbox 2 2 0 3 3 1
+bbox 0 0 0 -1 -1 1
+bbox -2 0 3 -3 -1
 
 //camera <pitch> <yaw> <roll> <offsetX> <offsetY> <offsetZ> <fov> <bgID>
 camera 0 0 0 1 1 1 75 1
 
-//bg <bgID> <ForegroundFileName> <BackgroundFileName>
-bg 1 BG_01_fg.tga BG_01_bg.tga
+//bg <bgID> <BackgroundFileName>
+bg 1 BG_01_bg.tga
 
-//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <offsetX> <offsetY> <offsetZ> <bgID>
-trigger 0 0 0 1 1 1 0 0 0 1
+//trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <bgID>
+trigger 0 0 0 1 1 1 1
 
 // spawn x y z
 spawn 0 0 0

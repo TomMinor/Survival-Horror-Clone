@@ -16,9 +16,7 @@ const float* Mesh::m_shadeDots = normalsDot[0];
 Vec3  lightColour;     // Final light colour
 
 Mesh::Mesh(std::string _meshPath, std::string _texturePath, float _scale) :
-  m_scale(_scale),
-  m_loopCount(0),
-  m_skin(_texturePath)
+  m_scale(_scale), m_loopCount(0), m_skin(_texturePath)
 {
   loadMesh(_meshPath);
 

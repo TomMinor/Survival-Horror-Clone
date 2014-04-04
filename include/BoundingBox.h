@@ -8,6 +8,13 @@ namespace Game {
 class BBox
 {
 public:
+  enum Face
+  {
+    LEFT,  BACK,  BOTTOM, // Negative xyz axis
+    RIGHT, FRONT, TOP,    // Positive xyz axis
+    NONE
+  };
+
   // Explicitly pass min/max
   BBox( float _xmin=-1.0f, float _ymin=-1.0f, float _zmin=-1.0f,
         float _xmax= 1.0f, float _ymax= 1.0f, float _zmax= 1.0f) :
@@ -23,8 +30,12 @@ public:
   void move(Vec4 _pos);
   void draw() const;
   Vec4 getCenter() const;
-  Vec4 getCollisionNormal(const BBox& _b);
-  bool checkCollision(const BBox& _b) const;
+
+  Face getTouchingFace(const BBox& _b) const;
+  bool checkIntersection(const BBox& _b) const;
+  bool checkIntersectOrTouch(const BBox& _b) const;
+  bool checkTouch(const BBox& _b) const;
+  Vec4 getIntersectOffset(const BBox& _b) const;
 
   static void toggleDebugDraw() { m_debugDraw ^= 1;}
   friend std::ostream & operator<<(std::ostream &, const BBox &);

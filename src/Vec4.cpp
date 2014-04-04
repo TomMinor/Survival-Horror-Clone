@@ -37,7 +37,7 @@ Vec4 Vec4::operator -(const Vec4 &_rhs) const
 
 Vec4 Vec4::operator -() const
 {
-  return Vec4(-m_x, -m_y, -m_z);
+  return Vec4(-m_x, -m_y, -m_z, 0.0f);
 }
 
 void Vec4::operator -=(const Vec4 &_rhs)
@@ -58,14 +58,12 @@ bool Vec4::operator==(const Vec4 &_rhs) const
 
 std::ostream & operator<<(std::ostream &_output, const Vec4 &_v)
 {
-  return _output << "[" << _v.m_x << "," << _v.m_y << "," << _v.m_z << "," << _v.m_w << "]\n";
+  return _output << "[" << _v.m_x << "," << _v.m_y << ","  << _v.m_z << "," << _v.m_w << "]\n";
 }
-
-
 
 void Vec4::print() const
 {
-  std::cout << "[" << m_x << "," << m_y << "," << m_z << "," << m_w << "]\n";
+  std::cout << *this;
 }
 
 float Vec4::length() const

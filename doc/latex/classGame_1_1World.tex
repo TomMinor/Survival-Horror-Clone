@@ -1,0 +1,75 @@
+\hypertarget{classGame_1_1World}{\section{Game\-:\-:World Class Reference}
+\label{classGame_1_1World}\index{Game\-::\-World@{Game\-::\-World}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classGame_1_1World_a5210effbf160fb0531b706c4292dda9c}{bool {\bfseries init} ()}\label{classGame_1_1World_a5210effbf160fb0531b706c4292dda9c}
+
+\item 
+\hypertarget{classGame_1_1World_a78c7be887b292218049c6c4711712438}{void {\bfseries draw} () const }\label{classGame_1_1World_a78c7be887b292218049c6c4711712438}
+
+\item 
+\hypertarget{classGame_1_1World_a893a6ff86f81183825333505f1739001}{void {\bfseries draw\-Actors} () const }\label{classGame_1_1World_a893a6ff86f81183825333505f1739001}
+
+\item 
+\hypertarget{classGame_1_1World_a5c787886c39d4398856ee9c880961cff}{void {\bfseries update} ()}\label{classGame_1_1World_a5c787886c39d4398856ee9c880961cff}
+
+\item 
+\hypertarget{classGame_1_1World_a6986a87b6a08f3cfb7cc5f018f7cf134}{void {\bfseries change\-Room} (const std\-::string \&\-\_\-next\-Room)}\label{classGame_1_1World_a6986a87b6a08f3cfb7cc5f018f7cf134}
+
+\item 
+\hypertarget{classGame_1_1World_a56892aa3cae6992335ead8572d8bb8be}{void {\bfseries player\-Walk} (float \-\_\-offset)}\label{classGame_1_1World_a56892aa3cae6992335ead8572d8bb8be}
+
+\item 
+\hypertarget{classGame_1_1World_aa8f08737beaf45ece98fbdfb8b136e29}{void {\bfseries player\-Turn} (float \-\_\-deg)}\label{classGame_1_1World_aa8f08737beaf45ece98fbdfb8b136e29}
+
+\item 
+\hypertarget{classGame_1_1World_abc5310d2b97c22e4561911e8f33ca9ed}{void {\bfseries player\-Dash} ()}\label{classGame_1_1World_abc5310d2b97c22e4561911e8f33ca9ed}
+
+\item 
+\hypertarget{classGame_1_1World_a0ff6fd8e680afaae488cbc9644655796}{void {\bfseries damage\-Player} (int \-\_\-val)}\label{classGame_1_1World_a0ff6fd8e680afaae488cbc9644655796}
+
+\item 
+\hypertarget{classGame_1_1World_a60c8627fbc4eec20bb4b2a95484c3431}{void {\bfseries update\-Time} ()}\label{classGame_1_1World_a60c8627fbc4eec20bb4b2a95484c3431}
+
+\item 
+\hypertarget{classGame_1_1World_a8c5b0211b1da2368337e8200ea2c209f}{double {\bfseries get\-Last\-Time} () const }\label{classGame_1_1World_a8c5b0211b1da2368337e8200ea2c209f}
+
+\item 
+\hypertarget{classGame_1_1World_ab48fe9897e0d77a9a3b8425745787651}{double {\bfseries get\-Current\-Time} () const }\label{classGame_1_1World_ab48fe9897e0d77a9a3b8425745787651}
+
+\item 
+\hypertarget{classGame_1_1World_a50267426169e3da66b56e63c51effedf}{double {\bfseries get\-Elapsed\-Time} () const }\label{classGame_1_1World_a50267426169e3da66b56e63c51effedf}
+
+\item 
+bool \hyperlink{classGame_1_1World_a13ba8ac502ce8ff169be2920332cf291}{load\-Room} (const std\-::string \&\-\_\-file\-Name)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classGame_1_1World_a13ba8ac502ce8ff169be2920332cf291}{World\-::load\-Room} Loads the specified '$\ast$.room' into the \hyperlink{classGame_1_1World}{World}'s current active \hyperlink{classGame_1_1Room}{Room} and will attempt to handle common file handling exceptions if loading fails. \hyperlink{classGame_1_1World}{World}'s currently active \hyperlink{classGame_1_1Room}{Room} will not be modified if the room could not be loaded correctly. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classGame_1_1World_a13ba8ac502ce8ff169be2920332cf291}{\index{Game\-::\-World@{Game\-::\-World}!load\-Room@{load\-Room}}
+\index{load\-Room@{load\-Room}!Game::World@{Game\-::\-World}}
+\subsubsection[{load\-Room}]{\setlength{\rightskip}{0pt plus 5cm}bool Game\-::\-World\-::load\-Room (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{\-\_\-file\-Name}
+\end{DoxyParamCaption}
+)}}\label{classGame_1_1World_a13ba8ac502ce8ff169be2920332cf291}
+
+
+\hyperlink{classGame_1_1World_a13ba8ac502ce8ff169be2920332cf291}{World\-::load\-Room} Loads the specified '$\ast$.room' into the \hyperlink{classGame_1_1World}{World}'s current active \hyperlink{classGame_1_1Room}{Room} and will attempt to handle common file handling exceptions if loading fails. \hyperlink{classGame_1_1World}{World}'s currently active \hyperlink{classGame_1_1Room}{Room} will not be modified if the room could not be loaded correctly. 
+
+Exceptions will be automatically echoed to std\-::cerr 
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-file\-Name} & The file containing room data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the \hyperlink{classGame_1_1World}{World}'s current active \hyperlink{classGame_1_1Room}{Room} was updated, false if the file was not loaded for some reason. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/World.\-h\item 
+src/World.\-cpp\end{DoxyCompactItemize}

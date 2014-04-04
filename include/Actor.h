@@ -16,12 +16,12 @@ public:
   void draw() const;
   void update();
   void damage(int _value);
-  void move(float _offset, float _deg=0.0f);
+  void move(float _offset, float _deg);
 
   void forceAnimation(Md2::Animation::Sequence _type) { m_meshBody.setAnimation(_type);
                                                         m_meshHead.setAnimation(_type); }
 
-  void setPosition(const Vec4& _pos) { m_pos = _pos; }
+  void setPosition(const Vec4& _pos);
 private:
   void onAttack();
   void onDamage();

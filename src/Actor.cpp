@@ -12,10 +12,6 @@ Actor::Actor(const Vec4 & _scale, const Vec4 & _pos )
     m_meshHead("assets/actor/mach-head.md2", "assets/actor/mach-head.jpg", 0.05f),
     m_state(IDLE), m_previousState(IDLE),
     m_bbox(_pos, _scale)
-//    m_bbox( _pos.m_x, _pos.m_y, _pos.m_z,
-//            _pos.m_x + _scale.m_x,
-//            _pos.m_y + _scale.m_y,
-//            _pos.m_z + _scale.m_z)
 {
   m_meshBody.setAnimation(Md2::Animation::STAND);
   m_meshHead.setAnimation(Md2::Animation::STAND);
@@ -49,6 +45,24 @@ void Actor::move(float _offset, float _deg)
 
     m_yaw += _deg;
 
+    std::cout << m_yaw << "\n";
+    // Z
+//    if(m_yaw < 0) { m_yaw = 0; }
+//    if(m_yaw > 180) { m_yaw = 180; }
+
+    // -Z
+//    if(m_yaw > 0) { m_yaw = 0; }
+//    if(m_yaw < -180) { m_yaw = -180; }
+
+    // X
+//    if(m_yaw < 90) { m_yaw = 90; }
+//    if(m_yaw > 270) { m_yaw = 270; }
+
+    // -X
+//    if(m_yaw > 90) { m_yaw = 90; }
+//    if(m_yaw < 270) { m_yaw = 270; }
+
+
     // Only allow rotation while preparing to attack
     if(m_state != PREPARE_ATTACK)
     {
@@ -62,6 +76,12 @@ void Actor::move(float _offset, float _deg)
       m_bbox.move(Vec4(offsetX, 0, offsetZ));
     }
   }
+}
+
+void Actor::setPosition(const Vec4& _pos)
+{
+  m_bbox.move(_pos-m_pos);
+  m_pos = _pos;
 }
 
 void Actor::update()
