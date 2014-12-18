@@ -12,8 +12,8 @@ camera 343.46164727 34.6 -360.0 16.94973795 7.12356293481 15.8569190324 75 2
 camera 165.86164727 35.4119663154 -180.0 18.0784447017 6.21444551698 -3.26673637968 75 3
 
 //bg <bgID> <BackgroundFileName>
-bg 1 BG_02a.tif
-bg 2 BG_02b.tif
+bg 1 BG_02.tif
+bg 2 BG_02.tif
 bg 3 BG_02c.tif
 
 //trigger <Xmin> <Ymin> <Zmin> <Xmax> <Ymax> <Zmax> <bgID>

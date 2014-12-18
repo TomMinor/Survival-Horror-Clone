@@ -45,7 +45,7 @@ int main()
   // Use a 4:3 aspect ratio to match the backgrounds
   SDL_Rect windowBounds = {0, 0, 800, 600};
 
-  SDL_Window *window=SDL_CreateWindow("SDLGL",
+  SDL_Window *window=SDL_CreateWindow("Survival Horror Clone",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
                                       windowBounds.w,
@@ -122,22 +122,21 @@ int main()
   Vec4 cameraPos(position);
   Vec4 cameraRot(rotation);
 
-//  Game::Camera tits(  Vec4(position.m_x, position.m_y, position.m_z),
-//                      Vec4(rotation.m_y, rotation.m_x, rotation.m_z),
-//                      90.0f);
+  Game::Camera tmpCamera(  Vec4(position.m_x, position.m_y, position.m_z),
+                      Vec4(rotation.m_y, rotation.m_x, rotation.m_z),
+                      90.0f);
 
 //  Game::Actor test(Vec4(1.0f, 1.0f, 1.0f), Vec4());
 //  test.forceAnimation(Md2::Animation::DEATH_IDLE);
 //  float time = 0.0f;
 //  Vec4 cameraPos;
 
-  int i = 0;
+  int i = 2;
   std::string rooms[] = { "ROOM_01.room",
                           "ROOM_02.room",
-                          "ROOM_03.room",
-                          "ROOM_Example_ErrorFile"
+                          "ROOM_03.room"
                         };
-
+  world->loadRoom(rooms[(i)]);
 
 
   //float tmp[] = { 0.6962864869302063, 0.6851291113894016, 0.21397015877257444, 0.0, -0.3256486830215435, 0.5672002014874894, -0.7564633941433556, 0.0, -0.6396390101961622, 0.4570361387891777, 0.6180452285035081, 0.0, 10.019665073440814, 7.789568673257114, 9.253249521312483, 1.0 };
@@ -172,15 +171,19 @@ int main()
             case SDLK_b : Game::BBox::toggleDebugDraw(); break;
             case SDLK_PAGEUP :
             {
-              i++;
-              i%=4;
+              i++; i%=4;
+
               world->loadRoom(rooms[i]);
               break;
             }
             case SDLK_PAGEDOWN :
             {
-              i--;
-              if(i == -1) i+=sizeof(rooms)/sizeof(rooms[0]);
+              if(i > 0)
+              {
+                i--; i%=4;
+              }
+
+              //if(i == -1) i+=sizeof(rooms)/sizeof(rooms[0]);
               world->loadRoom(rooms[(i)]);
               break;
             }
@@ -245,13 +248,13 @@ int main()
 //        }
 //      glPopMatrix();
 
-//      tits.setTransform(cameraPos, cameraRot);
-      std::cout << cameraPos << "\n";
-      std::cout << cameraRot << "\n";
-//      tits.setView();
+      //tmpCamera.setTransform(cameraPos, cameraRot);
+//      std::cout << cameraPos << "\n";
+//      std::cout << cameraRot << "\n";
+      //tmpCamera.setView();
       world->update();
       world->draw();
-//      tits.setView();
+//      tmpCamera.setView();
 
       // swap the buffers
       SDL_GL_SwapWindow(window);

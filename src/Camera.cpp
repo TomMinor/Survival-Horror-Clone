@@ -12,7 +12,7 @@ namespace Game {
 Camera::Camera(const Vec4 &_pos, const Vec4 &_rotation, float _fov)
   : m_viewMatrix( Mat4() ), m_fov(_fov)
   {
-    std::cout << _pos << _rotation << "\n";
+    //std::cout << _pos << _rotation << "\n";
     setTransform(_pos, _rotation);
   }
 

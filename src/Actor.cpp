@@ -45,7 +45,7 @@ void Actor::move(float _offset, float _deg)
 
     m_yaw += _deg;
 
-    std::cout << m_yaw << "\n";
+    //std::cout << m_yaw << "\n";
     // Z
 //    if(m_yaw < 0) { m_yaw = 0; }
 //    if(m_yaw > 180) { m_yaw = 180; }

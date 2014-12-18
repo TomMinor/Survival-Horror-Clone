@@ -25,6 +25,7 @@ public:
     m_backgrounds(_backgrounds), m_exits(_exits)
   {
     m_backgrounds[m_currentBG].loadBackgroundTexture();
+    m_backgrounds[m_currentBG].setCameraView();
   }
 
   bool checkWallCollide(const BBox& _actor);
