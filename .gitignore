@@ -24,9 +24,6 @@ SDLOpenGL
 *.out
 *.app
 
-*.mtl
-*.jpg
-
 # C++ objects and libs
 
 *.slo
