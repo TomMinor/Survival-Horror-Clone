@@ -1,6 +1,8 @@
 #include "md2mesh.h"
 #include "md2loader.h"
 
+#include <assert.h>
+
 namespace Md2
 {
 
@@ -135,6 +137,11 @@ void Mesh::interp(Vec3* _frameVtx)
 
 void Mesh::renderFrame() const
 {
+  assert(m_Vertices != NULL);
+  assert(m_keyframeVerts != NULL);
+  assert(m_GLcmds != NULL);
+  assert(m_lightNormals != NULL);
+
   int*  triCmds = m_GLcmds;
 
   // Reverse face orientation to counter glCmd's clockwise winding
@@ -151,6 +158,7 @@ void Mesh::renderFrame() const
   // Draw triangles
   while(int i = *(triCmds++))
   {
+    //@todo Is this needed??
     if(i < 0)
     {
       glBegin(GL_TRIANGLE_FAN);

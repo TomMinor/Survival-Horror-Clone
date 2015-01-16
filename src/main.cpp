@@ -55,7 +55,7 @@ int main()
                                       windowBounds.w,
                                       windowBounds.h,
                                       SDL_WINDOW_OPENGL
-                                     );
+                                      );
   if (!window)
   {
     SDLErrorExit("Unable to create window");
@@ -97,12 +97,12 @@ int main()
 
   SDL_GL_SwapWindow(window);
 
-//  glEnable(GL_COLOR_MATERIAL);
-//  glEnable(GL_DEPTH_TEST);
-//  glEnable(GL_NORMALIZE);
-//  glEnable(GL_LIGHTING);
-//  glEnable(GL_LIGHT0);
-//  glColor3f(1,0,1);
+  glEnable(GL_COLOR_MATERIAL);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_NORMALIZE);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glColor3f(1,0,1);
 
   /*------------------Initialise World------------------*/
   /*----------------------------------------------------*/
@@ -134,38 +134,51 @@ int main()
 
   while(!quit)
   {
-      while ( SDL_PollEvent(&event) )
+    while ( SDL_PollEvent(&event) )
+    {
+      switch (event.type)
       {
-        switch (event.type)
+        // this is the window x being clicked.
+        case SDL_QUIT:
         {
-          // this is the window x being clicked.
-          case SDL_QUIT:
-          {
-            quit = true; break;
-          }
+          quit = true; break;
+        }
 
           // now we look for a keydown event
-          case SDL_KEYDOWN:
+        case SDL_KEYDOWN:
+        {
+          switch( event.key.keysym.sym )
           {
-            switch( event.key.keysym.sym )
+            case SDLK_ESCAPE:
             {
-              case SDLK_ESCAPE:
-              {
-                quit = true; break;
-              }
-
-              case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
-              case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
+              quit = true; break;
             }
-          } /* End of keydown */
-          default: break;
-        }/* End event switch */
-      } /* End event polling */
 
-      draw();
+            case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
+            case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
+          }
+        } /* End of keydown */
+        default: break;
+      }/* End event switch */
+    } /* End event polling */
+
+    if( world->getElapsedTime() >= worldUpdateDelay)
+    {
+      if(keystate[SDL_SCANCODE_UP])           { world->playerWalk(0.1);    }
+      if(keystate[SDL_SCANCODE_DOWN])         { world->playerWalk(-0.1);   }
+      if(keystate[SDL_SCANCODE_RIGHT])        { world->playerTurn(-4);     }
+      if(keystate[SDL_SCANCODE_LEFT])         { world->playerTurn(4);      }
+      if(keystate[SDL_SCANCODE_LSHIFT])       { world->playerDash();       }
+
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+//      draw();
+      world->update();
+      world->draw();
 
       // swap the buffers
       SDL_GL_SwapWindow(window);
+    }
   }
 
   // now tidy up and exit SDL
@@ -175,12 +188,12 @@ int main()
 
 SDL_GLContext createOpenGLContext(SDL_Window *window)
 {
-  #ifdef DARWIN
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-  #endif
+#ifdef DARWIN
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+#endif
 
   // set multi sampling else we get really bad graphics that alias
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -274,8 +287,8 @@ bool createShaders()
   GLfloat vtxData[] =
   {
     -0.5f, -0.5f,
-     0.5f, -0.5f,
-     0.5f,  0.5f,
+    0.5f, -0.5f,
+    0.5f,  0.5f,
     -0.5f,  0.5f
   };
 
