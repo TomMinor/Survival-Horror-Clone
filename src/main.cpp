@@ -7,6 +7,8 @@
 #include <iostream>
 
 #include "World.h"
+#include "Mat4.h"
+#include "Vec4.h"
 
 /*@todo
  * - Convert to modern GL
@@ -126,6 +128,20 @@ int main()
   /*------------------Game Loop--------------------*/
   /*-----------------------------------------------*/
 
+  float mat[] = {0.8435023682382861, 0.2960261962932594, 0.44818773508937915, 0.0, -0.1364158338009386, 0.9251267262413614, -0.35430391005792733, 0.0, 0.5195136909310452, -0.23771628362837458, -0.8207292448993861, 0.0, 0.0, 0.0, 0.0, 1.0};
+
+  // This may be the fix I needed
+  Mat4 invert;
+  invert.identity();
+  float invertZ[] = { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, -0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.f};
+  memcpy(invert.m_openGL, invertZ, sizeof(float)*16);
+
+  Mat4 cameraTransform;
+  cameraTransform.identity();
+  memcpy(cameraTransform.m_openGL, mat, sizeof(float)*16);
+
+  cameraTransform *= invert;
+
   // Input keys array
   const Uint8* keystate = SDL_GetKeyboardState(0);
 
@@ -164,6 +180,8 @@ int main()
 
     if( world->getElapsedTime() >= worldUpdateDelay)
     {
+      //@todo Player shouldn't be part of the world class, or we should register the player with World and modify them outside
+      /* React to input */
       if(keystate[SDL_SCANCODE_UP])           { world->playerWalk(0.1);    }
       if(keystate[SDL_SCANCODE_DOWN])         { world->playerWalk(-0.1);   }
       if(keystate[SDL_SCANCODE_RIGHT])        { world->playerTurn(-4);     }
@@ -174,6 +192,7 @@ int main()
 
 //      draw();
       world->update();
+      cameraTransform.loadModelView();
       world->draw();
 
       // swap the buffers
