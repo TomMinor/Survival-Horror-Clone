@@ -7,6 +7,7 @@ CONFIG-=app_bundle
 DESTDIR=./
 OBJECTS_DIR=obj
 SOURCES=src/main.cpp \
+        src/oldmain.cpp \
         src/GLFunctions.cpp \
         src/Vec4.cpp \
         src/Mat4.cpp \
