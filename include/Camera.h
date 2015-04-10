@@ -4,8 +4,6 @@
 #include "Mat4.h"
 #include "Vec4.h"
 
-namespace Game {
-
 class Camera
 {
 public:
@@ -25,7 +23,5 @@ private:
   Mat4 m_viewMatrix;
   float m_fov;
 };
-
-}
 
 #endif // CAMERA_H

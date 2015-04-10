@@ -5,8 +5,6 @@
 #include "Room.h"
 #include "Vec4.h"
 
-namespace Game {
-
 class Room;
 
 class Door
@@ -28,7 +26,5 @@ private:
 
   std::string m_nextRoom; // The name of the file to load when this door is triggered
 };
-
-}
 
 #endif // DOOR_H

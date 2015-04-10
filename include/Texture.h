@@ -6,8 +6,6 @@
 #include <SDL_image.h>
 
 
-namespace Game {
-
 class Texture
 {
 public:
@@ -30,7 +28,5 @@ private:
   int m_texHeight;
   int m_texWidth;
 };
-
-}
 
 #endif // Texture_H

@@ -1,8 +1,6 @@
 #include "Room.h"
 #include <iterator>
 
-namespace Game {
-
 bool Room::checkWallCollide(const BBox& _actor)
 {
   for(std::vector<BBox>::iterator bound = m_collisionBoxes.begin();
@@ -74,6 +72,4 @@ void Room::updateCurrentBackground(const BBox& _actor)
       return;
     }
   }
-}
-
 }

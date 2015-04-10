@@ -7,7 +7,6 @@
 #include "Camera.h"
 #include "FileSystem.h"
 
-namespace Game {
 
 class Background
 {
@@ -40,7 +39,5 @@ private:
 
   Vec4 m_triggerColour;
 };
-
-}
 
 #endif // BACKGROUND_H

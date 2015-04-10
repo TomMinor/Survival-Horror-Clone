@@ -23,7 +23,10 @@ SOURCES=src/main.cpp \
     src/3dUtilities.cpp \
     src/md2loader.cpp \
     src/md2mesh.cpp \
-    src/FileSystem.cpp
+    src/FileSystem.cpp \
+    src/Inventory.cpp \
+    src/Item.cpp \
+    src/ItemFactory.cpp
 
 
 HEADERS+=include/GLFunctions.h \
@@ -46,11 +49,16 @@ HEADERS+=include/GLFunctions.h \
     include/md2mesh.h \
     include/md2.h \
     include/FileSystem.h \
-    include/Player.h
+    include/Player.h \
+    include/Inventory.h \
+    include/Item.h \
+    include/ItemFactory.h
 
 # add the ngl lib
 # this is where to look for includes
 INCLUDEPATH +=include
+
+QMAKE_CXXFLAGS += -std=c++11
 
 QMAKE_CXXFLAGS+= -msse -msse2 -msse3
 macx:QMAKE_CXXFLAGS+= -arch x86_64

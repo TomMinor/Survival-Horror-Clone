@@ -14,8 +14,6 @@
 #include "Vec4.h"
 #include "stringUtilities.h"
 
-namespace Game {
-
 class RoomReader
 {
 public:
@@ -76,7 +74,5 @@ spawn 0 0 0
 exit 0.5 1 0 ROOM_02.room
 
 */
-
-}
 
 #endif // ROOMREADER_H

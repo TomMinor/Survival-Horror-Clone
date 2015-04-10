@@ -11,6 +11,9 @@
 #include "Camera.h"
 #include "Actor.h"
 
+#include "Item.h"
+#include "ItemFactory.h"
+
 /* TODO
  * - Add copy constructors to all classes with pointers
  * - Ensure all pointers are freed in the destructor
@@ -21,7 +24,6 @@
  * - Make some example rooms, no need to worry about converting from mayas coordinate system
  * if there is no time, just blag it manually
  */
-
 
 /// @brief function to quit SDL with error message
 /// @param[in] _msg the error message to send
@@ -91,13 +93,13 @@ int main()
 
 
   const uint worldUpdateDelay = 30;
-  Game::World* world;
+  World* world;
 
   // Instantiate the world and try to load the first room,
   // if this room can't be loaded consider it a critical error and exit
   try
   {
-    world = new Game::World;
+    world = new World;
   }
   catch(std::runtime_error &msg)
   {
@@ -115,6 +117,13 @@ int main()
 //  Vec4 position(6.91449,-4.21061,-2.78206);
 //  Vec4 rotation(199,10,-2,1);
 
+  std::vector<BaseItem*> items;
+  items.push_back( registerHealthItem("First Aid Spray", "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
+  items.push_back( registerHealthItem("Green Herb",      "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
+  items.push_back( registerHealthItem("Red Herb",        "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
+  items.push_back( registerHealthItem("Blue Herb", "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
+
+
 
   Vec4 position;
   Vec4 rotation;
@@ -122,7 +131,7 @@ int main()
   Vec4 cameraPos(position);
   Vec4 cameraRot(rotation);
 
-  Game::Camera tmpCamera(  Vec4(position.m_x, position.m_y, position.m_z),
+  Camera tmpCamera(  Vec4(position.m_x, position.m_y, position.m_z),
                       Vec4(rotation.m_y, rotation.m_x, rotation.m_z),
                       90.0f);
 
@@ -168,7 +177,7 @@ int main()
             case SDLK_ESCAPE :  quit = true; break;
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
-            case SDLK_b : Game::BBox::toggleDebugDraw(); break;
+            case SDLK_b : BBox::toggleDebugDraw(); break;
             case SDLK_PAGEUP :
             {
               i++; i%=4;
@@ -223,8 +232,8 @@ int main()
 
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      Game::BBox a(Vec4(0,0,0), Vec4(1.0f, 1.0f, 1.0f));
-      Game::BBox b(Vec4(0,1.0f,0), Vec4(2.0f, 2.0f, 1.0f));
+      BBox a(Vec4(0,0,0), Vec4(1.0f, 1.0f, 1.0f));
+      BBox b(Vec4(0,1.0f,0), Vec4(2.0f, 2.0f, 1.0f));
 
 //      glPushMatrix();
 //        //glTranslatef(2.0f, 0.0f, -2.0f);

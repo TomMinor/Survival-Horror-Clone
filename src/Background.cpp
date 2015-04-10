@@ -4,8 +4,6 @@
 #include "GLFunctions.h"
 
 
-namespace Game {
-
 bool Background::touchesTrigger(const BBox& _actor)
 {
   return m_triggerVolume.checkIntersectOrTouch(_actor);
@@ -93,6 +91,4 @@ void Background::drawTrigger() const
 void Background::setCameraView() const
 {
   m_cameraView.setView();
-}
-
 }

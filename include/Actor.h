@@ -5,8 +5,6 @@
 #include "BoundingBox.h"
 #include "md2mesh.h"
 
-namespace Game {
-
 class Actor
 {
 public:
@@ -52,5 +50,4 @@ private:
 
 };
 
-}
 #endif // PLAYER_H

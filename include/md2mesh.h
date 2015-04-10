@@ -44,6 +44,7 @@ class Mesh
 {
 public:
   Mesh(std::string _meshPath, std::string _texturePath, float _scale=1.0f);
+  Mesh(const Mesh& _other);
   ~Mesh();
 
   void loadMesh(std::string _filename);
@@ -80,7 +81,7 @@ private:
   animState  m_anim;
   int        m_loopCount;
 
-  Game::Texture m_skin;
+  Texture m_skin;
 };
 
 }

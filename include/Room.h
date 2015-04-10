@@ -5,8 +5,6 @@
 #include "BoundingBox.h"
 #include "Door.h"
 
-namespace Game {
-
 // Forward declaration of Door
 class Door;
 
@@ -50,8 +48,5 @@ private:
   std::vector<Background> m_backgrounds;
   std::vector<Door> m_exits;
 };
-
-
-}
 
 #endif // ROOM_H

@@ -4,8 +4,6 @@
 #include "3dUtilities.h"
 #include <iostream>
 
-namespace Game {
-
 Actor::Actor(const Vec4 & _scale, const Vec4 & _pos )
   : m_time(0), m_pos(_pos), m_scale(_scale), m_yaw(0), m_health(100),
     m_meshBody("assets/actor/mach-body.md2", "assets/actor/soldier.jpg", 0.05f),
@@ -146,7 +144,4 @@ void Actor::damage(int _value)
   {
     m_state = DYING;
   }
-}
-
-
 }

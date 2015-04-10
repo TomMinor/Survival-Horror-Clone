@@ -7,7 +7,6 @@
 
 #include <cstring>
 
-namespace Game {
 
 Camera::Camera(const Vec4 &_pos, const Vec4 &_rotation, float _fov)
   : m_viewMatrix( Mat4() ), m_fov(_fov)
@@ -59,6 +58,4 @@ void Camera::draw() const
       util::drawWorldAxis(1.25);
     glPopMatrix();
   glPopMatrix();
-}
-
 }

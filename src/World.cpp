@@ -9,8 +9,6 @@
 #include "Vec4.h"
 #include "RoomReader.h"
 
-namespace Game {
-
 World::World(const std::string& _firstRoom) :
   m_currentRoom(NULL), m_lastTime(0),
   m_player( Vec4(1.0f, 2.0f, 1.0f), Vec4() ), m_playerOffset(0), m_playerYaw(0)
@@ -119,6 +117,4 @@ bool World::loadRoom(const std::string& _fileName)
   }
 
   return true;
-}
-
 }

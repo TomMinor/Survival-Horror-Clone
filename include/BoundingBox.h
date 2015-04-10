@@ -3,8 +3,6 @@
 
 #include "Vec4.h"
 
-namespace Game {
-
 class BBox
 {
 public:
@@ -48,5 +46,4 @@ private:
 
 std::ostream & operator<<(std::ostream &_output, const BBox &_b);
 
-}
 #endif // BOUNDINGBOX_H

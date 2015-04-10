@@ -1,6 +1,5 @@
 #include "Door.h"
 
-namespace Game {
 
 void Door::displayLoadingScreen()
 {
@@ -15,6 +14,4 @@ void Door::drawVolume() const
 bool Door::canTrigger(const BBox& _bounds) const
 {
   return m_trigger.checkIntersection(_bounds);
-}
-
 }

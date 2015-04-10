@@ -1,0 +1,2 @@
+RELOAD 	"Shotgun" 		"Shotgun_Shells"
+RELOAD 	"9mm_Handgun" 	"9mm_Bullets"

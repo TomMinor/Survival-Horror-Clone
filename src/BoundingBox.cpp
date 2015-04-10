@@ -5,8 +5,6 @@
 
 #include "3dUtilities.h"
 
-namespace Game {
-
 bool BBox::m_debugDraw = true;
 
 /**
@@ -133,6 +131,3 @@ std::ostream & operator<<(std::ostream &_output, const BBox &_b)
 
   return _output;
 }
-
-}
-

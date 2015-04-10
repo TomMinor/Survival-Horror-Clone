@@ -3,9 +3,6 @@
 
 #include <iostream>
 
-namespace Game
-{
-
 class FileSystem
 {
 public:
@@ -26,7 +23,5 @@ private:
   // Hard-coded resource files
   static const std::string m_fallbackTexture;
 };
-
-}
 
 #endif // FILESYSTEM_H

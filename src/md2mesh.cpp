@@ -24,12 +24,41 @@ Mesh::Mesh(std::string _meshPath, std::string _texturePath, float _scale) :
   setAnimation(Animation::STAND);
 }
 
+Mesh::Mesh(const Mesh& _other)
+{
+    m_totalFrames = _other.m_totalFrames;
+    m_totalVertices = _other.m_totalVertices;
+    m_totalGLcmds = _other.m_totalGLcmds;
+
+    m_scale = _other.m_scale;
+    m_anim = _other.m_anim;
+    m_loopCount = _other.m_loopCount;
+
+    m_skin = _other.m_skin;
+
+    m_Vertices = new Vec3[m_totalFrames * m_totalVertices];
+    memcpy(&m_Vertices[0], &_other.m_Vertices[0], m_totalFrames * m_totalVertices * sizeof(Vec3));
+
+    m_lightNormals = new int[m_totalFrames * m_totalVertices];
+    memcpy(m_lightNormals, _other.m_lightNormals, m_totalFrames * m_totalVertices * sizeof(int));
+
+    m_keyframeVerts = nullptr;/*new Vec3[m_totalVertices];
+    memcpy(m_keyframeVerts, _other.m_keyframeVerts, m_totalVertices * sizeof(Vec3));*/
+
+    m_GLcmds = new int[m_totalGLcmds];
+    memcpy(m_GLcmds, _other.m_GLcmds, m_totalGLcmds * sizeof(int));
+}
+
 Mesh::~Mesh()
 {
   delete[] m_Vertices;
-  delete[] m_keyframeVerts;
-  delete[] m_GLcmds;
-  delete[] m_lightNormals;
+  m_Vertices = nullptr;
+  //delete[] m_keyframeVerts;
+  m_keyframeVerts = nullptr;
+  delete [] m_GLcmds;
+  m_GLcmds = nullptr;
+  delete [] m_lightNormals;
+  m_lightNormals = nullptr;
 }
 
 void Mesh::loadMesh(std::string _filename)
@@ -83,7 +112,6 @@ void Mesh::animate(float _time)
 
   if(m_anim.currentTime - m_anim.lastTime > (1.0f/m_anim.currentAnim.fps))
   {
-
     m_anim.currentFrame = m_anim.nextFrame++;
 
     // Loop the animation

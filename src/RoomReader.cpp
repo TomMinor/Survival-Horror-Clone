@@ -4,8 +4,6 @@
 #include <sstream>
 #include <iostream>
 
-namespace Game {
-
 // Expected amount of tokens for respective line identifier - 1(identifier) + parameters
 const uint RoomReader::c_identifierSize[] = { 1+ 7, //  TRIGGER
                                               1+ 6,  //  BBOX
@@ -13,7 +11,7 @@ const uint RoomReader::c_identifierSize[] = { 1+ 7, //  TRIGGER
                                               1+ 4,  //  EXIT
                                               1+ 2,  //  BACKGROUND
                                               1+ 3,  //  SPAWN
-                                              ~0    //  ERROR
+                                              0      //  ERROR
                                             };
 
 RoomReader::RoomReader(const std::string& _fileName)
@@ -277,6 +275,3 @@ void RoomReader::setSpawn(const std::vector<std::string>& i_tokens)
 
   m_spawnPosition = Vec4(coord[0], coord[1], coord[2]);
 }
-
-}
-

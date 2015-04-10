@@ -1,7 +1,6 @@
 #include "FileSystem.h"
 
-namespace Game
-{
+
 // Root folder for assets
 const std::string FileSystem::m_assetPath = "assets/";
 
@@ -20,6 +19,4 @@ std::string FileSystem::roomPath(const std::string& _fileName)
 std::string FileSystem::actorPath(const std::string& _fileName)
 {
   return (m_assetPath + m_actorPath + _fileName);
-}
-
 }

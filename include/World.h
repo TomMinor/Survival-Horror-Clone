@@ -7,8 +7,6 @@
 #include "FileSystem.h"
 
 
-namespace Game {
-
 class World
 {
 private:
@@ -47,9 +45,6 @@ public:
 
 private:
   //bool loadRoom(const std::string& _fileName);
-
-
 };
 
-}
 #endif // WORLD_H

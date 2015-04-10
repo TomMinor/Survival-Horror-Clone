@@ -3,9 +3,6 @@
 
 #include "Actor.h"
 
-namespace Game
-{
-
 class Player
 {
 public:
@@ -14,8 +11,5 @@ public:
 private:
   Actor m_actor;
 };
-
-}
-
 
 #endif // PLAYER_H
