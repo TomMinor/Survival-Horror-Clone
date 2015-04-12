@@ -8,6 +8,7 @@ class FileSystem
 public:
   static std::string roomPath(const std::string& _fileName);
   static std::string actorPath(const std::string& _fileName);
+  static std::string itemPath(const std::string& _fileName);
 
   static std::string assetFolder()     { return m_assetPath;   }
 
@@ -19,6 +20,7 @@ private:
   // Child folders
   static const std::string m_roomPath;
   static const std::string m_actorPath;
+  static const std::string m_itemPath;
 
   // Hard-coded resource files
   static const std::string m_fallbackTexture;

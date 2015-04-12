@@ -13,6 +13,8 @@
 
 #include "Item.h"
 #include "ItemFactory.h"
+#include "ItemParser.h"
+#include "stringUtilities.h"
 
 /* TODO
  * - Add copy constructors to all classes with pointers
@@ -117,13 +119,27 @@ int main()
 //  Vec4 position(6.91449,-4.21061,-2.78206);
 //  Vec4 rotation(199,10,-2,1);
 
-  std::vector<BaseItem*> items;
-  items.push_back( registerHealthItem("First Aid Spray", "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
-  items.push_back( registerHealthItem("Green Herb",      "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
-  items.push_back( registerHealthItem("Red Herb",        "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
-  items.push_back( registerHealthItem("Blue Herb", "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80) );
+//  registerHealthItem("First Aid Spray", "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
+//  registerHealthItem("Green Herb",      "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
+//  registerHealthItem("Red Herb",        "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
+//  registerHealthItem("Blue Herb",       "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
 
+  ItemArray items;
 
+  try
+  {
+      parseItemManifest("assets/items/items_manifest.txt", items);
+  }
+  catch(std::exception& e)
+  {
+      std::cerr << "Item Manifest Error : " << e.what() << std::endl;
+  }
+
+  for(auto item : items)
+  {
+      item->print();
+      std::cout << std::endl;
+  }
 
   Vec4 position;
   Vec4 rotation;

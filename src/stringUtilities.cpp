@@ -1,9 +1,10 @@
 #include "stringUtilities.h"
 #include <sstream>
+#include <algorithm>
 
 namespace util {
 
-void tokenize(const std::string& _str,std::vector<std::string>& _tokens,const std::string& _delimiters)
+void tokenize(const std::string& _str, TokenStream &_tokens, const std::string& _delimiters)
 {
   // Skip delimiters at beginning.
   std::string::size_type lastPos = _str.find_first_not_of(_delimiters, 0);
@@ -13,7 +14,14 @@ void tokenize(const std::string& _str,std::vector<std::string>& _tokens,const st
   while (std::string::npos != pos || std::string::npos != lastPos)
   {
     // Found a token, add it to the vector.
-    _tokens.push_back(_str.substr(lastPos, pos - lastPos));
+    std::string tmp = _str.substr(lastPos, pos - lastPos);
+
+    // Skip empty strings
+    if(tmp.find_first_not_of(" \t\n\v\f\r") != std::string::npos)
+    {
+        _tokens.push_back(tmp);
+    }
+
     // Skip delimiters.  Note the "not_of"
     lastPos = _str.find_first_not_of(_delimiters, pos);
     // Find next "non-delimiter"
@@ -41,4 +49,20 @@ float tokenToFloat(const std::string& _token)
   return output;
 }
 
+void removeEmptyTokens(TokenStream& _tokens)
+{
+    std::vector<std::string>::iterator it = remove_if(_tokens.begin(), _tokens.end(),mem_fun_ref(&std::string::empty));
+    // erase the removed elements
+    _tokens.erase(it, _tokens.end());
 }
+
+void stripCharacters(std::string& _string, const std::string& _stripChars)
+{
+    for(auto charToRemove : _stripChars)
+    {
+        _string.erase(std::remove(_string.begin(), _string.end(), charToRemove), _string.end());
+    }
+}
+
+}
+

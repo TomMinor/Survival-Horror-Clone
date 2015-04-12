@@ -5,6 +5,7 @@
 
 #include "include/Texture.h"
 #include "include/md2mesh.h"
+#include "FileSystem.h"
 
 #include <unordered_map>
 
@@ -12,6 +13,8 @@
 /// Factory class for all items read from file
 /// Read items from file
 /// Read recipes from file
+
+//---------------------------------------- Shared Item Data---------------------------------------
 
 /**
  * @brief The SharedItemData struct is intended to represent the unique shareable data of an ITEM_H
@@ -32,8 +35,8 @@ struct SharedItemData
             const std::string& _iconPath,
             bool _isStackable
             )
-        : m_mesh(new Md2::Mesh(_meshPath, _texturePath)),
-          m_icon(new Texture(_iconPath)),
+        : m_mesh(new Md2::Mesh( FileSystem::itemPath(_name) + '/' + _meshPath, FileSystem::itemPath(_name) + '/' + _texturePath)),
+          m_icon(new Texture( FileSystem::itemPath(_name) + '/' + _iconPath)),
           m_name(_name),
           m_description(_description),
           m_isStackable(_isStackable)
@@ -55,31 +58,42 @@ struct SharedItemData
     }
 };
 
+std::ostream & operator<<(std::ostream &_output, const SharedItemData &_v);
+
+//---------------------------------------- Base Item Item ---------------------------------------
 
 class BaseItem
 {
     friend class Inventory;
 
 public:
-    BaseItem( const SharedItemData& _itemData )
+    BaseItem( const SharedItemData* _itemData )
         : m_itemData(_itemData)
     {;}
+
+    virtual ~BaseItem()
+    {
+        delete m_itemData;
+    }
 
     virtual void use() = 0;
 
     virtual bool useWith(const BaseItem* _item) = 0;
 
-    inline std::string itemName() const { return m_itemData.m_name; }
+    inline std::string itemName() const { return m_itemData->m_name; }
 
-private:
-    const SharedItemData& m_itemData;
+    virtual void print() const;
+
+protected:
+    const SharedItemData* m_itemData;
 };
 
+//---------------------------------------- Health Item ---------------------------------------
 
 class HealthItem : public BaseItem
 {
 public:
-    HealthItem( unsigned int _healthPoints, const SharedItemData& _itemData )
+    HealthItem( unsigned int _healthPoints, const SharedItemData* _itemData )
         : BaseItem(_itemData), m_healthPoints(_healthPoints)
     {;}
 
@@ -87,15 +101,18 @@ public:
 
     virtual bool useWith(const BaseItem* _item);
 
+    virtual void print() const;
+
 private:
     unsigned int m_healthPoints;
 };
 
+//---------------------------------------- Weapon Item ---------------------------------------
 
 class WeaponItem : public BaseItem
 {
 public:
-    WeaponItem( unsigned int _clipSize, const SharedItemData& _itemData )
+    WeaponItem( unsigned int _clipSize, const SharedItemData* _itemData )
         : BaseItem(_itemData), m_clipSize(_clipSize), m_ammoRemaining(_clipSize)
     {;}
 
@@ -103,11 +120,14 @@ public:
 
     virtual bool useWith(const BaseItem* _item);
 
+    virtual void print() const;
+
 private:
     unsigned int m_clipSize;
     unsigned int m_ammoRemaining;
 };
 
+//---------------------------------------- Ammo Item ---------------------------------------
 
 class AmmoItem : public BaseItem
 {
@@ -119,10 +139,12 @@ public:
       EXPLOSIVE     = 0x02,
       INCENDIARY    = 0x04,
       ACID          = 0x08,
-      ARROW         = 0x10
+      ARROW         = 0x10,
     };
 
-    AmmoItem( unsigned int _damage, AmmoFlags _flags, const SharedItemData& _itemData )
+    static const std::unordered_map<std::string, AmmoItem::AmmoFlags> StringToAmmoFlags;
+
+    AmmoItem( unsigned int _damage, int _flags, const SharedItemData* _itemData )
         : BaseItem(_itemData), m_damage(_damage), m_flags(_flags)
     {;}
 
@@ -130,16 +152,19 @@ public:
 
     virtual bool useWith(const BaseItem* _item);
 
+    virtual void print() const;
+
 private:
     unsigned int m_damage;
-    AmmoFlags m_flags;
+    int m_flags;
 };
 
+//---------------------------------------- Puzzle Item ---------------------------------------
 
 class PuzzleItem : public BaseItem
 {
 public:
-    PuzzleItem( unsigned int _uses, const SharedItemData& _itemData )
+    PuzzleItem( unsigned int _uses, const SharedItemData* _itemData )
         : BaseItem(_itemData), m_usesRemaining(_uses)
     {;}
 
@@ -147,8 +172,10 @@ public:
 
     virtual bool useWith(const BaseItem* _item);
 
+    virtual void print() const;
+
 private:
-    unsigned int m_usesRemaining;
+    int m_usesRemaining;
 };
 
 

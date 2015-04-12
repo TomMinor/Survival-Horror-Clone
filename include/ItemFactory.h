@@ -1,9 +1,12 @@
 #ifndef ITEMFACTORY_H
 #define ITEMFACTORY_H
 
+#include <vector>
 #include <string>
 
 #include "Item.h"
+
+typedef std::vector<BaseItem*> ItemArray;
 
 HealthItem* registerHealthItem(const std::string& _name,
                                const std::string& _description,
@@ -18,22 +21,22 @@ PuzzleItem* registerPuzzleItem( const std::string& _name,
                                 const std::string& _texturePath,
                                 const std::string& _iconPath,
                                 bool _isStackable,
-                                unsigned int _totalUses);
+                                int _totalUses);
 
 WeaponItem* registerWeaponItem( const std::string& _name,
                                 const std::string& _description,
                                 const std::string& _meshPath,
                                 const std::string& _texturePath,
                                 const std::string& _iconPath,
-                                unsigned int _healthPoints);
+                                unsigned int _clipSize);
 
-AmmoItem* registerAmmoItem( const std::string& _name,
+AmmoItem* registerAmmoItem(const std::string& _name,
                             const std::string& _description,
                             const std::string& _meshPath,
                             const std::string& _texturePath,
                             const std::string& _iconPath,
                             unsigned int _damage,
-                            AmmoItem::AmmoFlags _flags);
+                            int _flags);
 
 HealthItem* createHealthItem(const std::string& _name);
 

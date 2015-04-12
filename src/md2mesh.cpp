@@ -69,6 +69,7 @@ void Mesh::loadMesh(std::string _filename)
 
 void Mesh::drawMesh() const
 {
+
   glPushMatrix();
     // Correct the mesh rotation
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);

@@ -12,7 +12,8 @@ Loader::Loader(std::string _meshPath, Mesh * const o_mesh ) :
   m_fileStream.open(_meshPath.c_str(), std::ios::in | std::ios::binary);
   if( !m_fileStream.is_open() )
   {
-    throw std::runtime_error("Error opening file");
+    const std::string tmp = "Error opening file " + _meshPath;
+    throw std::runtime_error(tmp.c_str());
   }
 
   // Store the header

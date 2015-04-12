@@ -26,7 +26,8 @@ SOURCES=src/main.cpp \
     src/FileSystem.cpp \
     src/Inventory.cpp \
     src/Item.cpp \
-    src/ItemFactory.cpp
+    src/ItemFactory.cpp \
+    src/ItemParser.cpp
 
 
 HEADERS+=include/GLFunctions.h \
@@ -52,7 +53,8 @@ HEADERS+=include/GLFunctions.h \
     include/Player.h \
     include/Inventory.h \
     include/Item.h \
-    include/ItemFactory.h
+    include/ItemFactory.h \
+    include/ItemParser.h
 
 # add the ngl lib
 # this is where to look for includes

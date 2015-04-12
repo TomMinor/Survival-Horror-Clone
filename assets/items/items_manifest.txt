@@ -1,14 +1,12 @@
-# <itemID> <name>   <icon>      <modelfile>             <modeltexture>          <type> 	<meta>
-
 # Meta Data
 # HEALTH 	<HealAmount>
-# AMMO 		<DamageAmount>
-# KEY 		<n/a>
+# AMMO 		<DamageAmount> <Flags>
+# KEY 		<Uses>
 # WEAPON	<ClipSize>
 
-0 "First_Aid_Spray" "icon.jpg" 	"fas_mesh.md2"          "fas_tex.jpg"          	HEALTH 	50
-1 "9mm_Bullets"     "icon.jpg" 	"9mm_mesh.md2"          "9mm_tex.jpg"          	AMMO    10
-2 "Shotgun_Shells"  "icon.jpg" 	"shotgunshell_mesh.md2" "shotgunshell_tex.jpg" 	AMMO	50
-3 "Test_Keycard"    "icon.jpg" 	"keycard_mesh.md2"      "keycard.jpg"          	KEY 	
-4 "9mm_Handgun"		"icon.jpg"	"handgun.md2"			"handgun.jpg"			WEAPON	18
-5 "Shotgun"			"icon.jpg"	"shotgun.md2"			"shotgun.jpg"			WEAPON	8
+HEALTH 	'First_Aid_Spray'	'Heals a large amount of damage.' 											'icon.jpg' 	'fas_mesh.md2'			'fas_tex.jpg'          	 	80
+AMMO	'9mm_Bullets'     	'9x19 parabellum rounds.' 													'icon.jpg' 	'9mm_mesh.md2'          '9mm_tex.jpg'          	    10 'HITSCAN'
+AMMO	'Shotgun_Shells'  	'Shotgun shells. For the Remington M1100 series.' 							'icon.jpg' 	'shotgunshell_mesh.md2' 'shotgunshell_tex.jpg' 		50 'HITSCAN'
+KEY 	'Test_Keycard'    	'It looks like a card key for lab access.' 									'icon.jpg' 	'keycard_mesh.md2'      'keycard.jpg'          	 	-1
+WEAPON  '9mm_Handgun'		'Browning HP. Manufactured by FN, Belgium. It uses 9mm parabellum rounds.' 	'icon.jpg'	'handgun.md2'			'handgun.jpg'				18
+WEAPON	'Shotgun'			'Remington M1100-P. It uses 12 guage rounds. ' 								'icon.jpg'	'shotgun.md2'			'shotgun.jpg'				8
