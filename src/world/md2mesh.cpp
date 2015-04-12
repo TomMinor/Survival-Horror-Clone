@@ -166,6 +166,9 @@ void Mesh::renderFrame() const
 {
   int*  triCmds = m_GLcmds;
 
+  glEnable(GL_DEPTH_TEST);
+  glDepthMask(GL_TRUE);
+
   // Reverse face orientation to counter glCmd's clockwise winding
   glPushAttrib(GL_POLYGON_BIT);
   glFrontFace(GL_BACK);
@@ -175,7 +178,7 @@ void Mesh::renderFrame() const
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
 
-  m_skin.setCurrent();
+  m_skin.bind();
 
   // Draw triangles
   while(int i = *(triCmds++))

@@ -46,7 +46,7 @@ void Background::drawFacade(float _zOffset) const
   // Don't draw if no texture was loaded or the fallback texture was used
   if(m_bgTexture && !m_bgTexture->usingFallback())
   {
-    m_bgTexture->setCurrent();
+    m_bgTexture->bind();
 
     // Draw in orthographic projection
     glMatrixMode(GL_PROJECTION);
@@ -79,6 +79,8 @@ void Background::drawFacade(float _zOffset) const
     glPopMatrix();
 
     glMatrixMode(GL_MODELVIEW);
+
+    m_bgTexture->unbind();
   }
 }
 

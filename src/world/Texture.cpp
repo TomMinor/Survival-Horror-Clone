@@ -2,21 +2,21 @@
 #include "FileSystem.h"
 #include <stdexcept>
 
-  Texture::Texture(std::string _fileName) : m_texID(0), m_usingFallback(false), m_hasAlpha(false)
-  {
+Texture::Texture(std::string _fileName) : m_texID(0), m_usingFallback(false), m_hasAlpha(false)
+{
     glGenTextures(1,&m_texID);
 
     SDL_Surface* texture = IMG_Load((_fileName).c_str());
 
     if(!texture)
     {
-      // Attempt to load a fallback texture that should be guaranteed to exist
-      if( !(texture = IMG_Load(FileSystem().fallbackTexture().c_str())) )
-      {
-        throw std::invalid_argument(" Could not load fallback material ");
-      }
-      m_usingFallback = true;
-      std::cerr << SDL_GetError() << ", using fallback material\n";
+        // Attempt to load a fallback texture that should be guaranteed to exist
+        if( !(texture = IMG_Load(FileSystem().fallbackTexture().c_str())) )
+        {
+            throw std::invalid_argument(" Could not load fallback material ");
+        }
+        m_usingFallback = true;
+        std::cerr << SDL_GetError() << ", using fallback material\n";
     }
 
     // ----------------------------------------------------------------------
@@ -49,21 +49,29 @@
     glTexImage2D(GL_TEXTURE_2D, 0 , numColours, texture->w, texture->h, 0,
                  texFormat, GL_UNSIGNED_BYTE, texture->pixels);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     m_texHeight = texture->h;
     m_texWidth = texture->w;
 
     SDL_FreeSurface(texture);
-  }
+}
 
-  Texture::~Texture()
-  {
+Texture::~Texture()
+{
     glDeleteTextures(1,&m_texID);
-  }
+}
 
-  void Texture::setCurrent() const
-  {
+void Texture::bind() const
+{
     glBindTexture(GL_TEXTURE_2D, m_texID);
-  }
+}
+
+void Texture::unbind() const
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}

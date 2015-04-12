@@ -15,6 +15,7 @@
 #include "ItemFactory.h"
 #include "ItemParser.h"
 #include "stringUtilities.h"
+#include "HUD.h"
 
 /* TODO
  * - Add copy constructors to all classes with pointers
@@ -175,6 +176,10 @@ int main()
 
   //tmp2.transpose();
 
+  HUD test;
+
+  bool drawHud = true;
+
   while(!quit)
   {
     while ( SDL_PollEvent(&event) )
@@ -193,6 +198,7 @@ int main()
             case SDLK_ESCAPE :  quit = true; break;
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
+            case SDLK_r : drawHud ^= 1; break;
             case SDLK_b : BBox::toggleDebugDraw(); break;
             case SDLK_PAGEUP :
             {
@@ -277,8 +283,17 @@ int main()
 //      std::cout << cameraPos << "\n";
 //      std::cout << cameraRot << "\n";
       //tmpCamera.setView();
-      world->update();
-      world->draw();
+
+      if(drawHud)
+      {
+          test.draw();
+      }
+      else
+      {
+          world->update();
+          world->draw();
+      }
+
 //      tmpCamera.setView();
 
       // swap the buffers

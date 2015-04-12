@@ -18,7 +18,7 @@ GeneralItemData readItemData(util::TokenStream::iterator& _tokenStream, const ut
 {
     if( (_tokenStream + 5) > _end)
     {
-        std::string message("Line " + std::to_string(_line) + " Couldn't load item data : too few tokens");
+        std::string message("Line " + std::to_string(_line) + " Couldn't load item data : not enough tokens");
         throw std::runtime_error(message);
     }
 
@@ -61,10 +61,12 @@ void parseItemManifest(const std::string& _manifestFilePath, ItemArray &_items)
         {
             util::TokenStream::iterator token = tokens.begin();
 
-            if(*token == "HEALTH")
-            {
-                GeneralItemData itemData = readItemData( ++token, tokens.end(), lineCounter);
+            const std::string identifier = *token;
 
+            GeneralItemData itemData = readItemData( ++token, tokens.end(), lineCounter);
+
+            if(identifier == "HEALTH")
+            {
                 unsigned int healthPoints;
 
                 try
@@ -76,22 +78,20 @@ void parseItemManifest(const std::string& _manifestFilePath, ItemArray &_items)
                     throw e;
                 }
 
-                auto tmp = registerHealthItem(itemData.name,
-                                               itemData.description,
-                                               itemData.meshFileName,
-                                               itemData.meshTextureFileName,
-                                               itemData.iconFileName,
-                                               healthPoints);
+                HealthItem* tmp = registerHealthItem(itemData.name,
+                                                     itemData.description,
+                                                     itemData.meshFileName,
+                                                     itemData.meshTextureFileName,
+                                                     itemData.iconFileName,
+                                                     healthPoints);
 
                 if(tmp)
                     _items.push_back(tmp);
                 else
                     std::cerr << "Error constructing health item" << std::endl;
             }
-            else if(*token == "KEY")
+            else if(identifier == "KEY")
             {
-                GeneralItemData itemData = readItemData( ++token, tokens.end(), lineCounter);
-
                 unsigned int maximumUses;
 
                 try
@@ -103,23 +103,21 @@ void parseItemManifest(const std::string& _manifestFilePath, ItemArray &_items)
                     throw e;
                 }
 
-                auto tmp = registerPuzzleItem(itemData.name,
-                                              itemData.description,
-                                              itemData.meshFileName,
-                                              itemData.meshTextureFileName,
-                                              itemData.iconFileName,
-                                              false, ///@todo Modify file format to store isStackable
-                                              maximumUses);
+                PuzzleItem* tmp = registerPuzzleItem(itemData.name,
+                                                     itemData.description,
+                                                     itemData.meshFileName,
+                                                     itemData.meshTextureFileName,
+                                                     itemData.iconFileName,
+                                                     false, ///@todo Modify file format to store isStackable
+                                                     maximumUses);
 
                 if(tmp)
                     _items.push_back(tmp);
                 else
                     std::cerr << "Error constructing puzzle item" << std::endl;
             }
-            else if(*token == "AMMO")
+            else if(identifier == "AMMO")
             {
-                GeneralItemData itemData = readItemData( ++token, tokens.end(), lineCounter);
-
                 int flags = AmmoItem::NONE;
                 unsigned int damage;
 
@@ -141,22 +139,20 @@ void parseItemManifest(const std::string& _manifestFilePath, ItemArray &_items)
                     throw e;
                 }
 
-                auto tmp = registerAmmoItem(itemData.name,
-                                            itemData.description,
-                                            itemData.meshFileName,
-                                            itemData.meshTextureFileName,
-                                            itemData.iconFileName,
-                                            damage,
-                                            flags);
+                AmmoItem* tmp = registerAmmoItem(itemData.name,
+                                                 itemData.description,
+                                                 itemData.meshFileName,
+                                                 itemData.meshTextureFileName,
+                                                 itemData.iconFileName,
+                                                 damage,
+                                                 flags);
                 if(tmp)
                     _items.push_back(tmp);
                 else
                     std::cerr << "Error constructing ammo item" << std::endl;
             }
-            else if(*token == "WEAPON")
+            else if(identifier == "WEAPON")
             {
-                GeneralItemData itemData = readItemData( ++token, tokens.end(), lineCounter);
-
                 unsigned int clipSize;
 
                 try
@@ -168,12 +164,12 @@ void parseItemManifest(const std::string& _manifestFilePath, ItemArray &_items)
                     throw e;
                 }
 
-                auto tmp = registerWeaponItem(itemData.name,
-                                              itemData.description,
-                                              itemData.meshFileName,
-                                              itemData.meshTextureFileName,
-                                              itemData.iconFileName,
-                                              clipSize);
+                WeaponItem* tmp = registerWeaponItem(itemData.name,
+                                                     itemData.description,
+                                                     itemData.meshFileName,
+                                                     itemData.meshTextureFileName,
+                                                     itemData.iconFileName,
+                                                     clipSize);
 
                 if(tmp)
                     _items.push_back(tmp);

@@ -6,59 +6,26 @@ TARGET=SDLOpenGL
 CONFIG-=app_bundle
 DESTDIR=./
 OBJECTS_DIR=obj
-SOURCES=src/main.cpp \
-        src/GLFunctions.cpp \
-        src/Vec4.cpp \
-        src/Mat4.cpp \
-    src/World.cpp \
-    src/Actor.cpp \
-    src/Room.cpp \
-    src/BoundingBox.cpp \
-    src/Texture.cpp \
-    src/Camera.cpp \
-    src/Background.cpp \
-    src/Door.cpp \
-    src/stringUtilities.cpp \
-    src/RoomReader.cpp \
-    src/3dUtilities.cpp \
-    src/md2loader.cpp \
-    src/md2mesh.cpp \
-    src/FileSystem.cpp \
-    src/Inventory.cpp \
-    src/Item.cpp \
-    src/ItemFactory.cpp \
-    src/ItemParser.cpp
 
+SOURCES=src/*.cpp \
+        src/hud/*.cpp \
+        src/hud/item/*.cpp \
+        src/math/*.cpp \
+        src/world/*.cpp
 
-HEADERS+=include/GLFunctions.h \
-         include/Vec4.h \
-         include/Mat4.h \
-    include/World.h \
-    include/Actor.h \
-    include/Room.h \
-    include/Door.h \
-    include/BoundingBox.h \
-    include/Background.h \
-    include/Texture.h \
-    include/Camera.h \
-    include/stringUtilities.h \
-    include/RoomReader.h \
-    include/GLinc.h \
-    include/3dUtilities.h \
-    include/md2.h \
-    include/md2loader.h \
-    include/md2mesh.h \
-    include/md2.h \
-    include/FileSystem.h \
-    include/Player.h \
-    include/Inventory.h \
-    include/Item.h \
-    include/ItemFactory.h \
-    include/ItemParser.h
+HEADERS+=include/*.h \
+        include/hud/*.h \
+        include/hud/item/*.h \
+        include/math/*.h \
+        include/world/*.h
 
 # add the ngl lib
 # this is where to look for includes
 INCLUDEPATH +=include
+INCLUDEPATH +=include/hud
+INCLUDEPATH +=include/hud/item
+INCLUDEPATH +=include/math
+INCLUDEPATH +=include/world
 
 QMAKE_CXXFLAGS += -std=c++11
 

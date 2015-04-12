@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "include/Texture.h"
-#include "include/md2mesh.h"
+#include "Texture.h"
+#include "md2mesh.h"
 #include "FileSystem.h"
 
 #include <unordered_map>

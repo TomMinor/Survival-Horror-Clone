@@ -5,14 +5,14 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-
 class Texture
 {
 public:
   Texture(std::string _fileName = "error.png");
   ~Texture();
 
-  void setCurrent() const;
+  void bind() const;
+  void unbind() const;
 
   inline int height() const { return m_texHeight; }
   inline int width() const  { return m_texWidth; }
