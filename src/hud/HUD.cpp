@@ -18,31 +18,10 @@
 
 HUD::HUD()
 {
-    // Bad - Hard code all the things
+    const Vec2 inventoryPosition( 500, 450 );
+    const Vec2 inventorySize = Vec2( 250, 400) + Vec2(16,16);
 
-    // Inventory
-
-    const Vec2 position( 500, 450 );
-    const Vec2 size = Vec2( 250, 400) + Vec2(16,16);
-
-    const int rowCount = 5;
-    const int columnCount = 2;
-
-    m_widgets.push_back(new BaseInventoryWidget( position, size + Vec2(16,16), 16));
-    for(int x = 0; x < columnCount; x++)
-    {
-        for(int y = 0; y < rowCount; y++)
-        {
-            const int width = size.m_x / columnCount;
-            const int height  = size.m_y / rowCount;
-
-            m_widgets.push_back(new BaseInventoryWidget( Vec2(position.m_x + (x * width),
-                                                              position.m_y - (y * height) ) + Vec2(8, -8),
-                                                         Vec2(width, height),
-                                                         1)
-                                );
-        }
-    }
+    m_inventory = new InventoryWidget(4,2, inventoryPosition, inventorySize);
 }
 
 void HUD::draw()
@@ -71,10 +50,7 @@ void HUD::draw()
           // Draw the facade so that it fills the screen
           glTranslatef(0, 0, 0);
 
-          for(auto widget : m_widgets)
-          {
-              widget->draw();
-          }
+          m_inventory->draw();
 
           glDisable(GL_TEXTURE_2D);
           glEnable(GL_LIGHTING);

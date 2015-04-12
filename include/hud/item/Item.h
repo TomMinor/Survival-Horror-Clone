@@ -80,7 +80,7 @@ public:
 
     virtual bool useWith(const BaseItem* _item) = 0;
 
-    inline std::string itemName() const { return m_itemData->m_name; }
+    inline const SharedItemData* itemData() const { return m_itemData; }
 
     virtual void print() const;
 

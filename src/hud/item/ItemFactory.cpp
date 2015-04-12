@@ -39,7 +39,7 @@ BaseItem* createItem(const std::string& _name)
 {
     for(ItemArray::iterator item = s_itemTypes.begin(); item != s_itemTypes.end(); item++)
     {
-        if( (*item)->itemName() == _name )
+        if( (*item)->itemData()->m_name == _name )
         {
             return (*item);
         }

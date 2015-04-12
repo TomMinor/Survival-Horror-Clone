@@ -178,6 +178,12 @@ int main()
 
   HUD test;
 
+  test.m_inventory->addItem( items[0] );
+  test.m_inventory->addItem( items[1] );
+  test.m_inventory->addItem( items[1] );
+  test.m_inventory->addItem( items[3] );
+  test.m_inventory->addItem( items[2] );
+
   bool drawHud = true;
 
   while(!quit)

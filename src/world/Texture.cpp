@@ -63,7 +63,7 @@ Texture::Texture(std::string _fileName) : m_texID(0), m_usingFallback(false), m_
 
 Texture::~Texture()
 {
-    glDeleteTextures(1,&m_texID);
+    glDeleteTextures(1, &m_texID);
 }
 
 void Texture::bind() const

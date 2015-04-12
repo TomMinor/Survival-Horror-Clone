@@ -14,8 +14,8 @@ public:
 
     void draw();
 
-private:
-    std::vector<BaseInventoryWidget*> m_widgets;
+//private:
+    InventoryWidget* m_inventory;
 };
 
 #endif // HUD_H
