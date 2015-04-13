@@ -3,6 +3,9 @@
 
 #include <string>
 
+#include "EngineGlobals.h"
+
+#include "Vec4.h"
 #include "Vec2.h"
 #include "Texture.h"
 
@@ -33,8 +36,8 @@ public:
     void setTexture(const std::string _textureName);
     void setTexture(Texture * const _texture);
 
-    virtual void draw();
-    virtual void update();
+    virtual void draw(const Vec4 &_colour = Vec4(1,1,1,1));
+    virtual void update(Time _delta);
 
 protected:
     Texture* m_texture;
@@ -54,7 +57,7 @@ public:
         : RectWidget(_position, _size)
     {;}
 
-    virtual void draw();
+    virtual void draw(const Vec4 &_colour = Vec4(1,1,1,1));
 };
 
 #endif // BASEWIDGET_H

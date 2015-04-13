@@ -5,7 +5,7 @@
 #include <iostream>
 
 Actor::Actor(const Vec4 & _scale, const Vec4 & _pos )
-  : m_time(0), m_pos(_pos), m_scale(_scale), m_yaw(0), m_health(100),
+  : /*m_time(0), */m_pos(_pos), m_scale(_scale), m_yaw(0), m_health(100),
     m_meshBody("assets/actor/mach-body.md2", "assets/actor/soldier.jpg", 0.05f),
     m_meshHead("assets/actor/mach-head.md2", "assets/actor/mach-head.jpg", 0.05f),
     m_state(IDLE), m_previousState(IDLE),
@@ -82,9 +82,9 @@ void Actor::setPosition(const Vec4& _pos)
   m_pos = _pos;
 }
 
-void Actor::update()
+void Actor::update(Time _delta)
 {
-  m_time++;
+//  m_time++;
 
   // Update animations
   if(m_state != m_previousState)
@@ -105,8 +105,8 @@ void Actor::update()
     }
   }
 
-  m_meshBody.updateAnimation(m_time*0.05f);
-  m_meshHead.updateAnimation(m_time*0.05f);
+  m_meshBody.updateAnimation(_delta/**0.05f*/);
+  m_meshHead.updateAnimation(_delta/**0.05f*/);
 
   m_previousState = m_state;
 }

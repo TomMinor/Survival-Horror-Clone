@@ -2,12 +2,14 @@
 #define MD2MESH_H
 
 #include <stdexcept>
+
+#include "EngineGlobals.h"
+
 #include "md2.h"
 #include "Texture.h"
 
 namespace Md2
 {
-
   namespace Animation
   {
   const anim animList[21] =
@@ -50,7 +52,7 @@ public:
   void loadMesh(std::string _filename);
 
   void drawMesh() const;
-  void updateAnimation(float _time);
+  void updateAnimation(Time _time);
 
   void setAnimation(int _type);
   int currentAnimation()  { return m_anim.type; }

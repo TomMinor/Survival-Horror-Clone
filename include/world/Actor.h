@@ -12,7 +12,7 @@ public:
 
   const BBox& getBoundingBox() const { return m_bbox; }
   void draw() const;
-  void update();
+  void update(Time _delta);
   void damage(int _value);
   void move(float _offset, float _deg);
 
@@ -25,7 +25,7 @@ private:
   void onDamage();
   void onDeath();
 
-  int m_time;
+  //int m_time;
   Vec4 m_pos;
   Vec4 m_scale;
   float m_yaw;

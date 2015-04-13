@@ -1,11 +1,12 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include "EngineGlobals.h"
+
 #include <string>
 
 #include "Texture.h"
 #include "md2mesh.h"
-#include "FileSystem.h"
 
 #include <unordered_map>
 

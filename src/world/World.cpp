@@ -9,15 +9,36 @@
 #include "Vec4.h"
 #include "RoomReader.h"
 
-World::World(const std::string& _firstRoom) :
+#include "Item.h"
+#include "ItemFactory.h"
+#include "ItemParser.h"
+
+World::World(const std::vector<ItemName> &_startingItems, const std::string& _firstRoom, bool _realTimeHud) :
   m_currentRoom(NULL), m_lastTime(0),
-  m_player( Vec4(1.0f, 2.0f, 1.0f), Vec4() ), m_playerOffset(0), m_playerYaw(0)
+  m_player( new Actor(Vec4(1.0f, 2.0f, 1.0f), Vec4()) ), m_playerOffset(0), m_playerYaw(0),
+  m_hud( new HUD() ), m_bRealTimeOverlayHud(_realTimeHud), m_bDrawHud(false)
   {
     std::cout << "Loading assets :" <<  FileSystem().assetFolder() << "\n";
 
     if(!loadRoom(_firstRoom))
     {
-      throw std::runtime_error("Error loading assets");
+      throw std::runtime_error("Error loading first room");
+    }
+
+    ItemArray items;
+
+    try
+    {
+        parseItemManifest("assets/items/items_manifest.txt", items);
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << "Item Manifest Error : " << e.what() << std::endl;
+    }
+
+    for(auto item : _startingItems)
+    {
+      m_hud->m_inventory->addItem( createItem(item) );
     }
 
     updateTime();
@@ -27,14 +48,29 @@ World::World(const std::string& _firstRoom) :
 // Draw actors and room
 void World::draw() const
 {
-  m_currentRoom->draw();
-  drawActors();
-  m_currentRoom->drawForeground();
+  if(!m_bDrawHud || (m_bDrawHud && m_bRealTimeOverlayHud))
+  {
+    m_currentRoom->draw();
+    drawActors();
+    m_currentRoom->drawForeground();
+  }
+
+  if(m_bDrawHud)
+  {
+    if(!m_bRealTimeOverlayHud)
+    {
+      glClearColor(0.078, 0.137, 0.353,0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    m_hud->draw();
+  }
+
 }
 
 void World::drawActors() const
 {
-  m_player.draw();
+  m_player->draw();
 
   // Draw enemies here too
 }
@@ -42,29 +78,38 @@ void World::drawActors() const
 // Update actor states
 void World::update()
 {
+  m_time += 0.05f;
   updateTime();
 
-  m_player.move(m_playerOffset, m_playerYaw);
-//  if(m_playerYaw > 1.0f)
-//  {
-//    m_player.move(0, -m_playerYaw);
-//    m_player.move(Vec4(0, 0,m_playerOffset));
-//  }
+  if(!m_bDrawHud || (m_bDrawHud && m_bRealTimeOverlayHud))
+  {
+    m_player->move(m_playerOffset, m_playerYaw);
+  //  if(m_playerYaw > 1.0f)
+  //  {
+  //    m_player.move(0, -m_playerYaw);
+  //    m_player.move(Vec4(0, 0,m_playerOffset));
+  //  }
 
-  m_player.update();
+    m_player->update(m_time);
 
-  m_currentRoom->updateCurrentBackground(m_player.getBoundingBox());
+    m_currentRoom->updateCurrentBackground(m_player->getBoundingBox());
 
-//  if(!m_currentRoom->checkWallCollide(tmp))
-//  {
-//    m_player.move(m_playerOffset, m_playerYaw);
-//  }
-//  else
-//  {
-//    m_player.move(-0.01, m_playerYaw);
-//  }
+  //  if(!m_currentRoom->checkWallCollide(tmp))
+  //  {
+  //    m_player.move(m_playerOffset, m_playerYaw);
+  //  }
+  //  else
+  //  {
+  //    m_player.move(-0.01, m_playerYaw);
+  //  }
 
-  m_playerOffset = m_playerYaw = 0; // Reset movement
+    m_playerOffset = m_playerYaw = 0; // Reset movement
+  }
+
+  if(m_bDrawHud)
+  {
+    m_hud->update(m_time);
+  }
 }
 
 void World::playerWalk(float _offset)
@@ -107,7 +152,7 @@ bool World::loadRoom(const std::string& _fileName)
   {
     delete m_currentRoom;
     m_currentRoom = nextRoom;
-    m_player.setPosition(m_currentRoom->playerSpawn());
+    m_player->setPosition(m_currentRoom->playerSpawn());
   }
 
   if(!m_currentRoom || !nextRoom)

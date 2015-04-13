@@ -6,10 +6,6 @@ InventoryWidget::InventoryWidget(int _maxRows, int _maxColumns, const Vec2& _pos
 {
     m_itemWidgets.reserve(m_maxRows * m_maxColumns);
 
-//    const Vec2 position( 500, 450 );
-//    const Vec2 size = Vec2( 250, 400) + Vec2(16,16);
-
-
     m_background = new InventoryItemWidget( _position, _size + Vec2(16,16),
                                                  "assets/hud/item_background.jpg",
                                                  "assets/hud/metal_background.jpg",
@@ -26,7 +22,7 @@ InventoryWidget::InventoryWidget(int _maxRows, int _maxColumns, const Vec2& _pos
                                                            Vec2(width, height),
                                                            "assets/hud/item_background.jpg",
                                                            "assets/hud/item_background_dark.jpg",
-                                                           2));
+                                                           6));
         }
     }
 
@@ -42,9 +38,14 @@ void InventoryWidget::addItem( BaseItem* _item)
     }
 }
 
-void InventoryWidget::update()
+void InventoryWidget::update(Time _delta)
 {
+    m_background->update(_delta);
 
+    for(auto widget : m_itemWidgets)
+    {
+        widget->update(_delta);
+    }
 }
 
 void InventoryWidget::draw()
@@ -60,6 +61,7 @@ void InventoryWidget::draw()
 InventoryItemWidget::InventoryItemWidget(const Vec2 &_position, const Vec2 &_size, std::string _foregroundTexture, std::string _backgroundTexture, int _trim)
     : m_time(0), m_trim(_trim), m_item(NULL)
 {
+    ///@todo Fix this terrible 'fix', complicates the rest of the code
     Vec2 tmpSize(_size.m_x, -_size.m_y); // Invert Y coordinate direction
 
     m_foreground = new RectWidget(_position + Vec2((_trim / 2), -_trim / 2),
@@ -80,19 +82,39 @@ InventoryItemWidget::InventoryItemWidget(const Vec2 &_position, const Vec2 &_siz
 
 void InventoryItemWidget::draw()
 {
-    m_background->draw();
+    // Simple way to get a dropshadow
+    const Vec4 shadow(-2, -5, 0);
+    const Vec4 shadowColour(0.2, 0.2, 0.2);
+
+    if(m_isActive)
+    {
+      glDisable(GL_TEXTURE_2D);
+      m_background->draw( Vec4(0.75 + (sin(m_time * 4.0f) * 0.25), 0, 0, 1) );
+      glEnable(GL_TEXTURE_2D);
+    }
+    else
+    {
+      m_background->draw();
+    }
+
     m_foreground->draw();
 
     if(m_item)
     {
-        m_icon->draw();
+      glPushMatrix();
+        shadow.translateGL();
+        m_icon->draw(shadowColour);
+      glPopMatrix();
+
+      m_icon->draw();
     }
 }
 
-void InventoryItemWidget::update()
+void InventoryItemWidget::update(float _delta)
 {
-    m_background->update();
-    m_foreground->update();
+    m_time = _delta;
+    m_background->update(_delta);
+    m_foreground->update(_delta);
 }
 
 void InventoryItemWidget::setWidth(int _width)

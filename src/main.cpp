@@ -11,9 +11,6 @@
 #include "Camera.h"
 #include "Actor.h"
 
-#include "Item.h"
-#include "ItemFactory.h"
-#include "ItemParser.h"
 #include "stringUtilities.h"
 #include "HUD.h"
 
@@ -98,11 +95,20 @@ int main()
   const uint worldUpdateDelay = 30;
   World* world;
 
+  std::vector<ItemName> defaultItems;
+
+  defaultItems.push_back("9mm_Handgun");
+  defaultItems.push_back("9mm_Bullets");
+  defaultItems.push_back("Shotgun");
+  defaultItems.push_back("Shotgun_Shells");
+  defaultItems.push_back("First_Aid_Spray");
+  defaultItems.push_back("Test_Keycard");
+
   // Instantiate the world and try to load the first room,
   // if this room can't be loaded consider it a critical error and exit
   try
   {
-    world = new World;
+    world = new World(defaultItems, "ROOM_01.room", true);
   }
   catch(std::runtime_error &msg)
   {
@@ -124,23 +130,6 @@ int main()
 //  registerHealthItem("Green Herb",      "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
 //  registerHealthItem("Red Herb",        "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
 //  registerHealthItem("Blue Herb",       "Tmp", "assets/actor/mach-body.md2", "assets/fas.jpg", "assets/fasicon.jpg", 80);
-
-  ItemArray items;
-
-  try
-  {
-      parseItemManifest("assets/items/items_manifest.txt", items);
-  }
-  catch(std::exception& e)
-  {
-      std::cerr << "Item Manifest Error : " << e.what() << std::endl;
-  }
-
-  for(auto item : items)
-  {
-      item->print();
-      std::cout << std::endl;
-  }
 
   Vec4 position;
   Vec4 rotation;
@@ -176,15 +165,18 @@ int main()
 
   //tmp2.transpose();
 
-  HUD test;
+//  HUD ui;
 
-  test.m_inventory->addItem( items[0] );
-  test.m_inventory->addItem( items[1] );
-  test.m_inventory->addItem( items[1] );
-  test.m_inventory->addItem( items[3] );
-  test.m_inventory->addItem( items[2] );
+//  ui.m_inventory->addItem( items[4] );
+//  ui.m_inventory->addItem( items[5] );
+//  ui.m_inventory->addItem( items[2] );
+//  ui.m_inventory->addItem( items[1] );
+//  ui.m_inventory->addItem( items[1] );
+//  ui.m_inventory->addItem( items[3] );
+//  ui.m_inventory->addItem( items[0] );
 
-  bool drawHud = true;
+  int itemIndex = 0;
+  world->selectItem(itemIndex);
 
   while(!quit)
   {
@@ -201,10 +193,55 @@ int main()
           switch( event.key.keysym.sym )
           {
             // if it's the escape key quit
-            case SDLK_ESCAPE :  quit = true; break;
+            case SDLK_ESCAPE : { quit = true; break;}
+
+            case SDLK_UP:
+            {
+              if(world->isInventoryVisible())
+                if(itemIndex > 0)
+                {
+                  itemIndex -= 2;
+                  world->selectItem(itemIndex);
+                }
+              break;
+            }
+
+            case SDLK_DOWN:
+            {
+              if(world->isInventoryVisible())
+                if(itemIndex < 7)
+                {
+                  itemIndex += 2;
+                  world->selectItem(itemIndex);
+                }
+              break;
+            }
+
+            case SDLK_LEFT:
+            {
+              if(world->isInventoryVisible())
+                if(itemIndex > 0)
+                {
+                  itemIndex--;
+                  world->selectItem(itemIndex);
+                }
+              break;
+            }
+
+            case SDLK_RIGHT:
+            {
+              if(world->isInventoryVisible())
+                if(itemIndex < 7)
+                {
+                  itemIndex++;
+                  world->selectItem(itemIndex);
+                }
+              break;
+            }
+
             case SDLK_o : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_p : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
-            case SDLK_r : drawHud ^= 1; break;
+            case SDLK_r : world->toggleInventory(); break;
             case SDLK_b : BBox::toggleDebugDraw(); break;
             case SDLK_PAGEUP :
             {
@@ -231,30 +268,32 @@ int main()
       } // end of event switch
     } // end of poll events
 
-
     if( world->getElapsedTime() >= worldUpdateDelay)
     {
-      if(keystate[SDL_SCANCODE_UP])           { world->playerWalk(0.1);    }
-      if(keystate[SDL_SCANCODE_DOWN])         { world->playerWalk(-0.1);   }
-      if(keystate[SDL_SCANCODE_RIGHT])        { world->playerTurn(-4);     }
-      if(keystate[SDL_SCANCODE_LEFT])         { world->playerTurn(4);      }
-      if(keystate[SDL_SCANCODE_LSHIFT])       { world->playerDash();       }
+        if(!world->isInventoryVisible())
+        {
+            if(keystate[SDL_SCANCODE_UP])           { world->playerWalk(0.1);    }
+            if(keystate[SDL_SCANCODE_DOWN])         { world->playerWalk(-0.1);   }
+            if(keystate[SDL_SCANCODE_RIGHT])        { world->playerTurn(-4);     }
+            if(keystate[SDL_SCANCODE_LEFT])         { world->playerTurn(4);      }
+            if(keystate[SDL_SCANCODE_LSHIFT])       { world->playerDash();       }
+        }
 
-      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z+=0.25;   }
-      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z-=0.25;   }
-      if(keystate[SDL_SCANCODE_Q])            { cameraPos.m_y+=0.25;   }
-      if(keystate[SDL_SCANCODE_E])            { cameraPos.m_y-=0.25;   }
-      if(keystate[SDL_SCANCODE_D])            { cameraPos.m_x+=0.25;   }
-      if(keystate[SDL_SCANCODE_A])            { cameraPos.m_x-=0.25;   }
+//      if(keystate[SDL_SCANCODE_W])            { cameraPos.m_z+=0.25;   }
+//      if(keystate[SDL_SCANCODE_S])            { cameraPos.m_z-=0.25;   }
+//      if(keystate[SDL_SCANCODE_Q])            { cameraPos.m_y+=0.25;   }
+//      if(keystate[SDL_SCANCODE_E])            { cameraPos.m_y-=0.25;   }
+//      if(keystate[SDL_SCANCODE_D])            { cameraPos.m_x+=0.25;   }
+//      if(keystate[SDL_SCANCODE_A])            { cameraPos.m_x-=0.25;   }
 
-      if(keystate[SDL_SCANCODE_J])            { cameraRot.m_z+=0.25;   }
-      if(keystate[SDL_SCANCODE_L])            { cameraRot.m_z-=0.25;   }
+//      if(keystate[SDL_SCANCODE_J])            { cameraRot.m_z+=0.25;   }
+//      if(keystate[SDL_SCANCODE_L])            { cameraRot.m_z-=0.25;   }
 
-      if(keystate[SDL_SCANCODE_I])            { cameraRot.m_y+=0.25;   }
-      if(keystate[SDL_SCANCODE_K])            { cameraRot.m_y-=0.25;   }
+//      if(keystate[SDL_SCANCODE_I])            { cameraRot.m_y+=0.25;   }
+//      if(keystate[SDL_SCANCODE_K])            { cameraRot.m_y-=0.25;   }
 
-      if(keystate[SDL_SCANCODE_U])            { cameraRot.m_x+=0.25;   }
-      if(keystate[SDL_SCANCODE_O])            { cameraRot.m_x-=0.25;   }
+//      if(keystate[SDL_SCANCODE_U])            { cameraRot.m_x+=0.25;   }
+//      if(keystate[SDL_SCANCODE_O])            { cameraRot.m_x-=0.25;   }
 
       if(keystate[SDL_SCANCODE_SPACE])        { world->damagePlayer(10);   }
 
@@ -290,15 +329,8 @@ int main()
 //      std::cout << cameraRot << "\n";
       //tmpCamera.setView();
 
-      if(drawHud)
-      {
-          test.draw();
-      }
-      else
-      {
-          world->update();
-          world->draw();
-      }
+      world->update();
+      world->draw();
 
 //      tmpCamera.setView();
 

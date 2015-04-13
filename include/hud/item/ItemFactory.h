@@ -6,6 +6,7 @@
 
 #include "Item.h"
 
+typedef std::string ItemName;
 typedef std::vector<BaseItem*> ItemArray;
 
 HealthItem* registerHealthItem(const std::string& _name,
@@ -38,12 +39,7 @@ AmmoItem* registerAmmoItem(const std::string& _name,
                             unsigned int _damage,
                             int _flags);
 
-HealthItem* createHealthItem(const std::string& _name);
+BaseItem* createItem(const std::string& _name);
 
-PuzzleItem* createPuzzleItem(const std::string& _name);
-
-WeaponItem* createWeaponItem(const std::string& _name);
-
-AmmoItem* createAmmoItem(const std::string& _name);
 
 #endif // ITEMFACTORY_H

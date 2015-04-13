@@ -1,11 +1,12 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
 
+#include "EngineGlobals.h"
+
 #include "Vec4.h"
 #include "BoundingBox.h"
 #include "Texture.h"
 #include "Camera.h"
-#include "FileSystem.h"
 
 
 class Background

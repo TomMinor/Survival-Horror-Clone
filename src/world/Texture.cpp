@@ -1,10 +1,11 @@
+#include "EngineGlobals.h"
+
 #include "Texture.h"
-#include "FileSystem.h"
 #include <stdexcept>
 
 Texture::Texture(std::string _fileName) : m_texID(0), m_usingFallback(false), m_hasAlpha(false)
 {
-    glGenTextures(1,&m_texID);
+    glGenTextures(1, &m_texID);
 
     SDL_Surface* texture = IMG_Load((_fileName).c_str());
 

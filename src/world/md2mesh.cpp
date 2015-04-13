@@ -79,7 +79,7 @@ void Mesh::drawMesh() const
   glPopMatrix();
 }
 
-void Mesh::updateAnimation(float _time)
+void Mesh::updateAnimation(Time _time)
 {
   if(_time>0.0f)
   {
@@ -211,8 +211,11 @@ void Mesh::renderFrame() const
       // GL lighting
       glNormal3fv( normals[m_lightNormals[triCmds[2]]] );
 
-      // Push the vertices from the current keyframe
-      glVertex3fv(m_keyframeVerts[triCmds[2]]);
+      if(m_keyframeVerts)
+      {
+        // Push the vertices from the current keyframe
+        glVertex3fv(m_keyframeVerts[triCmds[2]]);
+      }
     }
 
     glEnd();

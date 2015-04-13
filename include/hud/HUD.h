@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "EngineGlobals.h"
+
 #include "Vec4.h"
 #include "Texture.h"
 #include "InventoryWidgets.h"
@@ -13,6 +15,8 @@ public:
     HUD();
 
     void draw();
+
+    void update(Time _delta);
 
 //private:
     InventoryWidget* m_inventory;

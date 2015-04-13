@@ -29,25 +29,6 @@ void insertItemIfUnique(const std::string& _name,  SharedItemData* _value)
     }
 }
 
-
-/**
- * @brief createItem
- * @param _name
- * @return
- */
-BaseItem* createItem(const std::string& _name)
-{
-    for(ItemArray::iterator item = s_itemTypes.begin(); item != s_itemTypes.end(); item++)
-    {
-        if( (*item)->itemData()->m_name == _name )
-        {
-            return (*item);
-        }
-    }
-
-    return nullptr;
-}
-
 }
 
 //----------------------------------------------- Health Item -----------------------------------------------
@@ -134,24 +115,24 @@ AmmoItem* registerAmmoItem(const std::string& _name,
     return result;
 }
 
-//------------------------------------------ Item Creation Wrappers -------------------------------------
 
-HealthItem* createHealthItem(const std::string& _name)
-{
-    return dynamic_cast<HealthItem*>(createItem(_name));
-}
 
-PuzzleItem* createPuzzleItem(const std::string& _name)
-{
-    return dynamic_cast<PuzzleItem*>(createItem(_name));
-}
 
-WeaponItem* createWeaponItem(const std::string& _name)
+/**
+ * @brief createItem
+ * @param _name
+ * @return
+ */
+BaseItem* createItem(const std::string& _name)
 {
-    return dynamic_cast<WeaponItem*>(createItem(_name));
-}
+    for(ItemArray::iterator item = s_itemTypes.begin(); item != s_itemTypes.end(); item++)
+    {
+        std::cout << _name << std::endl;
+        if( (*item)->itemData()->m_name == _name )
+        {
+            return (*item);
+        }
+    }
 
-AmmoItem* createAmmoItem(const std::string& _name)
-{
-    return dynamic_cast<AmmoItem*>(createItem(_name));
+    return nullptr;
 }

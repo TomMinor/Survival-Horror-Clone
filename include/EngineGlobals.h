@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+typedef float Time;
+
 class FileSystem
 {
 public:
